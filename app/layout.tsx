@@ -5,7 +5,8 @@ import { Header } from "@/components/Public_Components/Navigation/Header";
 import Footer from "@/components/Public_Components/Navigation/Footer";
 import { ThemeProvider } from "@/components/Public_Components/theme-provider";
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["cyrillic"] });
+
 
 export const metadata: Metadata = {
   title: "Shughuli - Project Management Made Simple",
@@ -28,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`{${montserrat.className}} antialiased`}
+        className={`{${montserrat.className}} ${montserrat.style.fontFamily} bg-background  antialiased`}
       >
         <ThemeProvider
           attribute="class"
