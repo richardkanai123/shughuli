@@ -1,10 +1,8 @@
 import { Boxes, Users2, Zap, Shield, Clock, BarChart3 } from "lucide-react"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
-import { prisma } from "@/lib/prisma"
 
 export default async function AboutPage() {
-    console.log(prisma.$connect())
     const features = [
         {
             icon: <Zap className="h-6 w-6 text-yellow-500" />,
@@ -39,7 +37,7 @@ export default async function AboutPage() {
     ]
 
     return (
-        <div className="container max-w-7xl mx-auto py-12 px-4 bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 from-white to-gray-100">
+        <div className="mx-auto py-12 px-4 bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 from-white to-gray-100">
             {/* Hero Section */}
             <div className="text-center mb-16">
                 <h1 className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 leading-tight">

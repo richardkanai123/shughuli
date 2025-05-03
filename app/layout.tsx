@@ -4,7 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/Public_Components/Navigation/Header";
 import Footer from "@/components/Public_Components/Navigation/Footer";
 import { ThemeProvider } from "@/components/Public_Components/theme-provider";
-
+import { Toaster } from 'react-hot-toast';
 const montserrat = Montserrat({ subsets: ["cyrillic"] });
 
 
@@ -37,11 +37,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="container mx-auto">
-            <Header />
-            {children}
-            <Footer />
-          </div>
+          <Header />
+          {children}
+          <Footer />
+
+          <Toaster />
         </ThemeProvider>
       </body>
     </html >

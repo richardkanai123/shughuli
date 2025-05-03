@@ -21,7 +21,7 @@ export function Header() {
     const pathname = usePathname()
 
     return (
-        <header className="bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 from-white to-gray-100 sticky top-0 z-50 w-full border-b backdrop-blur backdrop:saturate-150">
+        <header className="bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 from-white to-gray-100 sticky top-0 z-50 w-full border-b backdrop-blur backdrop:saturate-150 px-2">
             <div className="container flex h-14 max-w-screen-2xl items-center">
                 <div className="mr-4 hidden md:flex">
                     <Link
