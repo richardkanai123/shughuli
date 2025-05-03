@@ -38,7 +38,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          {children}
+          <main className="mx-auto w-full min-h-screen">{children}</main>
           <Footer />
 
           <Toaster />

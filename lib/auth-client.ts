@@ -11,4 +11,4 @@ import { auth } from "./auth";
  })
 
 
-export const { useSession, signIn, signOut,signUp,updateUser,sendVerificationEmail } = authClient
+export const { useSession, signIn, signOut,signUp,updateUser,sendVerificationEmail,resetPassword, getSession, deleteUser, verifyEmail } = authClient

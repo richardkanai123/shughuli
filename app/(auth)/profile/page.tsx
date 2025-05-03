@@ -37,7 +37,36 @@ export default async function ProfilePage() {
     }
 
 
-    const user = await getUserDetails(session.userId)
+    const { user, error } = await getUserDetails(session.userId)
+
+    if (error) {
+        return <div className="w-full h-[80vh] dark:bg-gray-900  flex flex-col items-center justify-center">
+            <div className="text-center space-y-6">
+                <div className="p-4 rounded-full bg-gray-100 dark:bg-gray-800 inline-block">
+                    <MailWarning className="w-8 h-8 text-gray-500 dark:text-gray-400" />
+                </div>
+                <div className="space-y-2">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                        {error}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    }
+
+    if (!user) return <div className="w-full h-[80vh] flex flex-col items-center justify-center">
+        <div className="text-center space-y-6">
+            <div className="p-4 rounded-full bg-gray-100 dark:bg-gray-800 inline-block">
+                <MailWarning className="w-8 h-8 text-gray-500 dark:text-gray-400" />
+            </div>
+            <div className="space-y-2">
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    User not found
+                </h1>
+            </div>
+        </div>
+    </div>
+
     return (
         <div className="w-full h-full flex-1 mx-auto py-10 px-4 ">
             <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden ">
@@ -159,44 +188,6 @@ export default async function ProfilePage() {
                             <SignOutBtn />
                         </div>
 
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div className="mt-6 mx-auto border-t border-gray-200 dark:border-gray-700 pt-6 px-4 md:max-w-[75%]">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    Activity Overview
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-900 space-y-2">
-                        <div className="flex items-center gap-2">
-                            <CheckCircle2 className="w-4 h-4 text-green-500" />
-                            <span className="text-sm text-gray-600 dark:text-gray-400">Completed</span>
-                        </div>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">24</p>
-                    </div>
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-900 space-y-2">
-                        <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-blue-500" />
-                            <span className="text-sm text-gray-600 dark:text-gray-400">In Progress</span>
-                        </div>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">12</p>
-                    </div>
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-900 space-y-2">
-                        <div className="flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-purple-500" />
-                            <span className="text-sm text-gray-600 dark:text-gray-400">Contributions</span>
-                        </div>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">156</p>
-                    </div>
-                    <div className="p-4 rounded-lg bg-gray-50 dark:bg-gray-900 space-y-2">
-                        <div className="flex items-center gap-2">
-                            <Star className="w-4 h-4 text-yellow-500" />
-                            <span className="text-sm text-gray-600 dark:text-gray-400">Achievements</span>
-                        </div>
-                        <p className="text-2xl font-bold text-gray-900 dark:text-white">3</p>
                     </div>
                 </div>
             </div>

@@ -1,21 +1,20 @@
 // gets user details
 import { UserDetails } from "@/lib/CustomTypes";
-import { WithAuth } from "./AuthProtection";
-const BASEURL = process.env.BASE_URL
-
-export const getUserDetails = async (id: string): Promise<UserDetails> => {
+const BASEURL = process.env.BASE_URL;
+interface UserDetailsProps {
+    user: UserDetails | null;
+    error: string | null;
+}
+export const getUserDetails = async (id: string): Promise<UserDetailsProps> => {
     try {
-        await WithAuth()
         const res = await fetch(`${BASEURL}/api/users/getDetails/${id}`);
         if (res.status !== 200) {
-            throw new Error("Failed to fetch user details");
+            return { error: "Something went wrong", user: null };
         }
         const data: UserDetails = await res.json();
-        return data;
+        return { user: data, error: null };
     } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        }
-        throw new Error("Failed to fetch user details");
+        if (error instanceof Error) return { error: error.message, user: null };
+        return { error: "Something went wrong", user: null };
     }
 };
