@@ -19,7 +19,7 @@ const SignIn = async () => {
                             Welcome Back!
                         </h2>
                         <p className="text-muted-foreground">
-                            You're already signed in to your account
+                            You&apos;re already signed in to your account
                         </p>
                     </div>
 
