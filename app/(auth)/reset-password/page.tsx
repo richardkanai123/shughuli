@@ -16,9 +16,9 @@ const ResetPasswordForm = () => {
                 </div>
 
                 {/* Form Section */}
-                <Suspense fallback={<LoadingSpinner />}>
-                    <ResetPasswordForm />
-                </Suspense>
+                {/* <Suspense fallback={<LoadingSpinner />}> */}
+                {/* <ResetPasswordForm /> */}
+                {/* </Suspense> */}
                 {/* Footer Links */}
                 <div className="p-6 border-t border-gray-200 dark:border-gray-700">
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-500">

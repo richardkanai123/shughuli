@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "react-hot-toast"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { SearchParams } from "next/dist/server/request/search-params"
+import { use } from "react"
 
 const ResetPasswordSchema = z.object({
     email: z.string().email("Please enter a valid email address"),
@@ -23,9 +23,12 @@ const ResetPasswordSchema = z.object({
 
 type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>
 
-const ResetPasswordForm = () => {
-    const searchParams = useSearchParams()
-    const emailParam = searchParams.get('email')
+const ResetPasswordForm = (props: {
+    searchParams: SearchParams
+}) => {
+
+    const search = use(props.searchParams)
+    const { email: emailParam } = search.email
 
     const form = useForm<ResetPasswordInput>({
         resolver: zodResolver(ResetPasswordSchema),
