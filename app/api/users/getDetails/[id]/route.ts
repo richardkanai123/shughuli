@@ -27,8 +27,8 @@ export async function GET({ params }:{
 		return NextResponse.json(user, { status: 200 });
 	} catch (error) {
 		if (error instanceof Error) {
-			return { status: 500, body: { message: error.message } };
+			return NextResponse.json({ status: 500, body: { message: error.message } });
 		}
-		return { status: 500, body: { message: "Internal Server Error" } };
+		return NextResponse.json({ status: 500, body: { message: "Internal Server Error" } });
 	}
 }
