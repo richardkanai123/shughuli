@@ -53,7 +53,7 @@ export default async function ProfilePage() {
                         </Suspense>
 
                         <Suspense fallback={<LoadingSpinner />}>
-                            <ActionButtons session={session} user={user} />
+                            <ActionButtons user={user} />
                         </Suspense>
                     </div>
                 </div>

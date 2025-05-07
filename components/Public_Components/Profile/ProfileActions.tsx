@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { EditProfileButton } from "../Buttons/EditProfileBtn"
 import SignOutBtn from "../Buttons/SignOutBtn"
+import { UserDetails } from "@/lib/CustomTypes"
+import { Session } from "better-auth"
 
-export default function ActionButtons({ session, user }: { session: any, user: any }) {
+export default function ActionButtons({ user }: { user: UserDetails }) {
     return (
         <div className="mt-6 w-full flex flex-wrap gap-4 align-middle items justify-between p-4 rounded-lg">
             <Link className="w-fit" href="/dashboard">
@@ -14,11 +16,11 @@ export default function ActionButtons({ session, user }: { session: any, user: a
                 </Button>
             </Link>
             <EditProfileButton session={{
-                username: session.username as string,
+                username: user.username as string,
                 user: {
                     name: user.name as string,
                     email: user.email as string,
-                    id: session.id as string,
+                    id: user.id as string,
                 }
             }} />
 
