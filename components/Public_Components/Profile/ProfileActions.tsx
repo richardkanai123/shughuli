@@ -5,7 +5,6 @@ import Link from "next/link"
 import { EditProfileButton } from "../Buttons/EditProfileBtn"
 import SignOutBtn from "../Buttons/SignOutBtn"
 import { UserDetails } from "@/lib/CustomTypes"
-import { Session } from "better-auth"
 
 export default function ActionButtons({ user }: { user: UserDetails }) {
     return (

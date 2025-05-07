@@ -2,6 +2,7 @@
 import { UserDetails } from "@/lib/CustomTypes";
 import { headers } from "next/headers";
 import { auth } from "../auth";
+import prisma from "../prisma";
 const BASEURL = process.env.BASE_URL;
 interface UserDetailsProps {
     user: UserDetails | null;
@@ -9,31 +10,47 @@ interface UserDetailsProps {
 }
 export const getCurrentUserDetails = async (id: string): Promise<UserDetailsProps> => {
     try {
+
+        if (!id) return { error: "User not found", user: null };
+
         const session = await auth.api.getSession({
             headers: await headers()
         })
 
+        if (!session) return { error: "Unauthorized", user: null };
 
-        // check if user is logged in and if the id of the user is the same as the id of the user who is logged in
-        if (!session || id !== session.userId) {
-            return { error: "Unauthorized", user: null };
-        }
-
-        const res = await fetch(`${BASEURL}/api/users/getDetails/${session.userId}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
+        const user = await prisma.user.findUnique({
+            where: {
+                id: id,
             },
-            next: {
-                tags: ["users", session.userId],
+            select: {
+                id: true,
+                email: true,
+                name: true,
+                username: true,
+                role: true,
+                createdAt: true,
+                updatedAt: true,
+                image: true,
+                emailVerified: true,
             }
-
-
         });
-        const data = await res.json();
-        if (res.status !== 200) {
-            return { error: data.message as string || "Something went wrong", user: null };
-        }
+
+        if (!user) return { error: "User not found", user: null };
+
+        const data: UserDetails = {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            username: user.username,
+            role: user.role,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            image: user.image,
+            emailVerified: user.emailVerified,
+        };
+
+
         return { user: data, error: null };
     } catch (error) {
         if (error instanceof Error) return { error: error.message, user: null };

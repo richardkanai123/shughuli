@@ -15,21 +15,16 @@ export default async function ProfilePage() {
     const session = await auth.api.getSession({
         headers: await headers()
     })
-
     if (!session) {
         return <AuthRequired />
     }
-
     const { user, error } = await getCurrentUserDetails(session.userId)
-
     if (error && !user) {
         return <ErrorMessage message={error} />
     }
-
     if (!user) {
         return <ErrorMessage message="User not found" />
     }
-
     return (
         <div className="w-full h-full flex-1 mx-auto py-10 px-4">
             <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden relative">

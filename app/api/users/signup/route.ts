@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
 
         })
         
-        console.log(newUserCreate.user.email)
         return Response.json({ success: true, message: "User created successfully", user: newUserCreate.user.email }, { status: 201 })
 
     } catch (error) {

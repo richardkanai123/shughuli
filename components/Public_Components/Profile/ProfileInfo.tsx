@@ -1,15 +1,11 @@
-import { User, AtSign, Mail, CheckCircle2, MailWarning } from "lucide-react"
-import VerifyEmailBtn from "@/components/Public_Components/Buttons/VerifyEmailButton"
+import { User, AtSign, Mail, CheckCircle2, MailWarning } from "lucide-react";
+import VerifyEmailBtn from "@/components/Public_Components/Buttons/VerifyEmailButton";
+import { UserDetails } from "@/lib/CustomTypes";
 
 interface ProfileInfoProps {
-    user: {
-        name: string
-        email: string
-        emailVerified: boolean
-    }
-    username: string
+    user: UserDetails;
+    username: string;
 }
-
 export function ProfileInfo({ user, username }: ProfileInfoProps) {
     return (
         <div className="flex justify-between items-start">
@@ -38,5 +34,5 @@ export function ProfileInfo({ user, username }: ProfileInfoProps) {
                 </div>
             </div>
         </div>
-    )
+    );
 }
