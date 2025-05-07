@@ -17,6 +17,7 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signUpSchema, SignUpSchemaType } from "@/lib/validation/schemas";
+import toast from "react-hot-toast";
 
 const SignUpForm = () => {
     const Router = useRouter();
@@ -33,8 +34,50 @@ const SignUpForm = () => {
     });
 
     const onSubmit = async (data: SignUpSchemaType) => {
-        console.log('submitted', BASEURL);
-        console.log(data);
+        const { email, password, name, username } = data
+        try {
+            const res = await fetch(`${BASEURL}/api/users/signup`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    name,
+                    username,
+                }),
+            });
+            const data = await res.json();
+            if (res.status !== 200) {
+                form.setError("root", { message: data.message as string })
+            }
+            // send welcome email
+            const emailRes = await fetch(`${BASEURL}/api/welcome`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    username,
+                }),
+            })
+
+            const emailResData = await emailRes.json();
+            if (emailRes.status !== 200) {
+                form.setError("root", { message: emailResData.message as string })
+            }
+
+            toast.success("Account created successfully")
+            Router.replace('/sign-in')
+
+        } catch (error) {
+            if (error instanceof Error) {
+                form.setError("root", { message: error.message })
+            }
+            form.setError("root", { message: "Something went wrong, please try again" })
+        }
     };
 
     return (

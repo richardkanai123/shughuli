@@ -51,8 +51,9 @@ export const auth = betterAuth({
 
 	socialProviders: {
 		google: {
+			// prompt: "consent",
 			enabled: true,
-			clientId: process.env.GOOGLE_CLIENTID as string,
+			clientId: process.env.GOOGLE_CLIENT_ID as string,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
 		},
 	},

@@ -21,20 +21,20 @@ interface ResetPasswordEmailProps {
 export const ResetPasswordEmail = ({ username, resetUrl }: ResetPasswordEmailProps) => (
     <Html>
         <Head />
-        <Preview>Reset your TaskForge password</Preview>
+        <Preview>Reset your Shughuli password</Preview>
         <Body style={main}>
             <Container style={container}>
                 <Img
                     src="/public/window.svg"
                     width="120"
                     height="40"
-                    alt="TaskForge"
+                    alt="Shughuli"
                     style={logo}
                 />
                 <Heading style={h1}>Reset Your Password</Heading>
                 <Text style={text}>Hi {username},</Text>
                 <Text style={text}>
-                    We received a request to reset your TaskForge account password.
+                    We received a request to reset your Shughuli account password.
                     Click the button below to choose a new password:
                 </Text>
                 <Section style={buttonContainer}>
@@ -52,8 +52,8 @@ export const ResetPasswordEmail = ({ username, resetUrl }: ResetPasswordEmailPro
                 <Hr style={hr} />
                 <Text style={footer}>
                     Need help? Contact us at{" "}
-                    <Link href="mailto:support@taskforge.com" style={link}>
-                        support@taskforge.com
+                    <Link href="mailto:support@Shughuli.com" style={link}>
+                        support@Shughuli.com
                     </Link>
                 </Text>
             </Container>

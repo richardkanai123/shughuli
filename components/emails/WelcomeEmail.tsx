@@ -22,20 +22,20 @@ interface WelcomeEmailProps {
 export const WelcomeEmail = ({ username, verifyUrl }: WelcomeEmailProps) => (
   <Html>
     <Head />
-    <Preview>Welcome to TaskForge!</Preview>
+    <Preview>Welcome to Shughuli!</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
           src="/public/window.svg"
           width="120"
           height="40"
-          alt="TaskForge"
+          alt="Shughuli"
           style={logo}
         />
-        <Heading style={h1}>Welcome to TaskForge!</Heading>
+        <Heading style={h1}>Welcome to Shughuli!</Heading>
         <Text style={text}>Hi {username},</Text>
         <Text style={text}>
-          Thank you for creating a TaskForge account. We&apos;re excited to have you on board!
+          Thank you for creating a Shughuli account. We&apos;re excited to have you on board!
           To get started, please verify your email address by clicking the button below:
         </Text>
         <Section style={buttonContainer}>
@@ -44,7 +44,7 @@ export const WelcomeEmail = ({ username, verifyUrl }: WelcomeEmailProps) => (
           </Button>
         </Section>
         <Text style={text}>
-          Once verified, you&apos;ll have full access to all TaskForge features, including:
+          Once verified, you&apos;ll have full access to all Shughuli features, including:
         </Text>
         <ul style={list}>
           <li>Project Management</li>
@@ -58,8 +58,8 @@ export const WelcomeEmail = ({ username, verifyUrl }: WelcomeEmailProps) => (
         </Text>
         <Text style={footer}>
           Need help? Contact us at{" "}
-          <Link href="mailto:support@taskforge.com" style={link}>
-            support@taskforge.com
+          <Link href="mailto:support@Shughuli.com" style={link}>
+            support@Shughuli.com
           </Link>
         </Text>
       </Container>
