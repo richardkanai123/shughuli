@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Footer = () => {
@@ -57,12 +58,12 @@ const Footer = () => {
                         <div className="space-y-4">
                             <p className="font-semibold text-sm text-gray-900 dark:text-white">Legal</p>
                             <nav className="flex flex-col space-y-2">
-                                <a href="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition">
+                                <Link href="/policy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition">
                                     Privacy Policy
-                                </a>
-                                <a href="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition">
+                                </Link>
+                                <Link href="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition">
                                     Terms of Service
-                                </a>
+                                </Link>
                             </nav>
                         </div>
 
