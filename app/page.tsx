@@ -1,3 +1,4 @@
+import CTABtn from "@/components/Public_Components/Buttons/CTABtn";
 import HomeFeaturesList from "@/components/Public_Components/Navigation/HomeFeatures";
 import TestimonialCard from "@/components/Public_Components/Navigation/TestimonialCard";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@ export default function Home() {
         </p>
         <div className="mt-8 flex gap-4 justify-center items-center">
           <div className="w-32">
-            add cta here
+            <CTABtn />
           </div>
           <Button
             variant="outline"

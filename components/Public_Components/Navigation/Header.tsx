@@ -11,6 +11,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import HeaderLink from "../Buttons/HeaderLink"
 
 const navigationItems = [
     { name: 'About', href: '/about' },
@@ -109,6 +110,7 @@ export function Header() {
 
                 <div className="flex flex-1 items-center justify-end space-x-4">
                     <nav className="flex items-center space-x-2">
+                        <HeaderLink />
                         <ModeToggle />
                     </nav>
                 </div>
