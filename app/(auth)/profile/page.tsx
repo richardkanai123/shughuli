@@ -8,7 +8,7 @@ import SignOutBtn from "@/components/Public_Components/Buttons/SignOutBtn"
 import { EditProfileButton } from "@/components/Public_Components/Buttons/EditProfileBtn"
 import { Suspense } from "react"
 import VerifyEmailBtn from "@/components/Public_Components/Buttons/VerifyEmailButton"
-import { getUserDetails } from "@/lib/actions/getUserDetails"
+import { getCurrentUserDetails } from "@/lib/actions/getUserDetails"
 export default async function ProfilePage() {
     const session = await auth.api.getSession({
         headers: await headers()
@@ -37,9 +37,11 @@ export default async function ProfilePage() {
     }
 
 
-    const { user, error } = await getUserDetails(session.userId)
+    const { user, error } = await getCurrentUserDetails(session.userId)
+    console.log(user, error)
 
-    if (error) {
+
+    if (error && !user) {
         return <div className="w-full h-[80vh] dark:bg-gray-900  flex flex-col items-center justify-center">
             <div className="text-center space-y-6">
                 <div className="p-4 rounded-full bg-gray-100 dark:bg-gray-800 inline-block">

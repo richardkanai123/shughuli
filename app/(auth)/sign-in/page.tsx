@@ -12,7 +12,7 @@ const SignIn = async () => {
 
     if (session) {
         return (
-            <div className="container dark:bg-slate-900 max-w-md mx-auto mt-16 p-8">
+            <div className="container dark:bg-slate-900 max-w-lg mx-auto mt-16 p-8">
                 <div className="text-center space-y-6">
                     <div className="space-y-2">
                         <h2 className="text-2xl font-semibold tracking-tight">
