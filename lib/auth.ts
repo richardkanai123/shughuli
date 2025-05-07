@@ -16,6 +16,20 @@ export const auth = betterAuth({
 		autoSignIn: true,
 		minPasswordLength: 6,
 		maxPasswordLength: 20,
+		sendResetPassword: async ({ user, url }) => {
+			// send reset password email
+			const res = await fetch(`${process.env.BASE_URL}/api/reset-password`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email: user.email,
+					username: user.name,
+					url,
+				}),
+			});
+		}
 	},
 	emailVerification: {
 		sendOnSignUp: true,
@@ -63,10 +77,12 @@ export const auth = betterAuth({
 			role: {
 				type: "string",
 				required: true,
+				fieldName: "role",
 			},
 			username: {
 				type: "string",
 				required: true,
+				fieldName: "username",
 			},
 		},
 	},
