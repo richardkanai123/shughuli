@@ -69,6 +69,17 @@ export const auth = betterAuth({
 			enabled: true,
 			clientId: process.env.GOOGLE_CLIENT_ID as string,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+			// creation of a username when user signs up with google
+			overrideUserInfoOnSignIn: true,
+			mapProfileToUser: async ({ email,name,given_name, family_name,picture,email_verified }) => {
+				return {
+					email,
+					name,
+					image: picture,
+					username: given_name.toLowerCase() + family_name.toLowerCase(),
+					emailVerified:email_verified
+				};
+			}
 		},
 	},
 

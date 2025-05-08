@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
@@ -14,18 +8,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  MEMBER
+  CUSTOMER
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}
+
+enum TeamRole {
+  MEMBER
+  LEAD
+}
+
 model User {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   email         String
   name          String
-  role          String
+  role          Role     @default(MEMBER)
   emailVerified Boolean
   image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
   username      String
-  sessions      Session[]
-  accounts      Account[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions       Session[]
+  accounts       Account[]
+  TeamMember     TeamMember[]
+  ProjectMember  ProjectMember[]
+  assignedTasks  Task[]           @relation("TaskAssignee")
+  createdTasks   Task[]           @relation("TaskCreator")
+  Comments       Comment[]
+  TeamInvitation TeamInvitation[]
+  Notifications  Notification[]
+  projects       Project[]        @relation("ProjectOwner")
+  teams          Team[]           @relation("TeamOwner")
+  Project        Project[]
+  Team           Team[]
 
   @@map("user")
 }
@@ -33,15 +65,14 @@ model User {
 model Session {
   id        String   @id @default(cuid())
   expiresAt DateTime
-  token     String
-  createdAt DateTime
-  updatedAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
   @@map("session")
 }
 
@@ -50,7 +81,6 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -58,19 +88,173 @@ model Account {
   refreshTokenExpiresAt DateTime?
   scope                 String?
   password              String?
-  createdAt             DateTime
-  updatedAt             DateTime
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }
 
 model Verification {
-  id         String    @id @default(cuid())
+  id         String   @id @default(cuid())
   identifier String
   value      String
   expiresAt  DateTime
-  createdAt  DateTime?
-  updatedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@map("verification")
+}
+
+model Project {
+  id          String          @id @default(uuid())
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  name        String
+  description String?
+  slug        String          @unique
+  isPublic    Boolean         @default(false)
+  startDate   DateTime?
+  endDate     DateTime?
+  attachments String[]
+  ownerId     String
+  teamId      String?
+  owner       User            @relation("ProjectOwner", fields: [ownerId], references: [id])
+  team        Team?           @relation(fields: [teamId], references: [id])
+  members     ProjectMember[]
+  tasks       Task[]
+  User        User?           @relation(fields: [userId], references: [id])
+  userId      String?
+
+  @@index([ownerId])
+  @@index([teamId])
+}
+
+model Team {
+  id             String           @id @default(uuid())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  name           String
+  description    String?
+  slug           String           @unique
+  image          String?
+  ownerId        String
+  projects       Project[]
+  owner          User             @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  TeamInvitation TeamInvitation[]
+  members        TeamMember[]
+  User           User?            @relation(fields: [userId], references: [id])
+  userId         String?
+
+  @@index([ownerId])
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      TeamRole @default(MEMBER)
+  teamId    String
+  userId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([userId])
+  @@index([teamId])
+}
+
+model ProjectMember {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      TeamRole @default(MEMBER)
+  projectId String
+  userId    String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, userId])
+  @@index([userId])
+  @@index([projectId])
+}
+
+model Task {
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  title       String
+  description String?
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
+  startDate   DateTime?
+  completedAt DateTime?
+  projectId   String
+  assigneeId  String?
+  creatorId   String
+  parentId    String?
+  comments    Comment[]
+  assignee    User?        @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  creator     User         @relation("TaskCreator", fields: [creatorId], references: [id])
+  parentTask  Task?        @relation("SubTasks", fields: [parentId], references: [id])
+  subTasks    Task[]       @relation("SubTasks")
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([assigneeId])
+  @@index([creatorId])
+  @@index([parentId])
+  @@index([status])
+  @@index([priority])
+}
+
+model Comment {
+  id              String    @id @default(uuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  content         String
+  taskId          String
+  userId          String
+  parentCommentId String?
+  parentComment   Comment?  @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  replies         Comment[] @relation("CommentReplies")
+  task            Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([taskId])
+  @@index([userId])
+  @@index([parentCommentId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  userId    String
+  link      String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model TeamInvitation {
+  id          String   @id @default(cuid())
+  email       String
+  role        TeamRole @default(MEMBER)
+  invitedById String
+  teamId      String
+  accepted    Boolean  @default(false)
+  token       String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  invitedBy   User     @relation(fields: [invitedById], references: [id])
+  team        Team     @relation(fields: [teamId], references: [id])
+
+  @@index([email])
+  @@index([teamId])
+  @@index([invitedById])
 }
