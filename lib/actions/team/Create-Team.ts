@@ -3,7 +3,7 @@
 import { auth } from "@/lib/auth"
 import prisma from "@/lib/prisma"
 import { teamSchema } from "@/lib/validation/teams"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { headers } from "next/headers"
 
 export async function createTeam(data: FormData | { name: string; description?: string }) {
@@ -49,6 +49,7 @@ export async function createTeam(data: FormData | { name: string; description?: 
 
         // Revalidate the teams page
         revalidatePath('/teams')
+        revalidateTag('teams')
 
         return { 
             success: true, 

@@ -43,16 +43,14 @@ export default function CreateTeamPage() {
             }
 
             toast.success(result.message || "Team created successfully")
-            // router.push(`/teams/${result.team.id}`)
-
             form.reset()
-            router.push('/add-members')
+            router.push('/dashboard/teams')
 
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)
             }
-            toast.error("Something went wrong")
+            toast.error("Something went wrong, please try again.")
         }
     }
 

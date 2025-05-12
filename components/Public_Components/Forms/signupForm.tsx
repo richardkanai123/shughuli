@@ -70,7 +70,7 @@ const SignUpForm = () => {
             }
 
             toast.success("Account created successfully")
-            Router.replace('/sign-in')
+            Router.replace('/create-team')
 
         } catch (error) {
             if (error instanceof Error) {

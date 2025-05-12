@@ -13,6 +13,7 @@ interface Team {
     name: string
     members?: { id: string }[]
     ownerId: string
+    lead: string | null
 }
 
 const AddTeamMember = async () => {
@@ -47,7 +48,7 @@ const AddTeamMember = async () => {
 
     return (
         <div className="container max-w-6xl mx-auto py-10 px-4">
-            < div className="grid gap-8 md:grid-cols-[1fr,300px]" >
+            <div className="grid gap-8 md:grid-cols-[1fr,300px]">
                 {/* Teams List Section */}
                 <Card>
                     <CardHeader>
@@ -69,9 +70,9 @@ const AddTeamMember = async () => {
                 </Card >
                 {/* Invite Form Section */}
                 < InviteToTeam teams={data} />
-            </div >
+            </div>
 
-        </div >
+        </div>
     )
 }
 

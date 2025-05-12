@@ -8,56 +8,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  MEMBER
-  CUSTOMER
-}
-
-enum TaskPriority {
-  LOW
-  MEDIUM
-  HIGH
-  URGENT
-}
-
-enum TaskStatus {
-  BACKLOG
-  TODO
-  IN_PROGRESS
-  REVIEW
-  DONE
-}
-
-enum TeamRole {
-  MEMBER
-  LEAD
-}
-
 model User {
-  id            String   @id @default(cuid())
-  email         String
-  name          String
-  role          Role     @default(MEMBER)
-  emailVerified Boolean
-  image         String?
-  username      String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  sessions       Session[]
-  accounts       Account[]
-  TeamMember     TeamMember[]
+  id             String           @id @default(cuid())
+  email          String           @unique
+  name           String
+  emailVerified  Boolean
+  image          String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  username       String
+  role           Role             @default(MEMBER)
+  Comments       Comment[]
+  Notifications  Notification[]
+  projects       Project[]        @relation("ProjectOwner")
+  Project        Project[]
   ProjectMember  ProjectMember[]
   assignedTasks  Task[]           @relation("TaskAssignee")
   createdTasks   Task[]           @relation("TaskCreator")
-  Comments       Comment[]
-  TeamInvitation TeamInvitation[]
-  Notifications  Notification[]
-  projects       Project[]        @relation("ProjectOwner")
-  teams          Team[]           @relation("TeamOwner")
-  Project        Project[]
   Team           Team[]
+  teams          Team[]           @relation("TeamOwner")
+  TeamInvitation TeamInvitation[]
+  TeamMember     TeamMember[]
+  accounts       Account[]
+  sessions       Session[]
 
   @@map("user")
 }
@@ -119,12 +92,12 @@ model Project {
   attachments String[]
   ownerId     String
   teamId      String?
+  userId      String?
   owner       User            @relation("ProjectOwner", fields: [ownerId], references: [id])
   team        Team?           @relation(fields: [teamId], references: [id])
+  User        User?           @relation(fields: [userId], references: [id])
   members     ProjectMember[]
   tasks       Task[]
-  User        User?           @relation(fields: [userId], references: [id])
-  userId      String?
 
   @@index([ownerId])
   @@index([teamId])
@@ -139,12 +112,12 @@ model Team {
   slug           String           @unique
   image          String?
   ownerId        String
+  lead           String?
   projects       Project[]
+  User           User?            @relation(fields: [lead], references: [id])
   owner          User             @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   TeamInvitation TeamInvitation[]
   members        TeamMember[]
-  User           User?            @relation(fields: [userId], references: [id])
-  userId         String?
 
   @@index([ownerId])
 }
@@ -257,4 +230,30 @@ model TeamInvitation {
   @@index([email])
   @@index([teamId])
   @@index([invitedById])
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+  CUSTOMER
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+}
+
+enum TeamRole {
+  MEMBER
+  LEAD
 }

@@ -28,6 +28,8 @@ import AuthRequired from "../Profile/AuthRequired"
 import LoadingSpinner from "../Loaders/LoadSpinner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
+import { createInvite } from "@/lib/actions/team/createInvite"
+import { useRouter } from "next/navigation"
 
 const inviteSchema = z.object({
     email: z.string().email("Please enter a valid email address"),
@@ -40,6 +42,7 @@ interface InviteToTeamProps {
 }
 
 const InviteToTeam = ({ teams }: InviteToTeamProps) => {
+    const Router = useRouter()
     const form = useForm<z.infer<typeof inviteSchema>>({
         resolver: zodResolver(inviteSchema),
         defaultValues: {
@@ -55,7 +58,7 @@ const InviteToTeam = ({ teams }: InviteToTeamProps) => {
         return <AuthRequired />
     }
 
-    if (isPending) {
+    if (isPending || !session) {
         return (
             <LoadingSpinner />
         )
@@ -63,10 +66,17 @@ const InviteToTeam = ({ teams }: InviteToTeamProps) => {
 
     async function onSubmit(values: z.infer<typeof inviteSchema>) {
         try {
-            // TODO: Implement the invite API call
-            console.log(values, session?.userId)
+            const { success, error } = await createInvite(values.teamId, values.email)
+            form.clearErrors()
+
+            if (!success) {
+                toast.error("Something went wrong. Please try again.")
+                form.setError("root", { message: error as string })
+                return
+            }
             toast.success("Invitation sent successfully.")
             form.reset()
+            Router.push('/invites/success')
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)
@@ -146,6 +156,10 @@ const InviteToTeam = ({ teams }: InviteToTeamProps) => {
                             }
                             {form.formState.isSubmitting ? "Sending invitation..." : "Send Invitation"}
                         </Button>
+
+                        {form.formState.errors.root && (
+                            <p className="text-red-500 text-sm">{form.formState.errors.root?.message}</p>
+                        )}
                     </form>
                 </Form>
             </div>
