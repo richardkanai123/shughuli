@@ -119,6 +119,8 @@ export const auth = betterAuth({
 				select: {
 					role: true,
 					username: true,
+					image: true,
+					email: true,
 				},
 			});
 
@@ -126,6 +128,8 @@ export const auth = betterAuth({
 				...session,
 				role: customUser?.role,
 				username: customUser?.username,
+				image: customUser?.image,
+				email: customUser?.email,
 			};
 		}),
 		nextCookies(),
