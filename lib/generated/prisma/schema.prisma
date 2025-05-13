@@ -87,6 +87,7 @@ model Project {
   description String?
   slug        String          @unique
   isPublic    Boolean         @default(false)
+  status      ProjectStatus   @default(OPEN)
   startDate   DateTime?
   endDate     DateTime?
   attachments String[]
@@ -256,4 +257,10 @@ enum TaskStatus {
 enum TeamRole {
   MEMBER
   LEAD
+}
+
+enum ProjectStatus {
+  OPEN
+  ONGOING
+  COMPLETED
 }

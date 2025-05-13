@@ -5,7 +5,7 @@ import { Header } from "@/components/Public_Components/Navigation/Header";
 import Footer from "@/components/Public_Components/Navigation/Footer";
 import { ThemeProvider } from "@/components/Public_Components/theme-provider";
 import { Toaster } from 'react-hot-toast';
-const montserrat = Montserrat({ subsets: ["cyrillic"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 
 export const metadata: Metadata = {

@@ -1,9 +1,6 @@
 "use client"
 
 import {
-    BellIcon,
-    CreditCardIcon,
-    LogOutIcon,
     MoreVerticalIcon,
     UserCircleIcon,
 } from "lucide-react"
@@ -30,6 +27,8 @@ import {
 } from "@/components/ui/sidebar"
 import { useSession } from "@/lib/auth-client"
 import LoadingSpinner from "../Public_Components/Loaders/LoadSpinner"
+import Link from "next/link"
+import SignOutBtn from "../Public_Components/Buttons/SignOutBtn"
 
 export function NavUser() {
     const { isMobile } = useSidebar()
@@ -92,16 +91,12 @@ export function NavUser() {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <UserCircleIcon />
-                                Profile
+                            <DropdownMenuItem asChild >
+                                <Link prefetch href="/profile"> <UserCircleIcon className="size-4" />Profile</Link>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <LogOutIcon />
-                            Log out
-                        </DropdownMenuItem>
+                        <SignOutBtn />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

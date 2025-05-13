@@ -2,9 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import { signOut, useSession } from "@/lib/auth-client"
-import { Loader2 } from "lucide-react"
+import { Loader2, LogOutIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+
 const SignOutBtn = () => {
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
@@ -22,12 +23,15 @@ const SignOutBtn = () => {
                     onSuccess: () => {
                         setError(null)
                         setLoading(false)
-                        Router.replace('/sign-in')
+                        Router.push('/sign-in')
                     }
                 }
             })} variant='destructive' size='sm'>
+
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {loading ? "Signing out..." : "Sign out"}
+                {loading ? "Signing out..." : <>
+                    Sign out <LogOutIcon className="ml-2 h-4 w-4" />
+                </>}
             </Button>
             {error && <p className="text-destructive">{error}</p>}
         </>
