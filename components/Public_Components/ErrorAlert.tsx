@@ -12,7 +12,7 @@ const ErrorAlert = ({ ErrorMessage }: { ErrorMessage: string | null | undefined 
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>
-                    <p className="text-center">{ErrorMessage || "An unknown error occurred!"}</p>
+                    <p className="text-center">{ErrorMessage ? ErrorMessage : "An unknown error occurred!"}</p>
                     <Button size='lg' className="mx-auto mt-5 cursor-pointer" onClick={() => Router.refresh()}>
                         Try Again
                     </Button>

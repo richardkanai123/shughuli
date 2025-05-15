@@ -1,5 +1,6 @@
+// api route to get notifications for a user
 import prisma from "@/lib/prisma";
-import { newProjectSchema } from "@/lib/validation/schemas";
+import { newTaskSchema } from "@/lib/validation/schemas";
 import { NextRequest, NextResponse } from "next/server";
 export async function GET(Request: NextRequest) {
     const userid = Request.nextUrl.searchParams.get("user");
@@ -14,20 +15,20 @@ export async function GET(Request: NextRequest) {
         });
         if (!user) return NextResponse.json({ message: "User not found" }, { status: 404 });
 
-        const Projects = await prisma.project.findMany({
+        const Tasks = await prisma.task.findMany({
             where: {
+                
                 OR: [
-                    { ownerId: userid },
-                    { members: { some: { id: userid } } },
-                    {userId: userid}
+                    { creatorId: userid },
+                    { assigneeId: userid },
                 ]
             },
             orderBy: {
                 createdAt: "desc",
             },
         });
-        if(Projects.length===0) return NextResponse.json({ message: "You have no Projects", Projects }, { status: 200 });
-        return NextResponse.json({ Projects:Projects, message: "Projects found" }, { status: 200 } );
+        if(Tasks.length===0) return NextResponse.json({ message: "You have no Tasks", Tasks }, { status: 200 });
+        return NextResponse.json({ Tasks:Tasks, message: "Tasks found" }, { status: 200 } );
     } catch (error) {
         if (error instanceof Error) {
             return NextResponse.json({ status: 500, body: { message: error.message } });
@@ -38,31 +39,31 @@ export async function GET(Request: NextRequest) {
 }
 
 
-// create project
+// create task
 export async function POST(Request: NextRequest) {
     const body = await Request.json();
-    const { projectData } = body;
-    // validate project data
-    const isValid = await newProjectSchema.safeParse(projectData);
+    const { taskData } = body;
+    // validate task data
+    const isValid = await newTaskSchema.safeParse(taskData);
     if (!isValid.success) {
         return NextResponse.json({ status: 400, body: { message: `${isValid.error.message} due to ${isValid.error.cause || 'unknown input data error'}` } });
     }
-    const { name, description, ownerId } = isValid.data;
+    const { title, description, creatorId, assigneeId, projectId,dueDate,priority,status,parentId } = isValid.data;
     try {
-        const project = await prisma.project.create({
+        const task = await prisma.task.create({
             data: {
-                name,
-                slug: name.toLowerCase().replace(/ /g, "-") + "-" + Date.now(),
+                title,
                 description,
-                ownerId,
-                members: {
-                    create: {
-                        userId: ownerId,
-                    },
-                },
+                creatorId,
+                assigneeId,
+                projectId,
+                dueDate,
+                priority,
+                status,
+                parentId
             },
         });
-        return NextResponse.json({ project, message: "Project created successfully" }, { status: 200 });
+        return NextResponse.json({ task, message: "Task created successfully" }, { status: 200 });
     } catch (error) {
         if (error instanceof Error) {
             return NextResponse.json({ status: 500, body: { message: error.message } });
