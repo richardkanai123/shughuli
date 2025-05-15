@@ -46,29 +46,29 @@
 
 :root {
 	--radius: 0.5rem;
-	--background: hsl(0 0% 98%);
-	--foreground: hsl(0 0% 20%);
-	--card: hsl(0 0% 100%);
-	--card-foreground: hsl(0 0% 20%);
-	--popover: hsl(0 0% 95%);
-	--popover-foreground: hsl(0 0% 20%);
-	--primary: hsl(180 100% 45%);
+	--background: hsl(210 60% 98%);
+	--foreground: hsl(210 60% 20%);
+	--card: hsl(240 100% 95%);
+	--card-foreground: hsl(210 60% 30%);
+	--popover: hsl(240 100% 95%);
+	--popover-foreground: hsl(210 60% 30%);
+	--primary: hsl(120 100% 60%);
 	--primary-foreground: hsl(0 0% 100%);
-	--secondary: hsl(48 100% 67%);
-	--secondary-foreground: hsl(0 0% 20%);
+	--secondary: hsl(200 80% 60%);
+	--secondary-foreground: hsl(0 0% 100%);
 	--muted: hsl(0 0% 90%);
-	--muted-foreground: hsl(0 0% 30%);
-	--accent: hsl(30 100% 60%);
-	--accent-foreground: hsl(0 0% 20%);
-	--destructive: hsl(0 100% 50%);
-	--border: hsl(0 0% 85%);
-	--input: hsl(118, 100%, 85%);
-	--ring: hsl(180 100% 45%);
-	--chart-1: hsl(180 100% 45%);
-	--chart-2: hsl(48 100% 67%);
-	--chart-3: hsl(30 100% 60%);
-	--chart-4: hsl(20 100% 55%);
-	--chart-5: hsl(340 70% 50%);
+	--muted-foreground: hsl(210 60% 30%);
+	--accent: hsl(45 100% 50%);
+	--accent-foreground: hsl(0 0% 100%);
+	--destructive: hsl(0 100% 60%);
+	--border: hsl(210 60% 85%);
+	--input: hsl(0 0% 95%);
+	--ring: hsl(120 100% 40%);
+	--chart-1: hsl(120 100% 55%);
+	--chart-2: hsl(200 80% 55%);
+	--chart-3: hsl(45 100% 60%);
+	--chart-4: hsl(0 100% 60%);
+	--chart-5: hsl(0 0% 80%);
 	--sidebar: oklch(0.985 0 0);
 	--sidebar-foreground: oklch(0.145 0 0);
 	--sidebar-primary: oklch(0.205 0 0);
@@ -81,29 +81,29 @@
 }
 
 .dark {
-	--background: #1d283a;
-	--foreground: hsl(0 0% 95%);
-	--card: #192639f2;
-	--card-foreground: hsl(0 0% 95%);
-	--popover: hsl(0 0% 25%);
-	--popover-foreground: hsl(0 0% 95%);
-	--primary: hsl(179 100% 30%);
+	--background: hsl(210 70% 15%);
+	--foreground: hsl(210 70% 85%);
+	--card: hsl(240 100% 20%);
+	--card-foreground: hsl(210 70% 80%);
+	--popover: hsl(240 100% 25%);
+	--popover-foreground: hsl(210 70% 85%);
+	--primary: hsl(120 100% 50%);
 	--primary-foreground: hsl(0 0% 100%);
-	--secondary: hsl(48 100% 45%);
-	--secondary-foreground: hsl(0 0% 90%);
-	--muted: #1c3356;
-	--muted-foreground: hsl(0 0% 80%);
-	--accent: hsl(30 100% 50%);
-	--accent-foreground: hsl(0 0% 95%);
-	--destructive: hsl(0 100% 40%);
-	--border: hsl(0 0% 30%);
-	--input: hsl(150, 92%, 20%);
-	--ring: hsl(180 100% 30%);
-	--chart-1: hsl(179 100% 30%);
-	--chart-2: hsl(48 100% 45%);
-	--chart-3: hsl(30 100% 50%);
-	--chart-4: hsl(20 100% 40%);
-	--chart-5: hsl(340 70% 40%);
+	--secondary: hsl(200 80% 50%);
+	--secondary-foreground: hsl(0 0% 100%);
+	--muted: hsl(210 60% 25%);
+	--muted-foreground: hsl(210 70% 70%);
+	--accent: hsl(45 100% 60%);
+	--accent-foreground: hsl(210 70% 95%);
+	--destructive: hsl(0 100% 50%);
+	--border: hsl(240 100% 30%);
+	--input: hsl(210 60% 30%);
+	--ring: hsl(120 100% 70%);
+	--chart-1: hsl(120 100% 50%);
+	--chart-2: hsl(200 80% 55%);
+	--chart-3: hsl(45 100% 60%);
+	--chart-4: hsl(0 100% 50%);
+	--chart-5: hsl(210 70% 70%);
 	--sidebar: #0e213f;
 	--sidebar-foreground: oklch(0.985 0 0);
 	--sidebar-primary: oklch(0.488 0.243 264.376);
@@ -148,7 +148,7 @@
 	.sidebar-collapsed .sidebar-item-text {
 		@apply opacity-0 w-0 hidden;
 	  }
-	
+
 	  .sidebar-item {
 		@apply flex items-center gap-2 px-2 py-1.5 rounded-md transition-all duration-200;
 	  }
