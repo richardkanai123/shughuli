@@ -31,9 +31,9 @@ export async function GET(Request: NextRequest) {
         return NextResponse.json({ Tasks:Tasks, message: "Tasks found" }, { status: 200 } );
     } catch (error) {
         if (error instanceof Error) {
-            return NextResponse.json({ status: 500, body: { message: error.message } });
+            return NextResponse.json({ message: error.message }, { status: 500}  );
         }
-        return NextResponse.json({ status: 500, body: { message: "Internal Server Error" } });
+        return NextResponse.json({ message: "Internal Server Error" }, {status: 500} );
         
     }
 }
@@ -46,7 +46,7 @@ export async function POST(Request: NextRequest) {
     // validate task data
     const isValid = await newTaskSchema.safeParse(taskData);
     if (!isValid.success) {
-        return NextResponse.json({ status: 400, body: { message: `${isValid.error.message} due to ${isValid.error.cause || 'unknown input data error'}` } });
+        return NextResponse.json({ message: isValid.error.message }, { status: 400 });
     }
     const { title, description, creatorId, assigneeId, projectId,dueDate,priority,status,parentId } = isValid.data;
     try {
@@ -66,9 +66,9 @@ export async function POST(Request: NextRequest) {
         return NextResponse.json({ task, message: "Task created successfully" }, { status: 200 });
     } catch (error) {
         if (error instanceof Error) {
-            return NextResponse.json({ status: 500, body: { message: error.message } });
+            return NextResponse.json( { message: error.message }, { status: 500 } );
         }
-        return NextResponse.json({ status: 500, body: { message: "Internal Server Error" } });
+        return NextResponse.json({ message: "Internal Server Error"}, { status: 500 });
         
     }
 }

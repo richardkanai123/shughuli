@@ -78,22 +78,20 @@ const DynamicHeader = () => {
         <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mx-auto w-full p-4
-                bg-background/75 backdrop-blur-md
-                border-b border-border/40
-                flex items-center align-middle justify-between gap-2
-                sticky top-0 
-                shadow-sm
-                transition-all duration-200">
+            className={cn(
+                "mx-auto w-full p-4",
+                "bg-background/75 backdrop-blur-md",
+                "border-b border-border/40",
+                "flex flex-col md:flex-row items-center justify-between",
+                "sticky top-0 z-20",
+                "shadow-sm",
+                "transition-all duration-200"
+            )}>
             <div className="flex items-center gap-4">
                 <SidebarTrigger
                     size="icon"
                     variant="ghost"
-                    className={cn(
-                        "hover:bg-accent/50",
-                        "transition-all duration-200",
-                        "active:scale-95"
-                    )}>
+                    className="hover:bg-accent/50 transition-all duration-200 active:scale-95">
                     <Menu className="h-5 w-5" />
                 </SidebarTrigger>
 
@@ -109,35 +107,47 @@ const DynamicHeader = () => {
                 </motion.div>
             </div>
 
-            <Breadcrumb>
-                <BreadcrumbList>
-                    {pathSegments.map((segment, index) => {
-                        const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
-                        const isLast = index === pathSegments.length - 1;
-                        const segmentName = segment.replace(/-/g, " ");
-                        return (
-                            <BreadcrumbItem key={path}>
-                                <BreadcrumbSeparator>
-                                    <ChevronRight className="h-3 w-3" />
-                                </BreadcrumbSeparator>
-                                {isLast ? (
-                                    <BreadcrumbPage className="capitalize">
-                                        {segmentName}
-                                    </BreadcrumbPage>
-                                ) : (
-                                    <BreadcrumbLink
-                                        href={path}
-                                        className="capitalize text-muted-foreground hover:text-foreground">
-                                        {segmentName}
-                                    </BreadcrumbLink>
-                                )}
-                            </BreadcrumbItem>
-                        );
-                    })}
-                </BreadcrumbList>
+            <div className="flex items-center gap-4">
+                <Breadcrumb>
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink
+                                href="/dashboard"
+                                className="text-muted-foreground hover:text-foreground"
+                            >
+                                <HomeIcon className="h-3 w-3" />
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
 
-            </Breadcrumb>
-            <ModeToggle />
+                        {pathSegments.map((segment, index) => {
+                            const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
+                            const isLast = index === pathSegments.length - 1;
+                            const segmentName = segment.replace(/-/g, " ");
+
+                            return (
+                                <BreadcrumbItem key={path}>
+
+                                    <ChevronRight className="h-3 w-3" />
+
+                                    {isLast ? (
+                                        <BreadcrumbPage className="capitalize">
+                                            {segmentName}
+                                        </BreadcrumbPage>
+                                    ) : (
+                                        <BreadcrumbLink
+                                            href={path}
+                                            className="capitalize text-muted-foreground hover:text-foreground"
+                                        >
+                                            {segmentName}
+                                        </BreadcrumbLink>
+                                    )}
+                                </BreadcrumbItem>
+                            );
+                        })}
+                    </BreadcrumbList>
+                </Breadcrumb>
+                <ModeToggle />
+            </div>
         </motion.div>
     );
 };

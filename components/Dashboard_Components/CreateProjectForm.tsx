@@ -12,7 +12,6 @@ import {
     newProjectSchema,
 } from '@/lib/validation/schemas'
 
-import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -32,9 +31,8 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
-import { Calendar as CalendarIcon, PlusIcon } from 'lucide-react'
+import { Calendar as CalendarIcon, Loader2, PlusIcon } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
-import LoadingSpinner from '../Public_Components/Loaders/LoadSpinner'
 import { Textarea } from '../ui/textarea'
 import {
     Select,
@@ -43,7 +41,8 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select"
-import { Switch } from '../ui/switch'
+import { Switch } from '@/components/ui/switch'
+import { createProject } from '@/lib/actions/projects/create-project'
 
 const isDateValid = (date: Date, startDate?: Date) => {
     const today = new Date()
@@ -53,8 +52,6 @@ const isDateValid = (date: Date, startDate?: Date) => {
 }
 
 const CreateProjectForm = ({ userId }: { userId: string }) => {
-    const router = useRouter()
-
     const form = useForm({
         defaultValues: {
             name: '',
@@ -69,54 +66,60 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
         resolver: zodResolver(newProjectSchema),
         mode: 'onChange',
     })
-
-    const { isSubmitting } = form.formState
-
     useEffect(() => {
         const now = new Date()
         form.setValue('startDate', now)
         form.setValue('endDate', now)
-    }, [])
+    }, [form])
 
     const onSubmit: SubmitHandler<NewProjectSchemaType> = async (values) => {
-        const slug = values.name
-            .toLowerCase()
-            .replace(/[^\w\s-]/g, '')
-            .trim()
-            .replace(/\s+/g, '-')
-
-        const projectData = { ...values, slug }
-
+        console.log(values)
         try {
+            const slug = values.name
+                .toLowerCase()
+                .replace(/[^\w\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-') + '-' + Date.now().toString()
+
+            const projectData = {
+                name: values.name,
+                description: values.description,
+                startDate: values.startDate,
+                endDate: values.endDate,
+                isPublic: values.isPublic,
+                status: values.status,
+                slug,
+                ownerId: values.ownerId,
+            }
+
             console.log(projectData)
-            // const response = await toast.promise(
-            //     fetch('/api/projects/create', {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify(projectData),
-            //     }),
-            //     {
-            //         loading: 'Creating your project...',
-            //         success: 'Project created successfully! Redirecting...',
-            //         error: (err) =>
-            //             err instanceof Error
-            //                 ? err.message
-            //                 : 'Failed to create project',
-            //     }
-            // )
+            const { data, message, status } = await createProject(
+                {
+                    description: projectData.description,
+                    endDate: projectData.endDate,
+                    isPublic: projectData.isPublic,
+                    name: projectData.name,
+                    startDate: projectData.startDate,
+                    status: projectData.status,
+                    slug: projectData.slug,
+                    ownerId: projectData.ownerId
+                }
+            )
 
-            // const data = await response.json()
+            console.log(data, message, status)
 
-            // if (!response.ok) throw new Error(data.message)
-
-            // form.reset()
-            // router.refresh()
-            // router.push(`/projects/${data.project.id}`)
+            if (status !== 201) {
+                toast.error(message)
+                form.setError('root', { message })
+                return
+            }
+            toast.success(data || message)
+            form.reset()
         } catch (error) {
-            // Error already handled by toast
-            console.log(error)
+            if (error instanceof Error) {
+                toast.error(error.message)
+            }
+            toast.error("Something went wrong. Please try again.")
         }
     }
 
@@ -284,14 +287,19 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
                         )}
                     />
 
+                    {/* error message */}
+                    {form.formState.errors.root && <div className="p-1 rounded-md w-full">
+                        <p className="text-sm text-red-400">{form.formState.errors.root.message}</p>
+                    </div>}
+
                     {/* Submit Button */}
                     <Button
                         size='sm'
                         type="submit"
                         className="w-full shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.01] active:scale-[0.98] disabled:hover:scale-100"
-                        disabled={isSubmitting}
+                        disabled={form.formState.isSubmitting || !form.formState.isValid}
                     >
-                        {isSubmitting ? <><LoadingSpinner /> 'Creating'</> : <>
+                        {form.formState.isSubmitting ? <><Loader2 className="h-6 w-6 animate-spin text-primary" /> 'Creating'</> : <>
                             <PlusIcon className="mr-2 h-4 w-4" /> Create Project</>}
                     </Button>
                 </form>

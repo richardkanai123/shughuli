@@ -47,10 +47,10 @@ export const newTaskSchema = z.object({
 
 export const teamSchema = z.object({
 	name: z.string().min(1),
-	description: z.string().optional(),
-	image: z.string().url().optional(),
-	ownerId: z.string().min(1),
-	lead: z.string().optional(),
+	description: z.string(),
+	// image: z.string().url().optional(),
+	// ownerId: z.string().min(1),
+	// lead: z.string().optional(),
 });
 
 export const newCommentSchema = z.object({

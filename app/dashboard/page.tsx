@@ -21,10 +21,10 @@ const Dashboard = async () => {
     return (
         <div className="flex flex-col gap-4 p-2">
             <p>Dashboard</p>
-            {session ? <SignOutBtn /> : <SignInBtn />}
 
             <RecentNotifications userId={session.userId} />
             <ProjectsOverview userid={session.userId} />
+            {session ? <SignOutBtn /> : <SignInBtn />}
         </div>
     )
 }

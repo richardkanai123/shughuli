@@ -3,26 +3,14 @@ import { GetUserProjects } from '@/lib/actions/projects/get-projects'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { FolderOpen, CheckCircle2, Timer, Layers } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import { headers } from 'next/headers'
+import ProjectStat from './ProjectStat'
 
-interface ProjectStatProps {
-    icon: React.ReactNode
-    label: string
-    value: number
-    className?: string
-}
-
-const ProjectStat = ({ icon, label, value, className }: ProjectStatProps) => (
-    <div className={`p-4 rounded-lg space-y-2 ${className}`}>
-        <div className="flex items-center gap-2">
-            {icon}
-            <span className="text-sm font-medium">{label}</span>
-        </div>
-        <p className="text-2xl font-bold">{value}</p>
-    </div>
-)
 
 const ProjectsOverview = async ({ userid }: { userid: string }) => {
+    await headers()
     const { message, projects, status } = await GetUserProjects(userid)
+
 
     if (status !== 200) {
         return (
@@ -56,6 +44,12 @@ const ProjectsOverview = async ({ userid }: { userid: string }) => {
     const openProjects = projects.filter(project => project.status === "OPEN").length
     const completionRate = Math.round((completedProjects / totalProjects) * 100)
 
+    // overdue projects 
+    const today = new Date()
+    const overdueProjects = projects.filter(project => new Date(project.endDate as Date) < today)
+    const overdueRate = Math.round((overdueProjects.length / totalProjects) * 100)
+
+
     return (
         <Card>
             <CardHeader>
@@ -65,7 +59,7 @@ const ProjectsOverview = async ({ userid }: { userid: string }) => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <ProjectStat
                         icon={<Layers className="h-4 w-4" />}
-                        label="Total Projects"
+                        label="Total"
                         value={totalProjects}
                         className="bg-slate-100 dark:bg-slate-800"
                     />
@@ -79,13 +73,19 @@ const ProjectsOverview = async ({ userid }: { userid: string }) => {
                         icon={<Timer className="h-4 w-4 text-orange-500" />}
                         label="Ongoing"
                         value={ongoingProjects}
-                        className="bg-orange-100 dark:bg-orange-900"
+                        className="bg-orange-100 dark:bg-yellow-500"
                     />
                     <ProjectStat
                         icon={<CheckCircle2 className="h-4 w-4 text-green-500" />}
                         label="Completed"
                         value={completedProjects}
                         className="bg-green-100 dark:bg-green-900"
+                    />
+                    <ProjectStat
+                        icon={<Timer className="h-4 w-4 text-red-500" />}
+                        label="Overdue"
+                        value={overdueProjects.length}
+                        className="bg-red-100 dark:bg-red-900"
                     />
                 </div>
 
@@ -95,6 +95,15 @@ const ProjectsOverview = async ({ userid }: { userid: string }) => {
                         <span className="font-medium">{completionRate}%</span>
                     </div>
                     <Progress value={completionRate} className="h-2" />
+
+                </div>
+
+                <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Overdue Rate</span>
+                        <span className="font-medium">{overdueRate}%</span>
+                    </div>
+                    <Progress value={overdueRate} className="h-2" />
                 </div>
             </CardContent>
         </Card>
