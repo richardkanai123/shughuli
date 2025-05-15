@@ -62,7 +62,7 @@
 	--accent-foreground: hsl(0 0% 20%);
 	--destructive: hsl(0 100% 50%);
 	--border: hsl(0 0% 85%);
-	--input: hsl(0 0% 100%);
+	--input: hsl(118, 100%, 85%);
 	--ring: hsl(180 100% 45%);
 	--chart-1: hsl(180 100% 45%);
 	--chart-2: hsl(48 100% 67%);
@@ -97,7 +97,7 @@
 	--accent-foreground: hsl(0 0% 95%);
 	--destructive: hsl(0 100% 40%);
 	--border: hsl(0 0% 30%);
-	--input: hsl(0 0% 20%);
+	--input: hsl(150, 92%, 20%);
 	--ring: hsl(180 100% 30%);
 	--chart-1: hsl(179 100% 30%);
 	--chart-2: hsl(48 100% 45%);
@@ -144,6 +144,14 @@
 	.header-shadow {
 		@apply shadow-sm hover:shadow-md transition-all duration-200;
 	}
+
+	.sidebar-collapsed .sidebar-item-text {
+		@apply opacity-0 w-0 hidden;
+	  }
+	
+	  .sidebar-item {
+		@apply flex items-center gap-2 px-2 py-1.5 rounded-md transition-all duration-200;
+	  }
 }
 
 button,

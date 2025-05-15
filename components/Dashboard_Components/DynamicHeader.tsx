@@ -84,9 +84,10 @@ const DynamicHeader = () => {
                 flex items-center align-middle justify-between gap-2
                 sticky top-0 
                 shadow-sm
-                transition-all duration-200 mb-10">
+                transition-all duration-200">
             <div className="flex items-center gap-4">
                 <SidebarTrigger
+                    size="icon"
                     variant="ghost"
                     className={cn(
                         "hover:bg-accent/50",

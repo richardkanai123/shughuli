@@ -11,6 +11,7 @@ import { NavMain } from "./MainNav"
 import { NavUser } from "./Nav-user"
 import { ArrowUpCircleIcon } from "lucide-react"
 import Link from "next/link"
+import { Logo } from "../ui/logo"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     return (
@@ -22,8 +23,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             asChild
                             className="data-[slot=sidebar-menu-button]:!p-1.5"
                         >
-                            <Link href="#">
-                                <ArrowUpCircleIcon className="h-5 w-5" />
+                            <Link href="/dashboard">
+                                <Logo size={60} />
                                 <span className="text-2xl font-bold">
                                     Shughuli
                                 </span>
