@@ -1,9 +1,9 @@
 
 // create team Route
 import { NextRequest, NextResponse } from "next/server"
-import { teamSchema } from "@/lib/validation/teams"
 import prisma from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { teamSchema } from "@/lib/validation/schemas"
 
 export async function POST(req: NextRequest) {
     const body = await req.json()
