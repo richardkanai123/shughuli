@@ -20,11 +20,15 @@ export const GetUserTasks = async (userId: string): Promise<{
             where: {
                 creatorId: userId,
             },
+            orderBy: {
+                createdAt: "desc",
+            },
+            
         });
 
         if (!tasks) return { tasks: null, message: "Tasks not found", status: 404 };
 
-        if (tasks.length === 0) return { tasks: null, message: "You have no tasks", status: 200 };
+        if (tasks.length === 0 || !tasks) return { tasks: null, message: "You have no tasks", status: 200 };
         return {
             tasks,
             message: "Tasks fetched successfully",
