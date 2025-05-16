@@ -40,11 +40,6 @@ export function NavMain() {
             icon: ListIcon,
         },
         {
-            title: "Team",
-            url: "/dashboard/teams",
-            icon: UsersIcon,
-        },
-        {
             title: "Notifications",
             url: "/dashboard/notifications",
             icon: BellIcon,

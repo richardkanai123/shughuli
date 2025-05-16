@@ -58,12 +58,6 @@ import { NewProjectSchemaType, newProjectSchema } from "@/lib/validation/schemas
                         isPublic,
                         startDate,
                         status,
-                        members: {
-                            create: {
-                                userId: ownerId,
-                                role: "LEAD",
-                            },
-                        },
                     },
                 });
               

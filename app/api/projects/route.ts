@@ -31,8 +31,6 @@ export async function GET(Request: NextRequest) {
 			where: {
 				OR: [
 					{ ownerId: userid },
-					{ members: { some: { id: userid } } },
-					{ userId: userid },
 				],
 			},
 			orderBy: {
@@ -109,12 +107,7 @@ export async function POST(Request: NextRequest) {
 				isPublic,
 				startDate,
 				status,
-				members: {
-					create: {
-						userId: ownerId,
-						role: "LEAD",
-					},
-				},
+				
 			},
 		});
 		return NextResponse.json(

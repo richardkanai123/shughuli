@@ -17,29 +17,20 @@ export const getProjectDetails = async (projectslug: string): Promise<{ project:
             where: {
                 slug: projectslug,
             },
-            include: {
-                members: {
-                    select: {
-                        id: true,
-                        userId: true
-                    },
-                },
-            },
         });
         if (!project) {
             return { project: null, message: "Project not found", status: 404 };
         }
 
         // check if the project belongs to the user or user is part of the project members
-        const isProjectMember = project.members.some(member => member.id === session.userId);
         const isProjectOwner = project.ownerId === session.userId;
-        if (!isProjectMember && !isProjectOwner) {
+        if ( !isProjectOwner) {
             return { project: null, message: "Unauthorized", status: 401 };
         }
 
-        const newProject ={ ...project, members: undefined }
+       
 
-        return { project: newProject, message: "Project fetched successfully", status: 200 };
+        return { project, message: "Project fetched successfully", status: 200 };
     } catch (error) {
         if (error instanceof Error) {
             return { project: null, message: error.message, status: 500 };

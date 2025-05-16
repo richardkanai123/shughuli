@@ -9,28 +9,24 @@ datasource db {
 }
 
 model User {
-  id             String           @id @default(cuid())
-  email          String           @unique
-  name           String
-  emailVerified  Boolean
-  image          String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  username       String
-  role           Role             @default(MEMBER)
-  Comments       Comment[]
-  Notifications  Notification[]
-  projects       Project[]        @relation("ProjectOwner")
-  Project        Project[]
-  ProjectMember  ProjectMember[]
-  assignedTasks  Task[]           @relation("TaskAssignee")
-  createdTasks   Task[]           @relation("TaskCreator")
-  Team           Team[]
-  teams          Team[]           @relation("TeamOwner")
-  TeamInvitation TeamInvitation[]
-  TeamMember     TeamMember[]
-  accounts       Account[]
-  sessions       Session[]
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  username      String
+  role          Role     @default(MEMBER)
+
+  projects      Project[]      @relation("ProjectOwner")
+  assignedTasks Task[]         @relation("TaskAssignee")
+  createdTasks  Task[]         @relation("TaskCreator")
+  Comments      Comment[]
+  Notifications Notification[]
+
+  accounts Account[]
+  sessions Session[]
 
   @@map("user")
 }
@@ -80,77 +76,20 @@ model Verification {
 }
 
 model Project {
-  id          String          @id @default(uuid())
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
   name        String
   description String
-  slug        String          @unique
-  isPublic    Boolean         @default(false)
-  status      ProjectStatus   @default(OPEN)
+  slug        String        @unique
+  isPublic    Boolean       @default(false)
+  status      ProjectStatus @default(OPEN)
   startDate   DateTime?
   endDate     DateTime?
   attachments String[]
   ownerId     String
-  teamId      String?
-  userId      String?
-  owner       User            @relation("ProjectOwner", fields: [ownerId], references: [id])
-  team        Team?           @relation(fields: [teamId], references: [id])
-  User        User?           @relation(fields: [userId], references: [id])
-  members     ProjectMember[]
+  owner       User          @relation("ProjectOwner", fields: [ownerId], references: [id])
   tasks       Task[]
-
-  @@index([ownerId])
-  @@index([teamId])
-}
-
-model Team {
-  id             String           @id @default(uuid())
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  name           String
-  description    String?
-  slug           String           @unique
-  image          String?
-  ownerId        String
-  lead           String?
-  projects       Project[]
-  User           User?            @relation(fields: [lead], references: [id])
-  owner          User             @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  TeamInvitation TeamInvitation[]
-  members        TeamMember[]
-
-  @@index([ownerId])
-}
-
-model TeamMember {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      TeamRole @default(MEMBER)
-  teamId    String
-  userId    String
-  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([teamId, userId])
-  @@index([userId])
-  @@index([teamId])
-}
-
-model ProjectMember {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      TeamRole @default(MEMBER)
-  projectId String
-  userId    String
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([projectId, userId])
-  @@index([userId])
-  @@index([projectId])
 }
 
 model Task {
@@ -168,37 +107,28 @@ model Task {
   assigneeId  String?
   creatorId   String
   parentId    String?
-  comments    Comment[]
-  assignee    User?        @relation("TaskAssignee", fields: [assigneeId], references: [id])
-  creator     User         @relation("TaskCreator", fields: [creatorId], references: [id])
-  parentTask  Task?        @relation("SubTasks", fields: [parentId], references: [id])
-  subTasks    Task[]       @relation("SubTasks")
-  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  @@index([projectId])
-  @@index([assigneeId])
-  @@index([creatorId])
-  @@index([parentId])
-  @@index([status])
-  @@index([priority])
+  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignee   User?     @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  creator    User      @relation("TaskCreator", fields: [creatorId], references: [id])
+  parentTask Task?     @relation("SubTasks", fields: [parentId], references: [id])
+  subTasks   Task[]    @relation("SubTasks")
+  comments   Comment[]
 }
 
 model Comment {
-  id              String    @id @default(uuid())
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id              String   @id @default(uuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   content         String
   taskId          String
   userId          String
   parentCommentId String?
-  parentComment   Comment?  @relation("CommentReplies", fields: [parentCommentId], references: [id])
-  replies         Comment[] @relation("CommentReplies")
-  task            Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([taskId])
-  @@index([userId])
-  @@index([parentCommentId])
+  task          Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parentComment Comment?  @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  replies       Comment[] @relation("CommentReplies")
 }
 
 model Notification {
@@ -210,27 +140,6 @@ model Notification {
   userId    String
   link      String?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([isRead])
-}
-
-model TeamInvitation {
-  id          String   @id @default(cuid())
-  email       String
-  role        TeamRole @default(MEMBER)
-  invitedById String
-  teamId      String
-  accepted    Boolean  @default(false)
-  token       String   @unique
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  invitedBy   User     @relation(fields: [invitedById], references: [id])
-  team        Team     @relation(fields: [teamId], references: [id])
-
-  @@index([email])
-  @@index([teamId])
-  @@index([invitedById])
 }
 
 enum Role {
@@ -252,11 +161,6 @@ enum TaskStatus {
   IN_PROGRESS
   REVIEW
   DONE
-}
-
-enum TeamRole {
-  MEMBER
-  LEAD
 }
 
 enum ProjectStatus {

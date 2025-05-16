@@ -30,7 +30,7 @@ const ProjectPage = async ({ params }: { params: Promise<{ projectid: string }> 
         )
     }
 
-    const { description, teamId, name, slug, startDate, endDate, status, ownerId, updatedAt } = data.project
+    const { description, name, slug, startDate, endDate, status, updatedAt } = data.project
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -104,28 +104,12 @@ const ProjectPage = async ({ params }: { params: Promise<{ projectid: string }> 
 
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2 text-sm">
-                                        <Users className="h-4 w-4 text-muted-foreground" />
-                                        <span className="text-muted-foreground">Team ID</span>
-                                    </div>
-                                    <p className="text-sm font-medium">{teamId || 'No team assigned'}</p>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <div className="flex items-center gap-2 text-sm">
                                         <Clock className="h-4 w-4 text-muted-foreground" />
                                         <span className="text-muted-foreground">Last Updated</span>
                                     </div>
                                     <p className="text-sm font-medium">
                                         {updatedAt ? format(new Date(updatedAt), 'PPP') : 'Not available'}
                                     </p>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <GitBranch className="h-4 w-4 text-muted-foreground" />
-                                        <span className="text-muted-foreground">Owner ID</span>
-                                    </div>
-                                    <p className="text-sm font-medium">{ownerId}</p>
                                 </div>
                             </div>
                         </div>
