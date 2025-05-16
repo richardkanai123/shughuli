@@ -10,18 +10,18 @@ export async function POST(req: NextRequest) {
 
     try {
         // check auth
-        const token = req.cookies.get('auth_token')?.value
+
         const session = await auth.api.getSession({
             headers: req.headers
         })
 
-        if (!session || !token) {
-            return NextResponse.json({ status: 401, body: { message: "Unauthorized" } })
+        if (!session) {
+            return NextResponse.json({message: "Unauthorized"}, { status: 401 }) 
         }
 
         const isValid = await teamSchema.safeParseAsync(body)
         if (!isValid.success) {
-            return NextResponse.json({ status: 400, body: { message: isValid.error.message } })
+            return NextResponse.json({message: isValid.error.message}, { status: 400 }) 
         }
 
         const { name, description } = isValid.data
@@ -41,14 +41,14 @@ export async function POST(req: NextRequest) {
             }
         })
 
-        return NextResponse.json({ status: 200, body: { message: "Team created successfully" } })
+        return NextResponse.json({message:"Team created successfully" }, { status: 201})
 
 
     } catch (error) {
         if(error instanceof Error) {
             return NextResponse.json({ status: 500, body: { message: error.message } })
         }
-        return NextResponse.json({ status: 500, body: { message: "Internal Server Error" } })
+        return NextResponse.json({message: "Internal Server Error"}, { status: 500 })
         
     }
     

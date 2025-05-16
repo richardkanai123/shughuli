@@ -1,8 +1,10 @@
 import prisma from '@/lib/prisma'
 import React from 'react'
 
-const TeamPage = async ({ params }: { params: { teamid: string } }) => {
-    const Team = await prisma.team.findUnique({ where: { id: params.teamid } })
+const TeamPage = async ({ params }: { params: Promise<{ teamid: string }> }) => {
+
+    const { teamid } = await params
+    const Team = await prisma.team.findUnique({ where: { id: teamid } })
 
     if (!Team) {
         return (

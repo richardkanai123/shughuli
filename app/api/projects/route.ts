@@ -1,12 +1,20 @@
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { newProjectSchema } from "@/lib/validation/schemas";
+import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 export async function GET(Request: NextRequest) {
-	const userid = Request.nextUrl.searchParams.get("user");
+	
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
+	const userid = session?.userId
+
 	try {
 		if (!userid)
 			return NextResponse.json(
-				{ message: "user identifier is required" },
+				{ message: "Unable to fetch projects for user" },
 				{ status: 404 }
 			);
 
