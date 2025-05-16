@@ -86,6 +86,7 @@ model Project {
   status      ProjectStatus @default(OPEN)
   startDate   DateTime?
   endDate     DateTime?
+  dueDate     DateTime
   attachments String[]
   ownerId     String
   owner       User          @relation("ProjectOwner", fields: [ownerId], references: [id])

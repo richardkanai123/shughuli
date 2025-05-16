@@ -1,3 +1,4 @@
+import CreateNewLink from '@/components/Dashboard_Components/project_components/CreateNewLink'
 import ProjectsOverview from '@/components/Dashboard_Components/ProjectsOverview'
 import RecentNotifications from '@/components/Dashboard_Components/RecentNotifications'
 import SignInBtn from '@/components/Public_Components/Buttons/sign-inBtn'
@@ -22,8 +23,13 @@ const Dashboard = async () => {
 
     return (
         <div className="flex flex-col gap-4 p-2">
-            <p>Dashboard</p>
+            <div className="w-full p-2 flex justify-between align-middle">
+                <h1 className="text-sm font-light">
+                    {session.username}'s Dashboard
+                </h1>
 
+                <CreateNewLink />
+            </div>
             <RecentNotifications userId={session.userId} />
             <Suspense fallback={<ProjectsOverviewSkeleton />}>
                 <ProjectsOverview userid={session.userId} />

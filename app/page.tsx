@@ -14,7 +14,7 @@ export default function Home() {
           Transform Your Workflow
         </h1>
         <p className="text-2xl mt-6 text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-          Forge your team&apos;s success with powerful task management, real-time collaboration, and intelligent automation.
+          Simplify your tasks and boost your productivity with our intuitive task management app.
         </p>
         <div className="mt-8 flex gap-4 justify-center items-center">
           <div className="w-32">

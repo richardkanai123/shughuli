@@ -17,9 +17,9 @@ export const newProjectSchema = z.object({
 	slug: z.string(),
 	isPublic: z.boolean().default(false),
 	status: z.enum(["OPEN", "ONGOING", "COMPLETED"]).default("OPEN"),
-	startDate: z.date(),
-	endDate: z.date(),
+	dueDate: z.date(),
 	ownerId: z.string(),
+	
 	// attachments: z.array(z.string()).optional(),
 	// teamId: z.string().optional(),
 });
@@ -34,15 +34,14 @@ export const updateProjectSchema = z.object({
 export const newTaskSchema = z.object({
     title: z.string().min(1),
     description: z.string().min(1),
-    status: z.enum(['BACKLOG', 'TODO', 'IN_PROGRESS', 'REVIEW', 'DONE']).optional().default('TODO'),
-    priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).optional().default('MEDIUM'),
-    dueDate: z.date().optional(),
+    priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).default('MEDIUM'),
+    dueDate: z.date(),
     startDate: z.date().optional(),
     completedAt: z.date().optional(),
     projectId: z.string(),
     assigneeId: z.string().optional(),
-    creatorId: z.string(),
-    parentId: z.string().optional(),
+	parentId: z.string().optional(),
+	status: z.enum(['BACKLOG', 'IN_PROGRESS', 'REVIEW', 'DONE', 'TODO']).default('TODO'),
 });
 
 export const teamSchema = z.object({

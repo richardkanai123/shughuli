@@ -24,9 +24,8 @@ import { NewProjectSchemaType, newProjectSchema } from "@/lib/validation/schemas
          
          const newProject = {
             name: projectData.name,
-            description: projectData.description,
-            startDate: new Date(projectData.startDate),
-            endDate: new Date(projectData.endDate),
+             description: projectData.description,
+            dueDate: projectData.dueDate,
             isPublic: projectData.isPublic,
             status: projectData.status,
             slug: projectData.slug,
@@ -42,11 +41,10 @@ import { NewProjectSchemaType, newProjectSchema } from "@/lib/validation/schemas
                     name,
                     description,
                     ownerId,
-                    endDate,
                     isPublic,
                     slug,
-                    startDate,
                     status,
+                    dueDate
                 } = isValid.data;
                 const project = await prisma.project.create({
                     data: {
@@ -54,10 +52,9 @@ import { NewProjectSchemaType, newProjectSchema } from "@/lib/validation/schemas
                         slug,
                         description,
                         ownerId,
-                        endDate,
                         isPublic,
-                        startDate,
                         status,
+                        dueDate
                     },
                 });
               

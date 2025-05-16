@@ -1,3 +1,4 @@
+import CreateNewLink from "@/components/Dashboard_Components/project_components/CreateNewLink";
 import ProjectsLister from "@/components/Dashboard_Components/project_components/ProjectsLister";
 import LoadingSpinner from "@/components/Public_Components/Loaders/LoadSpinner";
 import AuthRequired from "@/components/Public_Components/Profile/AuthRequired";
@@ -22,7 +23,13 @@ const ProjectsPage = async () => {
 
     return (
         <div className="w-full p-2">
-            <h1 className="text-3xl font-bold mb-6">Projects</h1>
+            <div className="w-full p-2 flex justify-between align-middle">
+                <h1 className="text-sm font-light">
+                    {session.username}'s  Projects
+                </h1>
+
+                <CreateNewLink />
+            </div>
             <Suspense fallback={<LoadingSpinner />}>
                 <ProjectsLister projects={projectsData} />
             </Suspense>

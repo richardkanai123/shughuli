@@ -48,7 +48,7 @@
 	--radius: 0.5rem;
 	--background: hsl(210 60% 98%);
 	--foreground: hsl(210 60% 20%);
-	--card: hsl(240 100% 95%);
+	--card: hsla(240, 100%, 95%, 0.692);
 	--card-foreground: hsl(210 60% 30%);
 	--popover: hsl(240 100% 95%);
 	--popover-foreground: hsl(210 60% 30%);
@@ -83,7 +83,7 @@
 .dark {
 	--background: hsl(210 70% 15%);
 	--foreground: hsl(210 70% 85%);
-	--card: hsl(240 100% 20%);
+	--card: hsla(240, 100%, 20%, 0.774);
 	--card-foreground: hsl(210 70% 80%);
 	--popover: hsl(240 100% 25%);
 	--popover-foreground: hsl(210 70% 85%);

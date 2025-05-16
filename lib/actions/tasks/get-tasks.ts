@@ -1,15 +1,39 @@
+import { auth } from "@/lib/auth";
 import {  Task } from "@/lib/generated/prisma";
+import prisma from "@/lib/prisma";
+import { headers } from "next/headers";
 
-export const GetUserProjects = async (userId: string): Promise<{
+
+export const GetUserTasks = async (userId: string): Promise<{
     tasks: Task[] | null;
     message: string;
     status: number;
 }> => {
-    const res = await fetch(`${process.env.BASE_URL}/api/tasks?user=${userId}`, { cache: "no-store" });
-    const data = await res.json();
-    return {
-        tasks: data.tasks,
-        message: data.message,
-        status: res.status
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        })
+
+        if (!session || !userId) return { tasks: null, message: "Unauthorized", status: 401 };
+
+        const tasks = await prisma.task.findMany({
+            where: {
+                creatorId: userId,
+            },
+        });
+
+        if (!tasks) return { tasks: null, message: "Tasks not found", status: 404 };
+
+        if (tasks.length === 0) return { tasks: null, message: "You have no tasks", status: 200 };
+        return {
+            tasks,
+            message: "Tasks fetched successfully",
+            status: 200,
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            return { tasks: null, message: error.message, status: 500 };
+        }
+        return { tasks: null, message: "Internal Server Error", status: 500 };
     }
 };

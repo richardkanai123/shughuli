@@ -376,8 +376,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.8.1
-   * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+   * Prisma Client JS version: 6.6.0
+   * Query Engine version: f676762280b54cd07c770017ed3711ddde35f37a
    */
   export type PrismaVersion = {
     client: string
@@ -6330,6 +6330,7 @@ export namespace Prisma {
     status: $Enums.ProjectStatus | null
     startDate: Date | null
     endDate: Date | null
+    dueDate: Date | null
     ownerId: string | null
   }
 
@@ -6344,6 +6345,7 @@ export namespace Prisma {
     status: $Enums.ProjectStatus | null
     startDate: Date | null
     endDate: Date | null
+    dueDate: Date | null
     ownerId: string | null
   }
 
@@ -6358,6 +6360,7 @@ export namespace Prisma {
     status: number
     startDate: number
     endDate: number
+    dueDate: number
     attachments: number
     ownerId: number
     _all: number
@@ -6375,6 +6378,7 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    dueDate?: true
     ownerId?: true
   }
 
@@ -6389,6 +6393,7 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    dueDate?: true
     ownerId?: true
   }
 
@@ -6403,6 +6408,7 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    dueDate?: true
     attachments?: true
     ownerId?: true
     _all?: true
@@ -6491,6 +6497,7 @@ export namespace Prisma {
     status: $Enums.ProjectStatus
     startDate: Date | null
     endDate: Date | null
+    dueDate: Date
     attachments: string[]
     ownerId: string
     _count: ProjectCountAggregateOutputType | null
@@ -6523,6 +6530,7 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    dueDate?: boolean
     attachments?: boolean
     ownerId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
@@ -6541,6 +6549,7 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    dueDate?: boolean
     attachments?: boolean
     ownerId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
@@ -6557,6 +6566,7 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    dueDate?: boolean
     attachments?: boolean
     ownerId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
@@ -6573,11 +6583,12 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    dueDate?: boolean
     attachments?: boolean
     ownerId?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "slug" | "isPublic" | "status" | "startDate" | "endDate" | "attachments" | "ownerId", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "slug" | "isPublic" | "status" | "startDate" | "endDate" | "dueDate" | "attachments" | "ownerId", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     tasks?: boolean | Project$tasksArgs<ExtArgs>
@@ -6607,6 +6618,7 @@ export namespace Prisma {
       status: $Enums.ProjectStatus
       startDate: Date | null
       endDate: Date | null
+      dueDate: Date
       attachments: string[]
       ownerId: string
     }, ExtArgs["result"]["project"]>
@@ -7044,6 +7056,7 @@ export namespace Prisma {
     readonly status: FieldRef<"Project", 'ProjectStatus'>
     readonly startDate: FieldRef<"Project", 'DateTime'>
     readonly endDate: FieldRef<"Project", 'DateTime'>
+    readonly dueDate: FieldRef<"Project", 'DateTime'>
     readonly attachments: FieldRef<"Project", 'String[]'>
     readonly ownerId: FieldRef<"Project", 'String'>
   }
@@ -11097,6 +11110,7 @@ export namespace Prisma {
     status: 'status',
     startDate: 'startDate',
     endDate: 'endDate',
+    dueDate: 'dueDate',
     attachments: 'attachments',
     ownerId: 'ownerId'
   };
@@ -11616,6 +11630,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    dueDate?: DateTimeFilter<"Project"> | Date | string
     attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -11633,6 +11648,7 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
+    dueDate?: SortOrder
     attachments?: SortOrder
     ownerId?: SortOrder
     owner?: UserOrderByWithRelationInput
@@ -11653,6 +11669,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    dueDate?: DateTimeFilter<"Project"> | Date | string
     attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -11670,6 +11687,7 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
+    dueDate?: SortOrder
     attachments?: SortOrder
     ownerId?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
@@ -11691,6 +11709,7 @@ export namespace Prisma {
     status?: EnumProjectStatusWithAggregatesFilter<"Project"> | $Enums.ProjectStatus
     startDate?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
     endDate?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
+    dueDate?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     attachments?: StringNullableListFilter<"Project">
     ownerId?: StringWithAggregatesFilter<"Project"> | string
   }
@@ -12322,6 +12341,7 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     startDate?: Date | string | null
     endDate?: Date | string | null
+    dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     owner: UserCreateNestedOneWithoutProjectsInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
@@ -12338,6 +12358,7 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     startDate?: Date | string | null
     endDate?: Date | string | null
+    dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
@@ -12354,6 +12375,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     owner?: UserUpdateOneRequiredWithoutProjectsNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
@@ -12370,6 +12392,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
@@ -12386,6 +12409,7 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     startDate?: Date | string | null
     endDate?: Date | string | null
+    dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
   }
@@ -12401,6 +12425,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
   }
 
@@ -12415,6 +12440,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
   }
@@ -13068,6 +13094,7 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    dueDate?: SortOrder
     attachments?: SortOrder
     ownerId?: SortOrder
   }
@@ -13083,6 +13110,7 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    dueDate?: SortOrder
     ownerId?: SortOrder
   }
 
@@ -13097,6 +13125,7 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    dueDate?: SortOrder
     ownerId?: SortOrder
   }
 
@@ -14173,6 +14202,7 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     startDate?: Date | string | null
     endDate?: Date | string | null
+    dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     tasks?: TaskCreateNestedManyWithoutProjectInput
   }
@@ -14188,6 +14218,7 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     startDate?: Date | string | null
     endDate?: Date | string | null
+    dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
   }
@@ -14452,6 +14483,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
+    dueDate?: DateTimeFilter<"Project"> | Date | string
     attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
   }
@@ -14968,6 +15000,7 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     startDate?: Date | string | null
     endDate?: Date | string | null
+    dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     owner: UserCreateNestedOneWithoutProjectsInput
   }
@@ -14983,6 +15016,7 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     startDate?: Date | string | null
     endDate?: Date | string | null
+    dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
   }
@@ -15213,6 +15247,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     owner?: UserUpdateOneRequiredWithoutProjectsNestedInput
   }
@@ -15228,6 +15263,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
   }
@@ -15782,6 +15818,7 @@ export namespace Prisma {
     status?: $Enums.ProjectStatus
     startDate?: Date | string | null
     endDate?: Date | string | null
+    dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
   }
 
@@ -15871,6 +15908,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     tasks?: TaskUpdateManyWithoutProjectNestedInput
   }
@@ -15886,6 +15924,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
   }
@@ -15901,6 +15940,7 @@ export namespace Prisma {
     status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
   }
 

@@ -6,12 +6,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import {
     Calendar,
     Clock,
-    Users,
     Link as LinkIcon,
     FileText,
-    GitBranch
 } from "lucide-react"
 import { format } from "date-fns"
+import { getStatusColor } from '@/lib/ProjectColorByStatus'
 
 const ProjectPage = async ({ params }: { params: Promise<{ projectid: string }> }) => {
 
@@ -32,16 +31,7 @@ const ProjectPage = async ({ params }: { params: Promise<{ projectid: string }> 
 
     const { description, name, slug, startDate, endDate, status, updatedAt } = data.project
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'COMPLETED':
-                return 'bg-green-500/10 text-green-500 hover:bg-green-500/20'
-            case 'ONGOING':
-                return 'bg-orange-500/10 text-orange-500 hover:bg-orange-500/20'
-            default:
-                return 'bg-blue-500/10 text-blue-500 hover:bg-blue-500/20'
-        }
-    }
+
 
     return (
         <ScrollArea className="h-[calc(100vh-4rem)]">

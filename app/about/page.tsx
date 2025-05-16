@@ -10,11 +10,6 @@ export default async function AboutPage() {
             description: "Streamline your workflow with intuitive task creation, assignment, and tracking capabilities."
         },
         {
-            icon: <Users2 className="h-6 w-6 text-blue-500" />,
-            title: "Team Collaboration",
-            description: "Foster seamless collaboration with real-time updates, comments, and file sharing."
-        },
-        {
             icon: <Boxes className="h-6 w-6 text-purple-500" />,
             title: "Project Organization",
             description: "Keep projects organized with customizable workspaces, labels, and hierarchical task structures."
@@ -44,8 +39,7 @@ export default async function AboutPage() {
                     About TaskForge
                 </h1>
                 <p className="text-2xl mt-6 text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-                    Your all-in-one project management solution designed to empower teams
-                    and streamline workflows with powerful, yet simple tools.
+                    Shughuli is a personal task and project management application designed for individuals who want a simple, efficient way to stay organized without the overhead of teams or collaboration features.
                 </p>
             </div>
 

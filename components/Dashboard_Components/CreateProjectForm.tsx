@@ -52,25 +52,23 @@ const isDateValid = (date: Date, startDate?: Date) => {
 }
 
 const CreateProjectForm = ({ userId }: { userId: string }) => {
+    const router = useRouter()
     const form = useForm({
         defaultValues: {
             name: '',
             description: '',
-            startDate: undefined,
-            endDate: undefined,
             isPublic: true,
             status: 'OPEN',
             slug: '',
             ownerId: userId,
+            dueDate: new Date(),
+
         },
         resolver: zodResolver(newProjectSchema),
         mode: 'onChange',
     })
-    useEffect(() => {
-        const now = new Date()
-        form.setValue('startDate', now)
-        form.setValue('endDate', now)
-    }, [form])
+
+
 
     const onSubmit: SubmitHandler<NewProjectSchemaType> = async (values) => {
         console.log(values)
@@ -84,25 +82,23 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
             const projectData = {
                 name: values.name,
                 description: values.description,
-                startDate: values.startDate,
-                endDate: values.endDate,
                 isPublic: values.isPublic,
                 status: values.status,
                 slug,
                 ownerId: values.ownerId,
+                dueDate: values.dueDate
+
             }
 
-            console.log(projectData)
             const { data, message, status } = await createProject(
                 {
-                    description: projectData.description,
-                    endDate: projectData.endDate,
-                    isPublic: projectData.isPublic,
                     name: projectData.name,
-                    startDate: projectData.startDate,
+                    description: projectData.description,
+                    isPublic: projectData.isPublic,
                     status: projectData.status,
                     slug: projectData.slug,
-                    ownerId: projectData.ownerId
+                    ownerId: projectData.ownerId,
+                    dueDate: projectData.dueDate
                 }
             )
 
@@ -115,6 +111,7 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
             }
             toast.success(data || message)
             form.reset()
+            router.push('/projects/success')
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)
@@ -170,47 +167,14 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
 
                     {/* Dates */}
                     <div className="grid gap-6 md:grid-cols-2">
-                        {/* Start Date */}
-                        <FormField
-                            control={form.control}
-                            name="startDate"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-col">
-                                    <FormLabel>Start Date</FormLabel>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    variant="outline"
-                                                    className="w-full pl-3 text-left font-normal shadow-sm transition-all duration-200 hover:shadow-md active:scale-[0.98]"
-                                                >
-                                                    {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0" align="start">
-                                            <Calendar
-                                                mode="single"
-                                                selected={field.value}
-                                                onSelect={field.onChange}
-                                                disabled={(date) => !isDateValid(date)}
-                                                initialFocus
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
 
-                        {/* End Date */}
+                        {/* Due Date */}
                         <FormField
                             control={form.control}
-                            name="endDate"
+                            name="dueDate"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>End Date</FormLabel>
+                                    <FormLabel>Due Date</FormLabel>
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <FormControl>
@@ -229,16 +193,20 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
                                                 selected={field.value}
                                                 onSelect={field.onChange}
                                                 disabled={(date) =>
-                                                    !isDateValid(date, form.getValues('startDate'))
+                                                    !isDateValid(date, form.getValues('dueDate'))
                                                 }
                                                 initialFocus
                                             />
                                         </PopoverContent>
                                     </Popover>
+
+                                    <FormDescription className="text-sm opacity-80">When is your project due?</FormDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+
+
                     </div>
 
                     {/* Status */}
