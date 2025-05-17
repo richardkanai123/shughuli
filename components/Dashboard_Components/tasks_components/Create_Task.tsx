@@ -107,7 +107,7 @@ const CreateTask = ({ projects }: { projects: projectProps[] }) => {
 
         toast.success(message as string)
         form.reset()
-        Router.push('/tasks/success')
+        Router.push('/dashboard/tasks/success')
     }
 
 
