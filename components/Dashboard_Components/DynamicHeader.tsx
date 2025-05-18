@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Menu, ChevronRight, HomeIcon } from "lucide-react";
+import { Menu, ChevronRight, HomeIcon, FolderIcon, CheckSquare, Bell, Users, FileText, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import {
     Breadcrumb,
@@ -12,67 +12,112 @@ import {
     BreadcrumbLink,
     BreadcrumbList,
     BreadcrumbPage,
-    BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { ModeToggle } from "../Public_Components/Navigation/mode-toggler";
 
-const paths = [
-    {
-        path: "/dashboard",
-        name: "Dashboard",
-        icon: "📊",
-    },
-    {
-        path: "/dashboard/projects",
-        name: "Projects",
-        icon: "📁",
-    },
-    {
-        path: "/dashboard/tasks",
-        name: "Tasks",
-        icon: "✓",
-    },
-    {
-        path: "/dashboard/teams",
-        name: "Teams",
-        icon: "👥",
-    },
-    {
-        path: "/dashboard/notifications",
-        name: "Notifications",
-        icon: "🔔",
-    },
-    {
-        path: "/dashboard/clients",
-        name: "Clients",
-        icon: "🤝",
-    },
-    {
-        path: "/projects/create-new",
-        name: "New Project",
-        icon: "➕",
-    },
-    {
-        path: "/tasks/create-new",
-        name: "New Task",
-        icon: "➕",
-    },
-    {
-        path: "/teams/create-new",
-        name: "New Team",
-        icon: "➕",
-    },
-    {
-        path: "/clients/create-new",
-        name: "Add Client",
-        icon: "➕",
-    },
-];
+// Icon mapping for common sections
+const sectionIcons: Record<string, React.ReactNode> = {
+    dashboard: <HomeIcon className="h-5 w-5" />,
+    projects: <FolderIcon className="h-5 w-5" />,
+    tasks: <CheckSquare className="h-5 w-5" />,
+    notifications: <Bell className="h-5 w-5" />,
+    users: <Users className="h-5 w-5" />,
+    // Add more section icons as needed
+};
+
+// Regular expression to identify UUID-like segments
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+// Regular expression for numeric IDs
+const numericIdRegex = /^\d+$/;
+
+// Helper function to check if a segment is likely an ID
+const isIdSegment = (segment: string): boolean => {
+    return uuidRegex.test(segment) || numericIdRegex.test(segment) || segment.length > 10;
+};
+
+// Helper function to get the entity type based on parent path
+const getEntityTypeFromPath = (pathSegments: string[], currentIndex: number): string => {
+    if (currentIndex <= 0) return "Item";
+
+    // Get the parent segment (e.g., 'tasks', 'projects')
+    const parentSegment = pathSegments[currentIndex - 1];
+
+    // Map parent segments to entity types
+    const entityMap: Record<string, string> = {
+        tasks: "Task",
+        projects: "Project",
+        users: "User",
+        // Add more mappings as needed
+    };
+
+    return entityMap[parentSegment] || "Item";
+};
+
+// Helper function to get a friendly name from path segment
+const getFriendlyName = (segment: string, pathSegments: string[] = [], index: number = 0): string => {
+    // Handle ID-like segments
+    if (isIdSegment(segment)) {
+        const entityType = getEntityTypeFromPath(pathSegments, index);
+        return `${entityType} Details`;
+    }
+
+    // Handle special cases or patterns
+    if (segment.startsWith('create-')) {
+        return `New ${segment.replace('create-', '').replace(/-/g, ' ')}`;
+    }
+
+    // Handle specific segments with custom naming
+    const specialNames: Record<string, string> = {
+        dashboard: 'Dashboard',
+        // Add more custom names as needed
+    };
+
+    if (specialNames[segment]) {
+        return specialNames[segment];
+    }
+
+    // Default: capitalize and replace hyphens with spaces
+    return segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+};
+
+// Helper function to get icon for a section
+const getIconForSection = (section: string, pathSegments: string[] = [], index: number = 0): React.ReactNode => {
+    // Handle ID segments
+    if (isIdSegment(section)) {
+        const parentSegment = index > 0 ? pathSegments[index - 1] : '';
+
+        // Return the parent's icon or a details icon
+        return sectionIcons[parentSegment] || <FileText className="h-5 w-5" />;
+    }
+
+    // Try to find a direct match
+    if (sectionIcons[section]) {
+        return sectionIcons[section];
+    }
+
+    // Check if it's a "create new" type page
+    if (section.startsWith('create-')) {
+        return <Plus className="h-5 w-5" />;
+    }
+
+    // Default icon for unknown sections
+    return <FileText className="h-5 w-5" />;
+};
 
 const DynamicHeader = () => {
     const pathname = usePathname();
-    const header = paths.find((path) => pathname.endsWith(path.path));
     const pathSegments = pathname.split("/").filter(Boolean);
+
+    // Get the current section (last part of the path)
+    const currentSection = pathSegments[pathSegments.length - 1];
+    const currentIndex = pathSegments.length - 1;
+
+    // Dynamically determine the header name and icon
+    const headerInfo = useMemo(() => {
+        const name = getFriendlyName(currentSection, pathSegments, currentIndex);
+        const icon = getIconForSection(currentSection, pathSegments, currentIndex);
+        return { name, icon };
+    }, [currentSection, pathSegments, currentIndex]);
 
     return (
         <motion.div
@@ -96,13 +141,13 @@ const DynamicHeader = () => {
                 </SidebarTrigger>
 
                 <motion.div
-                    key={header?.name}
+                    key={headerInfo.name}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     className="flex items-center gap-2">
-                    <span className="text-xl">{header?.icon}</span>
+                    <span className="text-xl">{headerInfo.icon}</span>
                     <h1 className="text-2xl font-semibold tracking-tight">
-                        {header?.name}
+                        {headerInfo.name}
                     </h1>
                 </motion.div>
             </div>
@@ -122,11 +167,14 @@ const DynamicHeader = () => {
                         {pathSegments.map((segment, index) => {
                             const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
                             const isLast = index === pathSegments.length - 1;
-                            const segmentName = segment.replace(/-/g, " ");
+
+                            // Get a meaningful name instead of showing IDs
+                            const segmentName = isIdSegment(segment)
+                                ? `${getEntityTypeFromPath(pathSegments, index)} Details`
+                                : getFriendlyName(segment);
 
                             return (
                                 <BreadcrumbItem key={path}>
-
                                     <ChevronRight className="h-3 w-3" />
 
                                     {isLast ? (

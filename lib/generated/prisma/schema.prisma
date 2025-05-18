@@ -89,6 +89,7 @@ model Project {
   dueDate     DateTime
   attachments String[]
   ownerId     String
+  progress    Int           @default(0)
   owner       User          @relation("ProjectOwner", fields: [ownerId], references: [id])
   tasks       Task[]
 }
@@ -104,6 +105,8 @@ model Task {
   dueDate     DateTime?
   startDate   DateTime?
   completedAt DateTime?
+  progress    Int          @default(0)
+  attachments String[]
   projectId   String
   assigneeId  String?
   creatorId   String

@@ -102,8 +102,6 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
                 }
             )
 
-            console.log(data, message, status)
-
             if (status !== 201) {
                 toast.error(message)
                 form.setError('root', { message })
@@ -111,7 +109,7 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
             }
             toast.success(data || message)
             form.reset()
-            router.push('/projects/success')
+            router.push('/dashboard/projects/success')
         } catch (error) {
             if (error instanceof Error) {
                 toast.error(error.message)

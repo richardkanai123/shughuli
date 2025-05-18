@@ -6315,8 +6315,18 @@ export namespace Prisma {
 
   export type AggregateProject = {
     _count: ProjectCountAggregateOutputType | null
+    _avg: ProjectAvgAggregateOutputType | null
+    _sum: ProjectSumAggregateOutputType | null
     _min: ProjectMinAggregateOutputType | null
     _max: ProjectMaxAggregateOutputType | null
+  }
+
+  export type ProjectAvgAggregateOutputType = {
+    progress: number | null
+  }
+
+  export type ProjectSumAggregateOutputType = {
+    progress: number | null
   }
 
   export type ProjectMinAggregateOutputType = {
@@ -6332,6 +6342,7 @@ export namespace Prisma {
     endDate: Date | null
     dueDate: Date | null
     ownerId: string | null
+    progress: number | null
   }
 
   export type ProjectMaxAggregateOutputType = {
@@ -6347,6 +6358,7 @@ export namespace Prisma {
     endDate: Date | null
     dueDate: Date | null
     ownerId: string | null
+    progress: number | null
   }
 
   export type ProjectCountAggregateOutputType = {
@@ -6363,9 +6375,18 @@ export namespace Prisma {
     dueDate: number
     attachments: number
     ownerId: number
+    progress: number
     _all: number
   }
 
+
+  export type ProjectAvgAggregateInputType = {
+    progress?: true
+  }
+
+  export type ProjectSumAggregateInputType = {
+    progress?: true
+  }
 
   export type ProjectMinAggregateInputType = {
     id?: true
@@ -6380,6 +6401,7 @@ export namespace Prisma {
     endDate?: true
     dueDate?: true
     ownerId?: true
+    progress?: true
   }
 
   export type ProjectMaxAggregateInputType = {
@@ -6395,6 +6417,7 @@ export namespace Prisma {
     endDate?: true
     dueDate?: true
     ownerId?: true
+    progress?: true
   }
 
   export type ProjectCountAggregateInputType = {
@@ -6411,6 +6434,7 @@ export namespace Prisma {
     dueDate?: true
     attachments?: true
     ownerId?: true
+    progress?: true
     _all?: true
   }
 
@@ -6452,6 +6476,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ProjectAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProjectSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ProjectMinAggregateInputType
@@ -6482,6 +6518,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ProjectCountAggregateInputType | true
+    _avg?: ProjectAvgAggregateInputType
+    _sum?: ProjectSumAggregateInputType
     _min?: ProjectMinAggregateInputType
     _max?: ProjectMaxAggregateInputType
   }
@@ -6500,7 +6538,10 @@ export namespace Prisma {
     dueDate: Date
     attachments: string[]
     ownerId: string
+    progress: number
     _count: ProjectCountAggregateOutputType | null
+    _avg: ProjectAvgAggregateOutputType | null
+    _sum: ProjectSumAggregateOutputType | null
     _min: ProjectMinAggregateOutputType | null
     _max: ProjectMaxAggregateOutputType | null
   }
@@ -6533,6 +6574,7 @@ export namespace Prisma {
     dueDate?: boolean
     attachments?: boolean
     ownerId?: boolean
+    progress?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
     tasks?: boolean | Project$tasksArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
@@ -6552,6 +6594,7 @@ export namespace Prisma {
     dueDate?: boolean
     attachments?: boolean
     ownerId?: boolean
+    progress?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -6569,6 +6612,7 @@ export namespace Prisma {
     dueDate?: boolean
     attachments?: boolean
     ownerId?: boolean
+    progress?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -6586,9 +6630,10 @@ export namespace Prisma {
     dueDate?: boolean
     attachments?: boolean
     ownerId?: boolean
+    progress?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "slug" | "isPublic" | "status" | "startDate" | "endDate" | "dueDate" | "attachments" | "ownerId", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "slug" | "isPublic" | "status" | "startDate" | "endDate" | "dueDate" | "attachments" | "ownerId" | "progress", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     tasks?: boolean | Project$tasksArgs<ExtArgs>
@@ -6621,6 +6666,7 @@ export namespace Prisma {
       dueDate: Date
       attachments: string[]
       ownerId: string
+      progress: number
     }, ExtArgs["result"]["project"]>
     composites: {}
   }
@@ -7059,6 +7105,7 @@ export namespace Prisma {
     readonly dueDate: FieldRef<"Project", 'DateTime'>
     readonly attachments: FieldRef<"Project", 'String[]'>
     readonly ownerId: FieldRef<"Project", 'String'>
+    readonly progress: FieldRef<"Project", 'Int'>
   }
     
 
@@ -7503,8 +7550,18 @@ export namespace Prisma {
 
   export type AggregateTask = {
     _count: TaskCountAggregateOutputType | null
+    _avg: TaskAvgAggregateOutputType | null
+    _sum: TaskSumAggregateOutputType | null
     _min: TaskMinAggregateOutputType | null
     _max: TaskMaxAggregateOutputType | null
+  }
+
+  export type TaskAvgAggregateOutputType = {
+    progress: number | null
+  }
+
+  export type TaskSumAggregateOutputType = {
+    progress: number | null
   }
 
   export type TaskMinAggregateOutputType = {
@@ -7518,6 +7575,7 @@ export namespace Prisma {
     dueDate: Date | null
     startDate: Date | null
     completedAt: Date | null
+    progress: number | null
     projectId: string | null
     assigneeId: string | null
     creatorId: string | null
@@ -7535,6 +7593,7 @@ export namespace Prisma {
     dueDate: Date | null
     startDate: Date | null
     completedAt: Date | null
+    progress: number | null
     projectId: string | null
     assigneeId: string | null
     creatorId: string | null
@@ -7552,6 +7611,8 @@ export namespace Prisma {
     dueDate: number
     startDate: number
     completedAt: number
+    progress: number
+    attachments: number
     projectId: number
     assigneeId: number
     creatorId: number
@@ -7559,6 +7620,14 @@ export namespace Prisma {
     _all: number
   }
 
+
+  export type TaskAvgAggregateInputType = {
+    progress?: true
+  }
+
+  export type TaskSumAggregateInputType = {
+    progress?: true
+  }
 
   export type TaskMinAggregateInputType = {
     id?: true
@@ -7571,6 +7640,7 @@ export namespace Prisma {
     dueDate?: true
     startDate?: true
     completedAt?: true
+    progress?: true
     projectId?: true
     assigneeId?: true
     creatorId?: true
@@ -7588,6 +7658,7 @@ export namespace Prisma {
     dueDate?: true
     startDate?: true
     completedAt?: true
+    progress?: true
     projectId?: true
     assigneeId?: true
     creatorId?: true
@@ -7605,6 +7676,8 @@ export namespace Prisma {
     dueDate?: true
     startDate?: true
     completedAt?: true
+    progress?: true
+    attachments?: true
     projectId?: true
     assigneeId?: true
     creatorId?: true
@@ -7650,6 +7723,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: TaskAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TaskSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: TaskMinAggregateInputType
@@ -7680,6 +7765,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: TaskCountAggregateInputType | true
+    _avg?: TaskAvgAggregateInputType
+    _sum?: TaskSumAggregateInputType
     _min?: TaskMinAggregateInputType
     _max?: TaskMaxAggregateInputType
   }
@@ -7695,11 +7782,15 @@ export namespace Prisma {
     dueDate: Date | null
     startDate: Date | null
     completedAt: Date | null
+    progress: number
+    attachments: string[]
     projectId: string
     assigneeId: string | null
     creatorId: string
     parentId: string | null
     _count: TaskCountAggregateOutputType | null
+    _avg: TaskAvgAggregateOutputType | null
+    _sum: TaskSumAggregateOutputType | null
     _min: TaskMinAggregateOutputType | null
     _max: TaskMaxAggregateOutputType | null
   }
@@ -7729,6 +7820,8 @@ export namespace Prisma {
     dueDate?: boolean
     startDate?: boolean
     completedAt?: boolean
+    progress?: boolean
+    attachments?: boolean
     projectId?: boolean
     assigneeId?: boolean
     creatorId?: boolean
@@ -7753,6 +7846,8 @@ export namespace Prisma {
     dueDate?: boolean
     startDate?: boolean
     completedAt?: boolean
+    progress?: boolean
+    attachments?: boolean
     projectId?: boolean
     assigneeId?: boolean
     creatorId?: boolean
@@ -7774,6 +7869,8 @@ export namespace Prisma {
     dueDate?: boolean
     startDate?: boolean
     completedAt?: boolean
+    progress?: boolean
+    attachments?: boolean
     projectId?: boolean
     assigneeId?: boolean
     creatorId?: boolean
@@ -7795,13 +7892,15 @@ export namespace Prisma {
     dueDate?: boolean
     startDate?: boolean
     completedAt?: boolean
+    progress?: boolean
+    attachments?: boolean
     projectId?: boolean
     assigneeId?: boolean
     creatorId?: boolean
     parentId?: boolean
   }
 
-  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "title" | "description" | "status" | "priority" | "dueDate" | "startDate" | "completedAt" | "projectId" | "assigneeId" | "creatorId" | "parentId", ExtArgs["result"]["task"]>
+  export type TaskOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "title" | "description" | "status" | "priority" | "dueDate" | "startDate" | "completedAt" | "progress" | "attachments" | "projectId" | "assigneeId" | "creatorId" | "parentId", ExtArgs["result"]["task"]>
   export type TaskInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     assignee?: boolean | Task$assigneeArgs<ExtArgs>
@@ -7845,6 +7944,8 @@ export namespace Prisma {
       dueDate: Date | null
       startDate: Date | null
       completedAt: Date | null
+      progress: number
+      attachments: string[]
       projectId: string
       assigneeId: string | null
       creatorId: string
@@ -8288,6 +8389,8 @@ export namespace Prisma {
     readonly dueDate: FieldRef<"Task", 'DateTime'>
     readonly startDate: FieldRef<"Task", 'DateTime'>
     readonly completedAt: FieldRef<"Task", 'DateTime'>
+    readonly progress: FieldRef<"Task", 'Int'>
+    readonly attachments: FieldRef<"Task", 'String[]'>
     readonly projectId: FieldRef<"Task", 'String'>
     readonly assigneeId: FieldRef<"Task", 'String'>
     readonly creatorId: FieldRef<"Task", 'String'>
@@ -11112,7 +11215,8 @@ export namespace Prisma {
     endDate: 'endDate',
     dueDate: 'dueDate',
     attachments: 'attachments',
-    ownerId: 'ownerId'
+    ownerId: 'ownerId',
+    progress: 'progress'
   };
 
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
@@ -11129,6 +11233,8 @@ export namespace Prisma {
     dueDate: 'dueDate',
     startDate: 'startDate',
     completedAt: 'completedAt',
+    progress: 'progress',
+    attachments: 'attachments',
     projectId: 'projectId',
     assigneeId: 'assigneeId',
     creatorId: 'creatorId',
@@ -11257,6 +11363,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TaskStatus'
    */
   export type EnumTaskStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskStatus'>
@@ -11285,16 +11405,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'Float'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'Float[]'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -11633,6 +11753,7 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"Project"> | Date | string
     attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
+    progress?: IntFilter<"Project"> | number
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     tasks?: TaskListRelationFilter
   }
@@ -11651,6 +11772,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     attachments?: SortOrder
     ownerId?: SortOrder
+    progress?: SortOrder
     owner?: UserOrderByWithRelationInput
     tasks?: TaskOrderByRelationAggregateInput
   }
@@ -11672,6 +11794,7 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"Project"> | Date | string
     attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
+    progress?: IntFilter<"Project"> | number
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     tasks?: TaskListRelationFilter
   }, "id" | "slug">
@@ -11690,9 +11813,12 @@ export namespace Prisma {
     dueDate?: SortOrder
     attachments?: SortOrder
     ownerId?: SortOrder
+    progress?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
+    _avg?: ProjectAvgOrderByAggregateInput
     _max?: ProjectMaxOrderByAggregateInput
     _min?: ProjectMinOrderByAggregateInput
+    _sum?: ProjectSumOrderByAggregateInput
   }
 
   export type ProjectScalarWhereWithAggregatesInput = {
@@ -11712,6 +11838,7 @@ export namespace Prisma {
     dueDate?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     attachments?: StringNullableListFilter<"Project">
     ownerId?: StringWithAggregatesFilter<"Project"> | string
+    progress?: IntWithAggregatesFilter<"Project"> | number
   }
 
   export type TaskWhereInput = {
@@ -11728,6 +11855,8 @@ export namespace Prisma {
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     startDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
+    progress?: IntFilter<"Task"> | number
+    attachments?: StringNullableListFilter<"Task">
     projectId?: StringFilter<"Task"> | string
     assigneeId?: StringNullableFilter<"Task"> | string | null
     creatorId?: StringFilter<"Task"> | string
@@ -11751,6 +11880,8 @@ export namespace Prisma {
     dueDate?: SortOrderInput | SortOrder
     startDate?: SortOrderInput | SortOrder
     completedAt?: SortOrderInput | SortOrder
+    progress?: SortOrder
+    attachments?: SortOrder
     projectId?: SortOrder
     assigneeId?: SortOrderInput | SortOrder
     creatorId?: SortOrder
@@ -11777,6 +11908,8 @@ export namespace Prisma {
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     startDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
+    progress?: IntFilter<"Task"> | number
+    attachments?: StringNullableListFilter<"Task">
     projectId?: StringFilter<"Task"> | string
     assigneeId?: StringNullableFilter<"Task"> | string | null
     creatorId?: StringFilter<"Task"> | string
@@ -11800,13 +11933,17 @@ export namespace Prisma {
     dueDate?: SortOrderInput | SortOrder
     startDate?: SortOrderInput | SortOrder
     completedAt?: SortOrderInput | SortOrder
+    progress?: SortOrder
+    attachments?: SortOrder
     projectId?: SortOrder
     assigneeId?: SortOrderInput | SortOrder
     creatorId?: SortOrder
     parentId?: SortOrderInput | SortOrder
     _count?: TaskCountOrderByAggregateInput
+    _avg?: TaskAvgOrderByAggregateInput
     _max?: TaskMaxOrderByAggregateInput
     _min?: TaskMinOrderByAggregateInput
+    _sum?: TaskSumOrderByAggregateInput
   }
 
   export type TaskScalarWhereWithAggregatesInput = {
@@ -11823,6 +11960,8 @@ export namespace Prisma {
     dueDate?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     startDate?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     completedAt?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
+    progress?: IntWithAggregatesFilter<"Task"> | number
+    attachments?: StringNullableListFilter<"Task">
     projectId?: StringWithAggregatesFilter<"Task"> | string
     assigneeId?: StringNullableWithAggregatesFilter<"Task"> | string | null
     creatorId?: StringWithAggregatesFilter<"Task"> | string
@@ -12343,6 +12482,7 @@ export namespace Prisma {
     endDate?: Date | string | null
     dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
+    progress?: number
     owner: UserCreateNestedOneWithoutProjectsInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
   }
@@ -12361,6 +12501,7 @@ export namespace Prisma {
     dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
+    progress?: number
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -12377,6 +12518,7 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
+    progress?: IntFieldUpdateOperationsInput | number
     owner?: UserUpdateOneRequiredWithoutProjectsNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
   }
@@ -12395,6 +12537,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -12412,6 +12555,7 @@ export namespace Prisma {
     dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
+    progress?: number
   }
 
   export type ProjectUpdateManyMutationInput = {
@@ -12427,6 +12571,7 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
+    progress?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProjectUncheckedUpdateManyInput = {
@@ -12443,6 +12588,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
   }
 
   export type TaskCreateInput = {
@@ -12456,6 +12602,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     project: ProjectCreateNestedOneWithoutTasksInput
     assignee?: UserCreateNestedOneWithoutAssignedTasksInput
     creator: UserCreateNestedOneWithoutCreatedTasksInput
@@ -12475,6 +12623,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     assigneeId?: string | null
     creatorId: string
@@ -12494,6 +12644,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     assignee?: UserUpdateOneWithoutAssignedTasksNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
@@ -12513,6 +12665,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
@@ -12532,6 +12686,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     assigneeId?: string | null
     creatorId: string
@@ -12549,6 +12705,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
   }
 
   export type TaskUncheckedUpdateManyInput = {
@@ -12562,6 +12720,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
@@ -13083,6 +13243,17 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type ProjectCountOrderByAggregateInput = {
     id?: SortOrder
     createdAt?: SortOrder
@@ -13097,6 +13268,11 @@ export namespace Prisma {
     dueDate?: SortOrder
     attachments?: SortOrder
     ownerId?: SortOrder
+    progress?: SortOrder
+  }
+
+  export type ProjectAvgOrderByAggregateInput = {
+    progress?: SortOrder
   }
 
   export type ProjectMaxOrderByAggregateInput = {
@@ -13112,6 +13288,7 @@ export namespace Prisma {
     endDate?: SortOrder
     dueDate?: SortOrder
     ownerId?: SortOrder
+    progress?: SortOrder
   }
 
   export type ProjectMinOrderByAggregateInput = {
@@ -13127,6 +13304,11 @@ export namespace Prisma {
     endDate?: SortOrder
     dueDate?: SortOrder
     ownerId?: SortOrder
+    progress?: SortOrder
+  }
+
+  export type ProjectSumOrderByAggregateInput = {
+    progress?: SortOrder
   }
 
   export type EnumProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -13137,6 +13319,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumProjectStatusFilter<$PrismaModel>
     _max?: NestedEnumProjectStatusFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumTaskStatusFilter<$PrismaModel = never> = {
@@ -13179,10 +13377,16 @@ export namespace Prisma {
     dueDate?: SortOrder
     startDate?: SortOrder
     completedAt?: SortOrder
+    progress?: SortOrder
+    attachments?: SortOrder
     projectId?: SortOrder
     assigneeId?: SortOrder
     creatorId?: SortOrder
     parentId?: SortOrder
+  }
+
+  export type TaskAvgOrderByAggregateInput = {
+    progress?: SortOrder
   }
 
   export type TaskMaxOrderByAggregateInput = {
@@ -13196,6 +13400,7 @@ export namespace Prisma {
     dueDate?: SortOrder
     startDate?: SortOrder
     completedAt?: SortOrder
+    progress?: SortOrder
     projectId?: SortOrder
     assigneeId?: SortOrder
     creatorId?: SortOrder
@@ -13213,10 +13418,15 @@ export namespace Prisma {
     dueDate?: SortOrder
     startDate?: SortOrder
     completedAt?: SortOrder
+    progress?: SortOrder
     projectId?: SortOrder
     assigneeId?: SortOrder
     creatorId?: SortOrder
     parentId?: SortOrder
+  }
+
+  export type TaskSumOrderByAggregateInput = {
+    progress?: SortOrder
   }
 
   export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -13688,6 +13898,14 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type UserUpdateOneRequiredWithoutProjectsNestedInput = {
     create?: XOR<UserCreateWithoutProjectsInput, UserUncheckedCreateWithoutProjectsInput>
     connectOrCreate?: UserCreateOrConnectWithoutProjectsInput
@@ -13722,6 +13940,10 @@ export namespace Prisma {
     update?: TaskUpdateWithWhereUniqueWithoutProjectInput | TaskUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: TaskUpdateManyWithWhereWithoutProjectInput | TaskUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: TaskScalarWhereInput | TaskScalarWhereInput[]
+  }
+
+  export type TaskCreateattachmentsInput = {
+    set: string[]
   }
 
   export type ProjectCreateNestedOneWithoutTasksInput = {
@@ -13782,6 +14004,11 @@ export namespace Prisma {
 
   export type EnumTaskPriorityFieldUpdateOperationsInput = {
     set?: $Enums.TaskPriority
+  }
+
+  export type TaskUpdateattachmentsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type ProjectUpdateOneRequiredWithoutTasksNestedInput = {
@@ -14157,6 +14384,33 @@ export namespace Prisma {
     _max?: NestedEnumProjectStatusFilter<$PrismaModel>
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TaskStatus | EnumTaskStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TaskStatus[] | ListEnumTaskStatusFieldRefInput<$PrismaModel>
@@ -14204,6 +14458,7 @@ export namespace Prisma {
     endDate?: Date | string | null
     dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
+    progress?: number
     tasks?: TaskCreateNestedManyWithoutProjectInput
   }
 
@@ -14220,6 +14475,7 @@ export namespace Prisma {
     endDate?: Date | string | null
     dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
+    progress?: number
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -14244,6 +14500,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     project: ProjectCreateNestedOneWithoutTasksInput
     creator: UserCreateNestedOneWithoutCreatedTasksInput
     parentTask?: TaskCreateNestedOneWithoutSubTasksInput
@@ -14262,6 +14520,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     creatorId: string
     parentId?: string | null
@@ -14290,6 +14550,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     project: ProjectCreateNestedOneWithoutTasksInput
     assignee?: UserCreateNestedOneWithoutAssignedTasksInput
     parentTask?: TaskCreateNestedOneWithoutSubTasksInput
@@ -14308,6 +14570,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     assigneeId?: string | null
     parentId?: string | null
@@ -14486,6 +14750,7 @@ export namespace Prisma {
     dueDate?: DateTimeFilter<"Project"> | Date | string
     attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
+    progress?: IntFilter<"Project"> | number
   }
 
   export type TaskUpsertWithWhereUniqueWithoutAssigneeInput = {
@@ -14518,6 +14783,8 @@ export namespace Prisma {
     dueDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     startDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     completedAt?: DateTimeNullableFilter<"Task"> | Date | string | null
+    progress?: IntFilter<"Task"> | number
+    attachments?: StringNullableListFilter<"Task">
     projectId?: StringFilter<"Task"> | string
     assigneeId?: StringNullableFilter<"Task"> | string | null
     creatorId?: StringFilter<"Task"> | string
@@ -14891,6 +15158,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     assignee?: UserCreateNestedOneWithoutAssignedTasksInput
     creator: UserCreateNestedOneWithoutCreatedTasksInput
     parentTask?: TaskCreateNestedOneWithoutSubTasksInput
@@ -14909,6 +15178,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     assigneeId?: string | null
     creatorId: string
     parentId?: string | null
@@ -15002,6 +15273,7 @@ export namespace Prisma {
     endDate?: Date | string | null
     dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
+    progress?: number
     owner: UserCreateNestedOneWithoutProjectsInput
   }
 
@@ -15019,6 +15291,7 @@ export namespace Prisma {
     dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
+    progress?: number
   }
 
   export type ProjectCreateOrConnectWithoutTasksInput = {
@@ -15119,6 +15392,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     project: ProjectCreateNestedOneWithoutTasksInput
     assignee?: UserCreateNestedOneWithoutAssignedTasksInput
     creator: UserCreateNestedOneWithoutCreatedTasksInput
@@ -15137,6 +15412,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     assigneeId?: string | null
     creatorId: string
@@ -15160,6 +15437,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     project: ProjectCreateNestedOneWithoutTasksInput
     assignee?: UserCreateNestedOneWithoutAssignedTasksInput
     creator: UserCreateNestedOneWithoutCreatedTasksInput
@@ -15178,6 +15457,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     assigneeId?: string | null
     creatorId: string
@@ -15249,6 +15530,7 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
+    progress?: IntFieldUpdateOperationsInput | number
     owner?: UserUpdateOneRequiredWithoutProjectsNestedInput
   }
 
@@ -15266,6 +15548,7 @@ export namespace Prisma {
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserUpsertWithoutAssignedTasksInput = {
@@ -15384,6 +15667,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     assignee?: UserUpdateOneWithoutAssignedTasksNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
@@ -15402,6 +15687,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
@@ -15452,6 +15739,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     project: ProjectCreateNestedOneWithoutTasksInput
     assignee?: UserCreateNestedOneWithoutAssignedTasksInput
     creator: UserCreateNestedOneWithoutCreatedTasksInput
@@ -15470,6 +15759,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     assigneeId?: string | null
     creatorId: string
@@ -15600,6 +15891,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     assignee?: UserUpdateOneWithoutAssignedTasksNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
@@ -15618,6 +15911,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
@@ -15820,6 +16115,7 @@ export namespace Prisma {
     endDate?: Date | string | null
     dueDate: Date | string
     attachments?: ProjectCreateattachmentsInput | string[]
+    progress?: number
   }
 
   export type TaskCreateManyAssigneeInput = {
@@ -15833,6 +16129,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     creatorId: string
     parentId?: string | null
@@ -15849,6 +16147,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     assigneeId?: string | null
     parentId?: string | null
@@ -15910,6 +16210,7 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
+    progress?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUpdateManyWithoutProjectNestedInput
   }
 
@@ -15926,6 +16227,7 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
+    progress?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -15942,6 +16244,7 @@ export namespace Prisma {
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: ProjectUpdateattachmentsInput | string[]
+    progress?: IntFieldUpdateOperationsInput | number
   }
 
   export type TaskUpdateWithoutAssigneeInput = {
@@ -15955,6 +16258,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
     parentTask?: TaskUpdateOneWithoutSubTasksNestedInput
@@ -15973,6 +16278,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     creatorId?: StringFieldUpdateOperationsInput | string
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15991,6 +16298,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     creatorId?: StringFieldUpdateOperationsInput | string
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16007,6 +16316,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     assignee?: UserUpdateOneWithoutAssignedTasksNestedInput
     parentTask?: TaskUpdateOneWithoutSubTasksNestedInput
@@ -16025,6 +16336,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16043,6 +16356,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16190,6 +16505,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     assigneeId?: string | null
     creatorId: string
     parentId?: string | null
@@ -16206,6 +16523,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     assignee?: UserUpdateOneWithoutAssignedTasksNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
     parentTask?: TaskUpdateOneWithoutSubTasksNestedInput
@@ -16224,6 +16543,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16242,6 +16563,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
     parentId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16258,6 +16581,8 @@ export namespace Prisma {
     dueDate?: Date | string | null
     startDate?: Date | string | null
     completedAt?: Date | string | null
+    progress?: number
+    attachments?: TaskCreateattachmentsInput | string[]
     projectId: string
     assigneeId?: string | null
     creatorId: string
@@ -16283,6 +16608,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     project?: ProjectUpdateOneRequiredWithoutTasksNestedInput
     assignee?: UserUpdateOneWithoutAssignedTasksNestedInput
     creator?: UserUpdateOneRequiredWithoutCreatedTasksNestedInput
@@ -16301,6 +16628,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
@@ -16319,6 +16648,8 @@ export namespace Prisma {
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    progress?: IntFieldUpdateOperationsInput | number
+    attachments?: TaskUpdateattachmentsInput | string[]
     projectId?: StringFieldUpdateOperationsInput | string
     assigneeId?: NullableStringFieldUpdateOperationsInput | string | null
     creatorId?: StringFieldUpdateOperationsInput | string
