@@ -3,7 +3,8 @@ import { Task } from "@/lib/generated/prisma"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown, ChevronDown, ChevronUp } from "lucide-react"
+import { ArrowUpDown, ChevronDown, ChevronUp, ExternalLink } from "lucide-react"
+import Link from "next/link"
 
 export const getTaskColumns = (): ColumnDef<Task>[] => [
     {
@@ -25,6 +26,20 @@ export const getTaskColumns = (): ColumnDef<Task>[] => [
                 </Button>
             );
         },
+        cell: ({ row }) => {
+            const taskId = row.original.id;
+            const title = row.getValue("title") as string;
+
+            return (
+                <Link
+                    href={`/dashboard/tasks/${taskId}`}
+                    className="flex items-center text-primary hover:underline hover:text-primary/80 transition-colors group"
+                >
+                    <span className="truncate">{title}</span>
+                    <ExternalLink className="ml-2 h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />
+                </Link>
+            );
+        }
     },
     {
         accessorKey: "status",

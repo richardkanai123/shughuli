@@ -3,7 +3,7 @@ import { Testimonial } from "@/lib/Constants";
 
 export default function TestimonialCard({ name, role, image, quote }: Testimonial) {
     return (
-        <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition group">
+        <div className="p-6 backdrop-blur-2xl bg-card rounded-xl shadow-sm hover:shadow-md transition group">
             <div className="flex items-center mb-4">
                 <Image
                     width={48}

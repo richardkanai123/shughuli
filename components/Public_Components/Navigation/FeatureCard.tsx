@@ -27,7 +27,7 @@ export default function FeatureCard({
     footer
 }: FeatureProps) {
     return (
-        <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm hover:shadow-md transition group">
+        <div className="bg-card p-5 rounded-xl shadow-sm hover:shadow-md transition group">
             <div className={`h-12 w-12 ${color.light} dark:${color.dark} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                 {icon}
             </div>
