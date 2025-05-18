@@ -1,7 +1,7 @@
 import CreateNewLink from "@/components/Dashboard_Components/project_components/CreateNewLink";
 import ProjectsLister from "@/components/Dashboard_Components/project_components/ProjectsLister";
-import LoadingSpinner from "@/components/Public_Components/Loaders/LoadSpinner";
 import AuthRequired from "@/components/Public_Components/Profile/AuthRequired";
+import ProjectsLoadingSkeleton from "@/components/Skeletons/ProjectsLoading";
 import { GetUserProjects } from "@/lib/actions/projects/get-projects";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -30,7 +30,7 @@ const ProjectsPage = async () => {
 
                 <CreateNewLink />
             </div>
-            <Suspense fallback={<LoadingSpinner />}>
+            <Suspense fallback={<ProjectsLoadingSkeleton />}>
                 <ProjectsLister projects={projectsData} />
             </Suspense>
         </div>
