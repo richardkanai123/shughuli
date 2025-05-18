@@ -1,19 +1,23 @@
+'use client'
+
 import React from 'react'
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 const pricingPlans = [
     {
         name: "Free",
         price: "0",
-        description: "Perfect for individuals and small teams getting started",
+        description: "Perfect for personal use with essential features",
         features: [
-            "Up to 5 team members",
+            "Up to 3 active projects",
+            "Unlimited tasks",
             "Basic task management",
-            "2 active projects",
-            "Basic reporting",
-            "Community support",
+            "7-day task history",
+            "Email support",
         ],
         cta: "Get Started",
         href: "/sign-up",
@@ -21,129 +25,153 @@ const pricingPlans = [
     },
     {
         name: "Pro",
-        price: "12",
-        description: "Ideal for growing teams and businesses",
+        price: "9",
+        description: "For individuals who need advanced productivity tools",
         features: [
-            "Unlimited team members",
-            "Advanced task management",
             "Unlimited projects",
-            "Advanced analytics",
+            "Advanced task management",
+            "Priority labels",
+            "Recurring tasks",
+            "Data export",
+            "Unlimited task history",
             "Priority support",
-            "Custom workflows",
-            "Team collaboration tools",
-            "API access",
-            "On-premises deployment",
+
         ],
         cta: "Start Free Trial",
         href: "/sign-up",
         highlighted: true
     },
     {
-        name: "Enterprise",
-        price: "49",
-        description: "For large organizations with complex needs",
+        name: "Premium",
+        price: "19",
+        description: "For power users with complex productivity needs",
         features: [
             "Everything in Pro",
-            "Custom integrations",
-            "Dedicated support",
-            "SAML SSO",
-            "Advanced security",
-            "Custom contracts",
-            "SLA guarantees",
-            "Dedicated success manager",
-            "Priority customer support"
+            "Advanced analytics",
+            "Custom themes",
+            "API access",
+            "Integrations with popular tools",
+            "Advanced filters",
+            "Premium support",
+            "Early access to new features"
         ],
-        cta: "Contact Sales",
-        href: "/contact",
+        cta: "Start Free Trial",
+        href: "/sign-up",
         highlighted: false
     }
 ];
+
 const PricingPage = () => {
+    // Animation variants
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2
+            }
+        }
+    };
+
+    const item = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+    };
+
     return (
-        <div className="min-h-screen py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+        <div className="min-h-screen py-16 px-4 bg-gradient-to-b from-background to-background/90">
             {/* Header */}
-            <div className="text-center px-6 mb-16">
-                <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                    Simple, Transparent Pricing
+            <motion.div
+                className="text-center mb-16 max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <h1 className="text-4xl font-bold text-foreground">
+                    Simple, Personal Pricing
                 </h1>
-                <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-                    Choose the perfect plan for your team&apos;s needs
+                <p className="mt-4 text-lg text-muted-foreground">
+                    Choose the plan that fits your personal productivity needs
                 </p>
-            </div>
+            </motion.div>
 
             {/* Pricing Grid */}
-            <div className="max-w-7xl mx-auto px-6">
+            <motion.div
+                className="max-w-7xl mx-auto px-4 sm:px-6"
+                variants={container}
+                initial="hidden"
+                animate="show"
+            >
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {pricingPlans.map((plan) => (
-                        <div
-                            key={plan.name}
-                            className={`relative rounded-2xl border bg-white dark:bg-gray-800 p-8 shadow-sm transition-all hover:shadow-lg ${plan.highlighted
-                                ? 'border-blue-600 dark:border-blue-500 scale-105'
-                                : 'border-gray-200 dark:border-gray-700'
-                                }`}
-                        >
-                            {plan.highlighted && (
-                                <div className="absolute -top-4 left-0 right-0 flex justify-center">
-                                    <span className="bg-blue-600 text-white text-sm font-medium px-4 py-1 rounded-full">
-                                        Most Popular
-                                    </span>
-                                </div>
-                            )}
-
-                            <div className="mb-6">
-                                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                                    {plan.name}
-                                </h3>
-                                <div className="mt-4 flex items-baseline">
-                                    <span className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                        ${plan.price}
-                                    </span>
-                                    <span className="ml-1 text-gray-500 dark:text-gray-400">
-                                        /month per user
-                                    </span>
-                                </div>
-                                <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-                                    {plan.description}
-                                </p>
-                            </div>
-
-                            <ul className="mb-8 space-y-4">
-                                {plan.features.map((feature) => (
-                                    <li key={feature} className="flex items-center">
-                                        <Check className="h-5 w-5 text-green-500 mr-3" />
-                                        <span className="text-gray-600 dark:text-gray-300">
-                                            {feature}
+                    {pricingPlans.map((plan, index) => (
+                        <motion.div key={plan.name} variants={item}>
+                            <Card className={`h-full flex flex-col overflow-hidden transition-all ${plan.highlighted ? 'border-primary shadow-lg shadow-primary/20' : ''
+                                }`}>
+                                {plan.highlighted && (
+                                    <div className="bg-primary text-primary-foreground text-center py-1.5 text-sm font-medium">
+                                        <Sparkles className="h-4 w-4 inline mr-1" /> Most Popular
+                                    </div>
+                                )}
+                                <CardHeader>
+                                    <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                                    <div className="mt-4 flex items-baseline">
+                                        <span className="text-4xl font-bold">
+                                            ${plan.price}
                                         </span>
-                                    </li>
-                                ))}
-                            </ul>
-
-                            <Button
-                                asChild
-                                className="w-full"
-                                variant={plan.highlighted ? "default" : "outline"}
-                            >
-                                <Link href={plan.href}>
-                                    {plan.cta}
-                                </Link>
-                            </Button>
-                        </div>
+                                        <span className="ml-1 text-muted-foreground">
+                                            /month
+                                        </span>
+                                    </div>
+                                    <CardDescription className="mt-2">
+                                        {plan.description}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent className="flex-grow">
+                                    <ul className="space-y-3 text-sm">
+                                        {plan.features.map((feature) => (
+                                            <li key={feature} className="flex items-center">
+                                                <Check className="h-4 w-4 text-primary mr-2 shrink-0" />
+                                                <span>
+                                                    {feature}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </CardContent>
+                                <CardFooter>
+                                    <Button
+                                        asChild
+                                        className="w-full"
+                                        variant={plan.highlighted ? "default" : "outline"}
+                                    >
+                                        <Link href={plan.href}>
+                                            {plan.cta}
+                                        </Link>
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        </motion.div>
                     ))}
                 </div>
 
                 {/* FAQ Section */}
-                <div className="mt-20 text-center">
-                    <p className="text-gray-600 dark:text-gray-400">
+                <motion.div
+                    className="mt-20 text-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.8 }}
+                >
+                    <p className="text-muted-foreground">
                         Have more questions?{" "}
                         <Link
                             href="/contact"
-                            className="text-blue-600 hover:text-blue-500 dark:text-blue-400"
+                            className="text-primary underline-offset-4 hover:underline"
                         >
-                            Contact our team
+                            Contact us
                         </Link>
                     </p>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
         </div>
     )
 }

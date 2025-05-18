@@ -6,12 +6,12 @@ Shughuli is a personal task and project management application designed for indi
 
 ## ✨ Features
 
-- ✅ Personal project management  
-- ✅ Task tracking with priorities and statuses  
-- ✅ Comments on tasks  
-- ✅ Project-level attachments  
-- ✅ Notification system  
-- ✅ Role-based access (Admin, Member, Customer)  
+- ✅ Personal project management and organization  
+- ✅ Task tracking with priorities, statuses, and due dates  
+- ✅ Comprehensive task details and management
+- ✅ Powerful filtering and searching capabilities
+- ✅ Responsive dashboard with activity tracking
+- ✅ Modern, minimalist UI with smooth animations
 - ✅ Authentication with BetterAuth  
 - ✅ PostgreSQL + Prisma ORM  
 - ✅ Fully responsive UI built with Tailwind CSS and ShadCN  
@@ -27,6 +27,7 @@ Shughuli is a personal task and project management application designed for indi
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [ShadCN](https://ui.shadcn.dev/)
 - **State Management**: Server Components + React hooks
 - **Emailing**: Resend (optional)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
 
 ---
 
@@ -34,33 +35,34 @@ Shughuli is a personal task and project management application designed for indi
 
 1. **Clone the repository**
 
-   ```bash
-   git clone https://github.com/yourusername/shughuli.git
-   cd shughuli
+    ```bash
+    git clone https://github.com/yourusername/shughuli.git
+    cd shughuli
+    ```
 
-
-2. **Install dependacies**
+2. **Install dependencies**
 
     ```bash
-   pnpm install
-
+    pnpm install
+    ```
 
 3. **Set up environment variables**
 
     ```bash
     DATABASE_URL=postgresql://your-user:your-password@localhost:5432/shughuli
-    BASE_URL=<http://localhost:3000>
+    BASE_URL=http://localhost:3000
     BETTERAUTH_SECRET=your-secret-key
+    ```
 
 4. **Generate Prisma client & apply migrations**
 
     ```bash
     npx prisma generate
     npx prisma migrate dev --name init
+    ```
 
 5. **Run the development server**
 
     ```bash
     pnpm dev
-
-
+    ```
