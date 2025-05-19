@@ -60,12 +60,14 @@ const useDebounce = (value: string, delay: number) => {
 // Main component
 const ProjectsLister = ({
     projects,
+    limit
 }: {
     projects: Promise<{
         projects: Project[] | null;
         message: string;
         status: number;
     }>;
+    limit: number;
 }) => {
     // Data fetching
     const { message, status, projects: data } = use(projects);
@@ -128,6 +130,18 @@ const ProjectsLister = ({
         return <EmptyState searchTerm={searchTerm} />;
     }
 
+    // Limit the number of projects displayed if limit is set else show all
+
+
+    // Limit the number of projects displayed
+    const limitedProjects = useMemo(() => {
+        if (limit <= 0) return filteredProjects;
+        if (filteredProjects.length <= limit) return filteredProjects;
+        return filteredProjects.slice(0, limit);
+    }, [filteredProjects, limit]);
+
+    // Render the component
+
     return (
         <div className="space-y-4 w-full">
             {/* Stats Summary - memoized component */}
@@ -151,12 +165,12 @@ const ProjectsLister = ({
             {/* Project List */}
             <div className="w-full flex flex-wrap gap-2 justify-center-safe align-middle">
                 <AnimatePresence mode="popLayout">
-                    {filteredProjects.length === 0 ? (
+                    {limitedProjects.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
                             No projects match your search criteria
                         </div>
                     ) : (
-                        filteredProjects.map((project) => (
+                        limitedProjects.map((project) => (
                             <Suspense
                                 key={project.id}
                                 fallback={
