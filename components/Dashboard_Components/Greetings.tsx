@@ -28,8 +28,8 @@ const Greetings = ({ username, image }: { username: string, image: string | null
         // Update immediately
         updateDateTime();
 
-        // Then update every second
-        const timerId = setInterval(updateDateTime, 1000);
+        // Then update every minute
+        const timerId = setInterval(updateDateTime, 60000);
 
         return () => clearInterval(timerId);
     }, []);
