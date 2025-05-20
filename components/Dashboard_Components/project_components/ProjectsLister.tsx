@@ -78,7 +78,7 @@ const ProjectsLister = ({
     const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
     // Debounce search for performance
-    const debouncedSearchTerm = useDebounce(searchTerm, 300);
+    const debouncedSearchTerm = useDebounce(searchTerm, 100);
 
     // Toggle sort direction
     const toggleSortDirection = () => {

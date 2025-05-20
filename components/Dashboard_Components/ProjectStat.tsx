@@ -18,9 +18,7 @@ export default function ProjectStat({ icon, label, value, className }: ProjectSt
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className={cn(
-                "p-4 rounded-lg space-y-2",
-                "hover:shadow-lg",
-                "transition-shadow duration-200",
+                "p-4 rounded-lg space-y-2 hover:shadow-lg transition-all duration-200 ",
                 className
             )}
         >

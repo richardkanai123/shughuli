@@ -265,8 +265,10 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
                         className="w-full shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-[1.01] active:scale-[0.98] disabled:hover:scale-100"
                         disabled={form.formState.isSubmitting || !form.formState.isValid}
                     >
-                        {form.formState.isSubmitting ? <><Loader2 className="h-6 w-6 animate-spin text-primary" /> 'Creating'</> : <>
-                            <PlusIcon className="mr-2 h-4 w-4" /> Create Project</>}
+                        {form.formState.isSubmitting ? <>
+                            <Loader2 className="h-6 w-6 animate-spin text-white" /> Creating</> :
+                            <>
+                                <PlusIcon className="mr-2 h-4 w-4" /> Create Project</>}
                     </Button>
                 </form>
             </Form>

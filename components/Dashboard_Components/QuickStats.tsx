@@ -1,83 +1,41 @@
+'use client";'
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Project, Task } from "@/lib/generated/prisma";
 import { Clock, CheckCircle, BarChart, Calendar } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 
-// This would show key metrics at a glance
-// async function fetchStats(userId: string) {
-//     // This would be replaced with actual data fetching
-//     const
-//     return {
-//         activeProjects: 5,
-//         tasksCompleted: 12,
-//         tasksOverdue: 3,
-//         tasksDueToday: 2
-//     };
-// }
 
-function StatsContent({ userId }: { userId: string }) {
-
-    const stats = {
-        activeProjects: 5,
-        tasksCompleted: 12,
-        tasksOverdue: 3,
-        tasksDueToday: 2
-    };
-
-    return (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card>
-                <CardContent className="pt-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-muted-foreground text-sm">Active Projects</p>
-                            <p className="text-2xl font-bold">{stats.activeProjects}</p>
-                        </div>
-                        <BarChart className="h-8 w-8 text-blue-500/20" />
-                    </div>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardContent className="pt-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-muted-foreground text-sm">Completed</p>
-                            <p className="text-2xl font-bold">{stats.tasksCompleted}</p>
-                        </div>
-                        <CheckCircle className="h-8 w-8 text-green-500/20" />
-                    </div>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardContent className="pt-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-muted-foreground text-sm">Overdue</p>
-                            <p className="text-2xl font-bold">{stats.tasksOverdue}</p>
-                        </div>
-                        <Clock className="h-8 w-8 text-red-500/20" />
-                    </div>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardContent className="pt-4">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-muted-foreground text-sm">Due Today</p>
-                            <p className="text-2xl font-bold">{stats.tasksDueToday}</p>
-                        </div>
-                        <Calendar className="h-8 w-8 text-orange-500/20" />
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
-    );
+interface tasksPromise {
+    tasks: Task[] | null;
+    message: string;
+    status: number;
 }
 
-export default function QuickStats({ userId }: { userId: string }) {
+interface projectsPromise {
+    projects: Project[] | null;
+    message: string;
+    status: number;
+}
+
+export default function QuickStats({ tasksPromise, userProjects }: { tasksPromise: Promise<tasksPromise>, userProjects: Promise<projectsPromise> }) {
+    const { tasks } = use(tasksPromise)
+    const { projects } = use(userProjects)
+
+    const stats = {
+        activeProjects: projects?.filter((project) => project.status !== "COMPLETED").length || 0,
+        tasksCompleted: tasks?.filter((task) => task.status === "DONE").length || 0,
+        tasksOverdue: tasks?.filter((task) => task.dueDate && new Date(task.dueDate as Date) < new Date() && task.status !== "DONE").length || 0,
+        tasksDueToday: tasks?.filter((task) => {
+            const dueDate = new Date(task.dueDate as Date);
+            const today = new Date();
+            return (
+                dueDate.getDate() === today.getDate() &&
+                dueDate.getMonth() === today.getMonth() &&
+                dueDate.getFullYear() === today.getFullYear()
+            );
+        }).length || 0,
+    };
     return (
         <Suspense fallback={
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -96,7 +54,55 @@ export default function QuickStats({ userId }: { userId: string }) {
                 ))}
             </div>
         }>
-            <StatsContent userId={userId} />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Card>
+                    <CardContent className="pt-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-muted-foreground text-sm">Active Projects</p>
+                                <p className="text-2xl font-bold">{stats.activeProjects}</p>
+                            </div>
+                            <BarChart className="h-8 w-8 text-blue-500/20 dark:text-primary" />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent className="pt-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-muted-foreground text-sm">Completed Tasks</p>
+                                <p className="text-2xl font-bold">{stats.tasksCompleted}</p>
+                            </div>
+                            <CheckCircle className="h-8 w-8 text-green-500/20 dark:text-primary" />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent className="pt-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-muted-foreground text-sm">Overdue Tasks</p>
+                                <p className="text-2xl font-bold">{stats.tasksOverdue}</p>
+                            </div>
+                            <Clock className="h-8 w-8 text-red-500/20 dark:text-red-500" />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardContent className="pt-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-muted-foreground text-sm">Due Today</p>
+                                <p className="text-2xl font-bold">{stats.tasksDueToday}</p>
+                            </div>
+                            <Calendar className="h-8 w-8 text-orange-500/20 dark:text-orange-500" />
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
         </Suspense>
     );
 }

@@ -31,7 +31,7 @@ const ProjectsPage = async () => {
                 <CreateNewLink />
             </div>
             <Suspense fallback={<ProjectsLoadingSkeleton />}>
-                <ProjectsLister projects={projectsData} />
+                <ProjectsLister projects={projectsData} limit={0} />
             </Suspense>
         </div>
     )

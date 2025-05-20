@@ -8,13 +8,14 @@ import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { Suspense } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import QuickStats from '@/components/Dashboard_Components/QuickStats'
 import { TaskStatusSummarySkeleton } from '@/components/Skeletons/TasksOverViewSkeletons'
 import ProjectsLoadingSkeleton from '@/components/Skeletons/ProjectsLoading'
 import ProjectsLister from '@/components/Dashboard_Components/project_components/ProjectsLister'
 import { GetUserProjects } from '@/lib/actions/projects/get-projects'
 import DashboardTasksList from '@/components/Dashboard_Components/task-components/TasksList'
+import Greetings from '@/components/Dashboard_Components/Greetings'
 
 const Dashboard = async () => {
     const session = await auth.api.getSession({
@@ -31,21 +32,11 @@ const Dashboard = async () => {
     const userProjects = GetUserProjects(session.userId)
 
     return (
-        <div className="container mx-auto py-4 space-y-6">
+        <div className="container mx-auto py-4 space-y-6 px-4">
             {/* Dashboard Header */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10 border">
-                        <AvatarImage src={session.image || undefined} alt={session.username} />
-                        <AvatarFallback>{session.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                        <h1 className="text-xl font-semibold">{session.username}'s Dashboard</h1>
-                        <p className="text-sm text-muted-foreground">
-                            {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                        </p>
-                    </div>
-                </div>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ">
+                <Greetings username={session.username as string} image={session.image as string} />
+
                 <CreateNewLink />
             </div>
 
@@ -57,9 +48,9 @@ const Dashboard = async () => {
                     <TabsTrigger value="tasks">Tasks</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="overview" className="space-y-4">
+                <TabsContent value="overview" className="space-y-4 px-4">
                     {/* Quick Stats Row */}
-                    <QuickStats userId={session.userId} />
+                    <QuickStats tasksPromise={tasksData} userProjects={userProjects} />
 
                     {/* Two-column layout for projects and tasks */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
