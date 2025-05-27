@@ -22,7 +22,8 @@ const ProjectDetails = ({ project }: { project: Project }) => {
         setIsVisible(true)
         const timer = setTimeout(() => {
             setProgressValue(project.progress || 0)
-        }, 300)
+        }, 3000) // Delay to simulate loading animation
+        // Cleanup timer on unmount
 
         return () => clearTimeout(timer)
     }, [project.progress])
@@ -32,8 +33,9 @@ const ProjectDetails = ({ project }: { project: Project }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
+            className="my-2"
         >
-            <Card className="overflow-hidden">
+            <Card className="overflow-hidden rounded-none">
                 <CardHeader className="relative">
                     <ProjectHeader
                         project={project}
@@ -43,9 +45,7 @@ const ProjectDetails = ({ project }: { project: Project }) => {
                     <div className="space-y-6">
                         {/* Description */}
                         <ProjectDescription description={project.description} />
-
                         <Separator />
-
                         {/* Progress Section */}
                         <ProjectProgress
                             progressValue={progressValue}
@@ -53,22 +53,19 @@ const ProjectDetails = ({ project }: { project: Project }) => {
                             startDate={project.startDate}
                             endDate={project.endDate}
                         />
-
                         <Separator />
-
                         {/* Project Details Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <ProjectDates
                                 startDate={project.startDate}
                                 endDate={project.endDate}
                                 projectId={project.id}
+                                ownerId={project.ownerId}
+                                dueDate={project.dueDate}
                             />
-
                         </div>
-
                         {/* Attachments Section */}
                         <Separator />
-
                         <ProjectAttachments
                             attachments={project.attachments || []}
                             projectId={project.id}

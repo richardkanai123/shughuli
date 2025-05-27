@@ -2,7 +2,7 @@
 import { CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Link as LinkIcon, Lock, TicketCheck, Trash2Icon, Unlock, X } from "lucide-react"
+import { Edit2, Link as LinkIcon, Lock, TicketCheck, Trash2Icon, Unlock, X } from "lucide-react"
 import { getStatusColor } from '@/lib/ProjectColorByStatus'
 import { Project } from "@/lib/generated/prisma"
 import { motion } from "framer-motion"
@@ -68,45 +68,48 @@ const ProjectHeader = ({ project }: { project: Project }) => {
                 <TooltipProvider>
 
                     {/* Project Privacy Toggle Button */}
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button variant="outline" size="sm">
-                                        {
-                                            isPublic ? "Privatise" : "Publicise"
-                                        }
-                                        {isPublic ? (
-                                            <Unlock className="h-4 w-4" />
-                                        ) : (
-                                            <Lock className="h-4 w-4" />
-                                        )}
-                                    </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            {isPublic ? "Make Project Private?" : "Make Project Public?"}
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            {isPublic
-                                                ? "This will restrict access to only team members and yourself."
-                                                : "This will make the project visible to anyone with the link."}
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction>
-                                            {isPublic ? "Make Private" : "Make Public"}
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>{isPublic ? "Project is public" : "Project is private"}</p>
-                        </TooltipContent>
-                    </Tooltip>
+                    <TooltipProvider>
+
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button variant="outline" size="sm">
+                                            {
+                                                isPublic ? "Privatise" : "Publicise"
+                                            }
+                                            {isPublic ? (
+                                                <Unlock className="h-4 w-4" />
+                                            ) : (
+                                                <Lock className="h-4 w-4" />
+                                            )}
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                                {isPublic ? "Make Project Private?" : "Make Project Public?"}
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                {isPublic
+                                                    ? "This will restrict access to only team members and yourself."
+                                                    : "This will make the project visible to anyone with the link."}
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction>
+                                                {isPublic ? "Make Private" : "Make Public"}
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>{isPublic ? "Project is public" : "Project is private"}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
 
                     {/* Complete Project Button */}
                     {status !== 'COMPLETED' && (
@@ -151,7 +154,7 @@ const ProjectHeader = ({ project }: { project: Project }) => {
                             <TooltipTrigger asChild>
                                 <Button variant="outline" >
                                     <Link className="flex align-middle justify-center items-center gap-2" href={`/dashboard/projects/${project.slug}/edit`}>
-                                        Edit <X className="h-4 w-4" />
+                                        Edit <Edit2 className="h-4 w-4" />
                                     </Link>
                                 </Button>
                             </TooltipTrigger>
