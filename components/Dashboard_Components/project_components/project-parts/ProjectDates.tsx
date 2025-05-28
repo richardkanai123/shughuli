@@ -111,7 +111,14 @@ const ProjectDates = ({
                         <span>Due Date</span>
                     </div>
 
-                    {isOwner && (
+                    {
+                        isPending &&
+                        <Button variant="outline" size="sm" disabled>
+                            <span>Loading...</span>
+                        </Button>
+
+                    }
+                    {(!isPending && isOwner) &&
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
                                 <Button variant="ghost" size="sm" className="h-7 px-2">
@@ -140,7 +147,8 @@ const ProjectDates = ({
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
-                    )}
+                    }
+
                 </div>
 
                 {dueDate ? (

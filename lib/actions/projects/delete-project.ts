@@ -28,8 +28,16 @@ export const DeleteProject = async (id: string) => {
 			},
 			select: {
 				name: true,
+				ownerId: true,
 			},
 		});
+
+		if (targetProject.ownerId !== session.userId) {
+			return {
+				success: false,
+				message: "You do not have permission to delete this project",
+			};
+		}
 
 		if (!targetProject) {
 			return {

@@ -1,7 +1,7 @@
 'use client'
 
 import { Task } from '@/lib/generated/prisma';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Suspense } from 'react';
 import {
     Card,
     CardContent,
@@ -48,6 +48,7 @@ import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { use } from "react";
 import { getStatusStyles } from '@/lib/TaskStatusStyle';
+import { Skeleton } from '@/components/ui/skeleton';
 interface TasksListProps {
     tasks: Promise<{ tasks: Task[] | null; message: string; status: number }>;
     limit?: number;
@@ -233,84 +234,108 @@ export default function DashboardTasksList({ tasks, limit = 10 }: TasksListProps
                 </div>
 
                 {/* Tasks Table */}
-                <div className="border rounded-md">
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead style={{ width: 50 }}></TableHead>
-                                <TableHead>Task</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Due Date</TableHead>
-                                <TableHead style={{ width: 80 }}></TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {paginatedTasks.map((task) => (
-                                <TableRow key={task.id}>
-                                    <TableCell>
-                                        <Checkbox
-                                            checked={task.status === 'DONE'}
-                                            onCheckedChange={() => handleCompleteTask(task.id, task.status)}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="font-medium">{task.title}</div>
-                                        {task.description && (
-                                            <div className="text-xs text-muted-foreground line-clamp-1">
-                                                {task.description}
-                                            </div>
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge className={getStatusStyles(task.status)} variant="outline">
-                                            {task.status.replace('_', ' ')}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center">
-                                            <Clock className="h-3 w-3 mr-1 text-muted-foreground" />
-                                            <span
-                                                className={
-                                                    getDueDateStatus(new Date(task.dueDate as Date)).className
-                                                }
-                                            >
-                                                {getDueDateStatus(new Date(task.dueDate as Date)).label}
-                                            </span>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                                    <span className="sr-only">Open menu</span>
-                                                    <ChevronDown className="h-4 w-4" />
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end">
-                                                <DropdownMenuItem asChild>
-                                                    <Link href={`/dashboard/tasks/${task.id}`}>
-                                                        View details
-                                                    </Link>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem asChild>
-                                                    <Link href={`/dashboard/tasks/${task.id}/edit`}>
-                                                        Edit task
-                                                    </Link>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() => handleCompleteTask(task.id, task.status)}
-                                                    disabled={task.status === 'DONE'}
-                                                >
-                                                    Mark as complete
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </TableCell>
+                <Suspense fallback={
+                    <>
+                        {Array(5).fill(0).map((_, index) => (
+                            <div
+                                key={index}
+                                className="grid grid-cols-[50px_1fr_120px_120px_80px] gap-4 py-4 px-4 border-b items-center"
+                            >
+                                <Skeleton className="h-4 w-4 rounded-sm" />
+                                <div className="space-y-2">
+                                    <Skeleton className="h-5 w-full max-w-[200px]" />
+                                    <Skeleton className="h-3 w-full max-w-[160px]" />
+                                </div>
+                                <Skeleton className="h-6 w-24 rounded-full" />
+                                <div className="flex items-center">
+                                    <Skeleton className="h-4 w-4 rounded-full mr-2" />
+                                    <Skeleton className="h-4 w-16" />
+                                </div>
+                                <Skeleton className="h-8 w-8 rounded-full" />
+                            </div>
+                        ))}
+                    </>
+                }
+                >
+                    <div className="border rounded-md">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead style={{ width: 50 }}></TableHead>
+                                    <TableHead>Task</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead>Due Date</TableHead>
+                                    <TableHead style={{ width: 80 }}></TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
+                            </TableHeader>
+                            <TableBody>
+                                {paginatedTasks.map((task) => (
+                                    <TableRow key={task.id}>
+                                        <TableCell>
+                                            <Checkbox
+                                                checked={task.status === 'DONE'}
+                                                onCheckedChange={() => handleCompleteTask(task.id, task.status)}
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="font-medium">{task.title}</div>
+                                            {task.description && (
+                                                <div className="text-xs text-muted-foreground line-clamp-1">
+                                                    {task.description}
+                                                </div>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge className={getStatusStyles(task.status)} variant="outline">
+                                                {task.status.replace('_', ' ')}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center">
+                                                <Clock className="h-3 w-3 mr-1 text-muted-foreground" />
+                                                <span
+                                                    className={
+                                                        getDueDateStatus(new Date(task.dueDate as Date)).className
+                                                    }
+                                                >
+                                                    {getDueDateStatus(new Date(task.dueDate as Date)).label}
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        <ChevronDown className="h-4 w-4" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem asChild>
+                                                        <Link href={`/dashboard/tasks/${task.id}`}>
+                                                            View details
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem asChild>
+                                                        <Link href={`/dashboard/tasks/${task.id}/edit`}>
+                                                            Edit task
+                                                        </Link>
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => handleCompleteTask(task.id, task.status)}
+                                                        disabled={task.status === 'DONE'}
+                                                    >
+                                                        Mark as complete
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </Suspense>
 
                 {/* Pagination */}
                 {totalPages > 1 && (
