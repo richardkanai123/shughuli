@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/tooltip"
 import { useSession } from "@/lib/auth-client"
 import Link from "next/link"
+import DeleteProjectbtn from "../../buttons/DeleteProjectbtn"
 
 const ProjectHeader = ({ project }: { project: Project }) => {
     const { name, slug, status, isPublic } = project
@@ -166,38 +167,7 @@ const ProjectHeader = ({ project }: { project: Project }) => {
                     )}
 
                     {/* delete Project Button */}
-                    {isOwner && (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button variant="destructive" size="sm">
-                                            Delete <Trash2Icon className="h-4 w-4" />
-                                        </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>
-                                                Delete Project
-                                            </AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                Are you sure you want to delete this project? This action cannot be undone.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction>
-                                                Delete Project
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Delete project</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    )}
+                    {isOwner && <DeleteProjectbtn projectid={project.id} />}
                 </TooltipProvider>
 
             </div>

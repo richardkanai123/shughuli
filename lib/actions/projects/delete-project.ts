@@ -1,8 +1,11 @@
+'use server';
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 
 export const DeleteProject = async (id: string) => {
+
+	console.log("DeleteProject called with ID:", id);
 	try {
 		if (!id) {
 			return {
