@@ -1,16 +1,17 @@
-// make a project private
-
+'use server'
 import { auth } from "@/lib/auth";
+import { Project } from "@/lib/generated/prisma";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 
-export const changeVisibility = async (projectId: string, currentPrivacy:boolean) => { 
-    
+export const changeVisibility = async (projectId: string, currentPrivacy:boolean): Promise<{ success: boolean; message: string; project: Project | null }> => {
+
     try {
         if (!projectId) {
             return {
               success: false,
                 message: "Project ID is required",
+                project: null,
             };
         }
 
@@ -21,6 +22,7 @@ export const changeVisibility = async (projectId: string, currentPrivacy:boolean
             return {
                success: false,
                 message: "Unauthorized",
+                project: null,
             };
         }
 
@@ -34,6 +36,7 @@ export const changeVisibility = async (projectId: string, currentPrivacy:boolean
             return {
               success: false,
                 message: "Project not found",
+                project: null,
             };
         }
 
@@ -41,6 +44,7 @@ export const changeVisibility = async (projectId: string, currentPrivacy:boolean
             return {
                 success: false,
                 message: "You do not have permission to make this project private",
+                project: null,
             };
         }
 
@@ -49,6 +53,7 @@ export const changeVisibility = async (projectId: string, currentPrivacy:boolean
             return {
                 success: false,
                 message: `Project is already ${currentPrivacy ? "public" : "private"}`,
+                project: null,
             };
         }
         const updatedProject = await prisma.project.update({
@@ -69,11 +74,13 @@ export const changeVisibility = async (projectId: string, currentPrivacy:boolean
             return {
                 success: false,
                 message: error.message,
+                project: null,
             };
         }
         return {
             success: false,
             message: "An unexpected error occurred",
+            project: null,
         };
     }
 };

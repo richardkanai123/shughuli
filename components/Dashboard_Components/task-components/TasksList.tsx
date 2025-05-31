@@ -49,6 +49,7 @@ import { toast } from "react-hot-toast";
 import { use } from "react";
 import { getStatusStyles } from '@/lib/TaskStatusStyle';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useParams } from 'next/navigation';
 interface TasksListProps {
     tasks: Promise<{ tasks: Task[] | null; message: string; status: number }>;
     limit?: number;
@@ -61,6 +62,9 @@ export default function DashboardTasksList({ tasks, limit = 10 }: TasksListProps
     const [page, setPage] = useState(1);
 
     const tasksData = use(tasks);
+
+    const params = useParams()
+
 
 
     const getDueDateStatus = (dueDate: Date) => {
@@ -172,9 +176,16 @@ export default function DashboardTasksList({ tasks, limit = 10 }: TasksListProps
                     <p className="text-sm text-muted-foreground/70 mt-1">
                         You don't have any tasks yet
                     </p>
-                    <Button asChild className="mt-4">
-                        <Link href="/dashboard/tasks/create-new">Create a task</Link>
-                    </Button>
+                    <Suspense fallback={<Skeleton className="h-6 w-32 mt-4" />}>
+                        <p className="text-sm text-muted-foreground/70 mt-1">
+                            Create your first task
+                        </p>
+
+                        <Button asChild className="mt-4">
+                            <Link href={`/dashboard/tasks/create-new?project=${params.projectid}`}>Create a task</Link>
+                        </Button>
+                    </Suspense>
+
                 </CardContent>
             </Card>
         );
@@ -364,7 +375,7 @@ export default function DashboardTasksList({ tasks, limit = 10 }: TasksListProps
 
                 <div className="flex justify-center mt-6">
                     <Button asChild>
-                        <Link href="/dashboard/tasks/create-new">Create New Task</Link>
+                        <Link href={`/dashboard/tasks/create-new?project=${params.projectid}`}>Create New Task</Link>
                     </Button>
                 </div>
             </CardContent>
