@@ -49,23 +49,16 @@ export const changeVisibility = async (projectId: string, currentPrivacy:boolean
         }
 
         // Update the project to make it private or public
-        if( targetProject.isPublic === currentPrivacy) {
-            return {
-                success: false,
-                message: `Project is already ${currentPrivacy ? "public" : "private"}`,
-                project: null,
-            };
-        }
         const updatedProject = await prisma.project.update({
             where: { id: projectId },
             data: {
-                isPublic: currentPrivacy,
+                isPublic: !currentPrivacy,
                 updatedAt: new Date(), // Update the timestamp
             },
         });
         return {
             success: true,
-            message: `Project visibility changed to ${currentPrivacy ? "public" : "private"} successfully`,
+            message: `Project visibility changed to ${updatedProject.isPublic ? "public" : "private"}`,
             project: updatedProject,
         };
        

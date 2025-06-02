@@ -1,3 +1,10 @@
 {
-	"recommendations": ["codeium.codeium"]
+	"recommendations": [
+		"GitHub.copilot",
+		"GitHub.copilot-chat",
+		"GitHub.copilot-labs",
+		"GitHub.copilot-labs-chat",
+		"GitHub.copilot-labs-code-translator",
+		"GitHub.copilot-labs-code-translator-chat"
+	]
 }

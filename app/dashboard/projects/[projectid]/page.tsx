@@ -1,7 +1,7 @@
 import { getProjectDetails } from "@/lib/actions/projects/get-ProjectDetails";
 import ProjectDetails from "@/components/Dashboard_Components/project_components/ProjectDetails";
 import { GetProjectTasks } from "@/lib/actions/projects/get-project-tasks";
-import DashboardTasksList from "@/components/Dashboard_Components/task-components/TasksList";
+import DashboardTasksList from "@/components/Dashboard_Components/tasks_components/DashboardTasksList";
 import { Suspense } from "react";
 import { TasksListSkeleton } from "@/components/Skeletons/TasksListSkeleton";
 import { FileQuestion } from "lucide-react";

@@ -47,6 +47,7 @@ export const completeProject = async (projectId: string) => {
             where: { id: projectId },
             data: {
                 status: 'COMPLETED',
+                progress: 100, // Set progress to 100% for completed project
                 updatedAt: new Date(), // Update the timestamp
             },
         });

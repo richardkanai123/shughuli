@@ -1,3 +1,4 @@
+import { start } from "repl";
 import { z } from "zod";
 export const signUpSchema = z.object({
 	name: z.string().min(3),
@@ -15,13 +16,16 @@ export const newProjectSchema = z.object({
 	name: z.string().min(1),
 	description: z.string(),
 	slug: z.string(),
-	isPublic: z.boolean().default(false),
-	status: z.enum(["OPEN", "ONGOING", "COMPLETED"]).default("OPEN"),
+	isPublic: z.boolean(),
+	status: z.enum(["OPEN", "ONGOING", "COMPLETED", "CANCELLED", "ARCHIVED"]),
 	dueDate: z.date(),
 	ownerId: z.string(),
-	
+	startDate: z.date(
+		{invalid_type_error: "Start date is required",
+		required_error: "Start date is required"}
+	),
 	// attachments: z.array(z.string()).optional(),
-	// teamId: z.string().optional(),
+
 });
 
 export const updateProjectSchema = z.object({

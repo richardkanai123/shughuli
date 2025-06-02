@@ -1,10 +1,34 @@
+'use server';
 // updates project details
 import { auth } from "@/lib/auth";
-import { ProjectStatus } from "@/lib/generated/prisma";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
+import { z } from "zod";
+const projectSchema = z.object({
+	name: z.string().min(3, {
+		message: 'Project name must be at least 3 characters.',
+	}),
+	description: z.string().optional(),
+	status: z.enum(["OPEN", "ONGOING", "COMPLETED", "CANCELLED", "ARCHIVED"], {
+		required_error: 'Project status is required.',
+	}),
+	isPublic: z.boolean(),
+	startDate: z.date().optional().nullable(),
+	endDate: z.date().optional().nullable(),
+	dueDate: z.date().optional().nullable(),
+	progress: z.coerce
+		.number()
+		.min(0)
+		.max(100, {
+			message: 'Progress must be between 0 and 100.',
+		}),
+})
 
-export const UpdateProject = async (projectId: string, data: FormData) => {
+// type for the project data
+type ProjectData = z.infer<typeof projectSchema>;
+
+export const UpdateProject = async (projectId: string, data: ProjectData) => {
+
 	try {
 		if (!projectId) {
 			return {
@@ -12,71 +36,21 @@ export const UpdateProject = async (projectId: string, data: FormData) => {
 				message: "Project ID is required",
 			};
 		}
-		if (!data || !(data instanceof FormData)) {
+
+		if (!data || Object.keys(data).length === 0) {
 			return {
 				success: false,
-				message: "Invalid data provided",
+				message: "Project data is required",
 			};
 		}
 
-		// Ensure the FormData contains the necessary fields
-		const name = data.get("name");
-		const description = data.get("description");
-		const dueDate = data.get("dueDate");
-		const progress = data.get("progress");
-		const isPublic = data.get("isPublic");
-		const status = data.get("status");
-		const startDate = data.get("startDate") || new Date().toISOString(); // Default to current date if not provided
-		const endDate = data.get("endDate");
-
-		if (
-			!name ||
-			!description ||
-			!dueDate ||
-			!progress ||
-			!isPublic ||
-			!status
-		) {
+		const projectData = projectSchema.safeParse(data);
+		if (!projectData.success) {
 			return {
 				success: false,
-				message: "All fields are required",
+				message: projectData.error.errors.map(err => err.message).join(", "),
 			};
 		}
-
-		// Validate the types of the FormData values
-		if (
-			typeof name !== "string" ||
-			typeof description !== "string" ||
-			typeof dueDate !== "string" ||
-			typeof progress !== "string" ||
-			typeof isPublic !== "string" ||
-			typeof status !== "string"
-		) {
-			return {
-				success: false,
-				message: "Invalid data types provided",
-			};
-		}
-
-		// validdate the status value
-		if (!Object.values(ProjectStatus).includes(status as ProjectStatus)) {
-			return {
-				success: false,
-				message: "Invalid project status",
-			};
-		}
-
-		// Convert FormData values to appropriate types
-		const projectData = {
-			name: name.toString(),
-			description: description.toString(),
-			dueDate: new Date(dueDate.toString()),
-			progress: parseInt(progress.toString(), 10),
-			isPublic: isPublic === "true",
-			status: status as ProjectStatus,
-			startDate: new Date(startDate.toString()),
-			endDate: endDate ? new Date(endDate.toString()) : null, // Handle optional endDate
-		};
 
 		const session = await auth.api.getSession({
 			headers: await headers(),
@@ -110,25 +84,27 @@ export const UpdateProject = async (projectId: string, data: FormData) => {
 			};
 		}
 
+		const validatedData = {
+			name: projectData.data.name,
+			description: projectData.data.description,
+			status: projectData.data.status,
+			isPublic: projectData.data.isPublic,
+			startDate: projectData.data.startDate ? new Date(projectData.data.startDate) : targetProject.startDate,
+			endDate: projectData.data.endDate ? new Date(projectData.data.endDate) : targetProject.endDate,
+			dueDate: projectData.data.dueDate ? new Date(projectData.data.dueDate) : targetProject.dueDate,
+			progress: projectData.data.progress,
+		};
+
 		const updatedProject = await prisma.project.update({
 			where: { id: projectId },
 			data: {
-				description: projectData.description,
-				name: projectData.name,
-				dueDate: projectData.dueDate,
-				progress: projectData.progress,
-				isPublic: projectData.isPublic,
-				status: projectData.status,
-				startDate: projectData.startDate,
-				endDate: projectData.endDate,
-				updatedAt: new Date(), // Update the timestamp
+				...validatedData,
 			},
 		});
 
 		return {
 			success: true,
 			message: `Project ${updatedProject.name} updated successfully`,
-			project: updatedProject,
 		};
 	} catch (error) {
 		if (error instanceof Error) {

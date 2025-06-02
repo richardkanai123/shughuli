@@ -2,7 +2,7 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { Lock, Unlock } from 'lucide-react'
+import { CheckCircle, Loader, Lock, TriangleAlertIcon, Unlock } from 'lucide-react'
 import { changeVisibility } from '@/lib/actions/projects/change-visibility'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -17,26 +17,65 @@ const ProjectVisibilityBtn = ({ isPublic, projectId }: { isPublic: boolean, proj
 
     const handleVisibilityChange = async () => {
 
-        console.log('changing vs')
         try {
             setIsLoading
             if (!projectId) return;
 
-            const { success, message, project } = await changeVisibility(projectId, !isPublic);
-            if (!success) {
-                // Handle error case
-                toast.error(message || "Failed to change project visibility", {
-                    duration: 3000,
+            toast.promise(
+                changeVisibility(projectId, isPublic),
+                {
+                    loading: "Changing project visibility...",
+                    success: (data) => {
+                        return data.message || `Project visibility changed to ${data.project?.isPublic ? "public" : "private"}`;
+                    },
+                    error: (error) => {
+                        return error.message || "Failed to change project visibility";
+                    }
+                },
+                {
                     position: "top-right",
-                });
-                setIsLoading(false);
-                return;
-            }
+                    loading: {
+                        icon: <Loader className="h-4 w-4 animate-spin" />,
+                        position: "top-right",
+                        removeDelay: 500,
+                        iconTheme: {
+                            primary: '#4a5568', // Gray-700
+                            secondary: '#fff', // White
+                        },
+                        style: {
+                            background: '#edf2f7', // Gray-100
+                            color: '#2d3748', // Gray-800
+                        }
 
-            toast.success(message || `Project: ${project?.name} is now ${project?.isPublic ? "private" : "public"}`, {
-                duration: 3000,
-                position: "top-right",
-            });
+                    },
+                    success: {
+                        icon: <CheckCircle className="h-4 text-lime-400 w-4" />,
+                        position: "top-right",
+                        removeDelay: 500,
+                        iconTheme: {
+                            primary: '#38a169', // Green-600
+                            secondary: '#fff', // White
+                        },
+                        style: {
+                            background: '#f0fff4', // Green-50
+                            color: '#2f855a', // Green-700
+                        }
+                    },
+                    error: {
+                        icon: <TriangleAlertIcon className="h-4 w-4" />,
+                        position: "top-right",
+                        removeDelay: 500,
+                        iconTheme: {
+                            primary: '#e53e3e',
+                            secondary: '#fff', // White
+                        },
+                        style: {
+                            background: '#fff5f5', // Red-50
+                            color: '#c53030', // Red-600
+                        }
+                    }
+                }
+            )
 
             setIsLoading(false);
             Router.refresh(); // Refresh the page to reflect changes
@@ -64,7 +103,7 @@ const ProjectVisibilityBtn = ({ isPublic, projectId }: { isPublic: boolean, proj
             <TooltipTrigger asChild>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant="outline" size="sm">
+                        <Button disabled={isLoading} variant="outline" size="sm">
                             {
                                 isPublic ? "Privatise" : "Publicise"
                             }

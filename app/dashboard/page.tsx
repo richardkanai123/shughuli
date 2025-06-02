@@ -14,7 +14,7 @@ import { TaskStatusSummarySkeleton } from '@/components/Skeletons/TasksOverViewS
 import ProjectsLoadingSkeleton from '@/components/Skeletons/ProjectsLoading'
 import ProjectsLister from '@/components/Dashboard_Components/project_components/ProjectsLister'
 import { GetUserProjects } from '@/lib/actions/projects/get-projects'
-import DashboardTasksList from '@/components/Dashboard_Components/task-components/TasksList'
+import DashboardTasksList from '@/components/Dashboard_Components/tasks_components/DashboardTasksList'
 import Greetings from '@/components/Dashboard_Components/Greetings'
 
 const Dashboard = async () => {

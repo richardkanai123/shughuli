@@ -1,6 +1,6 @@
-import { Task } from "./generated/prisma"
+import { TaskStatus } from "./generated/prisma"
 
-export const getStatusStyles = (status: Task['status']) => {
+export const getStatusStyles = (status: TaskStatus) => {
     switch (status) {
         case 'DONE':
             return 'bg-green-500/10 text-green-500 border-green-200'
@@ -12,6 +12,10 @@ export const getStatusStyles = (status: Task['status']) => {
             return 'bg-yellow-500/10 text-yellow-500 border-yellow-200'
         case 'REVIEW':
             return 'bg-gray-500/10 text-gray-500 border-gray-200'
+        case 'ARCHIVED':
+            return 'bg-gray-300/10 text-gray-700 border-gray-300'
+        case 'CANCELLED':
+            return 'bg-red-500/10 text-red-500 border-red-200'
         default:
             return 'bg-blue-500/10 text-blue-500 border-blue-200'
     }

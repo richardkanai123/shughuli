@@ -10,16 +10,16 @@ import {
 import { Progress } from "@/components/ui/progress";
 
 // Import sub-components instead of including everything in one file
-import TaskStatusSummary from './task-components/TaskStatusSummary';
-import TaskUrgentAlert from './task-components/TaskUrgentAlert';
-import TasksDueThisWeek from './task-components/TasksDueThisWeek';
-import TaskStatusChart from './task-components/TaskStatusChart';
-import TasksDueToday from './task-components/TasksDueToday'; // New component
+import TaskStatusSummary from './tasks_components/TaskStatusSummary';
+import TaskUrgentAlert from './tasks_components/TaskUrgentAlert';
+import TasksDueThisWeek from './tasks_components/TasksDueThisWeek';
+import TaskStatusChart from './tasks_components/TaskStatusChart';
+import TasksDueToday from './tasks_components/TasksDueToday'; // New component
 
 // Types moved to a separate file for reusability
-import { TasksData, TaskStats, calculateTaskStats } from './task-components/taskUtils';
+import { TasksData, TaskStats, calculateTaskStats } from './tasks_components/taskUtils';
 import { AlertTriangle, Calendar } from 'lucide-react';
-import TaskCompletionChart from './task-components/CompletionChart';
+import TaskCompletionChart from './tasks_components/CompletionChart';
 import {
     ChartSkeleton,
     CompletionProgressSkeleton,

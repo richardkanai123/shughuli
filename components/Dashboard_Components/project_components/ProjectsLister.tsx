@@ -33,7 +33,7 @@ const EmptyState = ({ searchTerm }: { searchTerm: string }) => (
                 : "You haven't created any projects yet"}
         </p>
         <Button className="mt-4" asChild>
-            <Link href="/dashboard/projects/create">Create Project</Link>
+            <Link href="/dashboard/projects/create-new">Create Project</Link>
         </Button>
     </div>
 );

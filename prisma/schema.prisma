@@ -160,15 +160,19 @@ enum TaskPriority {
 }
 
 enum TaskStatus {
-  BACKLOG
   TODO
   IN_PROGRESS
   REVIEW
   DONE
+  BACKLOG
+  CANCELLED
+  ARCHIVED
 }
 
 enum ProjectStatus {
   OPEN
   ONGOING
   COMPLETED
+  CANCELLED
+  ARCHIVED
 }
