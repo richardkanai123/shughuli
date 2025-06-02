@@ -32,7 +32,7 @@ const Dashboard = async () => {
     const userProjects = GetUserProjects(session.userId)
 
     return (
-        <div className="container mx-auto py-4 space-y-6 px-4">
+        <div className="container mx-auto py-4 space-y-6 px-1">
             {/* Dashboard Header */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 ">
                 <Greetings username={session.username as string} image={session.image as string} />
