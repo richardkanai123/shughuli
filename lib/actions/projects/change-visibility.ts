@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { Project } from "@/lib/generated/prisma";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
+import { createActivity } from "../activity/create-activity";
 
 export const changeVisibility = async (projectId: string, currentPrivacy:boolean): Promise<{ success: boolean; message: string; project: Project | null }> => {
 
@@ -56,6 +57,22 @@ export const changeVisibility = async (projectId: string, currentPrivacy:boolean
                 updatedAt: new Date(), // Update the timestamp
             },
         });
+
+        // Create a new activity
+                    const link = `/dashboard/projects/${updatedProject.slug}`;
+                    const content = `You have completed ${updatedProject.name}`;
+        
+                    const activityResult = await createActivity(
+                        'PROJECT_UPDATED', 
+                        link, 
+                        content, 
+                        '', 
+                        updatedProject.id
+                    );
+        
+                    if (!activityResult.success) {
+                        console.warn("Failed to create activity record for project completion:", activityResult.message);
+                    }
         return {
             success: true,
             message: `Project visibility changed to ${updatedProject.isPublic ? "public" : "private"}`,

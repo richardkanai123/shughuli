@@ -322,6 +322,7 @@ const CreateTask = ({ projects }: { projects: projectProps[] }) => {
                                                     <SelectItem value="LOW">Low</SelectItem>
                                                     <SelectItem value="MEDIUM">Medium</SelectItem>
                                                     <SelectItem value="HIGH">High</SelectItem>
+                                                    <SelectItem value="URGENT">Urgent</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                             <FormMessage />
@@ -350,21 +351,13 @@ const CreateTask = ({ projects }: { projects: projectProps[] }) => {
                                                     <SelectValue placeholder="Select status" />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            {/* TODO
-                                            IN_PROGRESS
-                                            REVIEW
-                                            DONE
-                                            BACKLOG
-                                            CANCELLED */}
-                                            ARCHIVED
                                             <SelectContent>
                                                 <SelectItem value="TODO">To Do</SelectItem>
                                                 <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
                                                 <SelectItem value="REVIEW">Reviewing</SelectItem>
                                                 <SelectItem value="DONE">Completed</SelectItem>
                                                 <SelectItem value="BACKLOG">Backlog</SelectItem>
-                                                <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                                                <SelectItem value="ARCHIVED">Archived</SelectItem>
+
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />

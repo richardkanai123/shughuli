@@ -54,8 +54,8 @@ export default function QuickStats({ tasksPromise, userProjects }: { tasksPromis
                 ))}
             </div>
         }>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Card>
+            <div className="flex flex-col md:flex-row flex-wrap align-middle justify-center items-center gap-4">
+                <Card className='shrink-0 w-full md:min-w-[200px] max-w-[350px]'>
                     <CardContent className="pt-4">
                         <div className="flex items-center justify-between">
                             <div>
@@ -67,7 +67,7 @@ export default function QuickStats({ tasksPromise, userProjects }: { tasksPromis
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className='shrink-0 w-full md:min-w-[200px] max-w-[350px]'>
                     <CardContent className="pt-4">
                         <div className="flex items-center justify-between">
                             <div>
@@ -79,7 +79,7 @@ export default function QuickStats({ tasksPromise, userProjects }: { tasksPromis
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className='shrink-0 w-full md:min-w-[200px] max-w-[350px]'>
                     <CardContent className="pt-4">
                         <div className="flex items-center justify-between">
                             <div>
@@ -91,7 +91,7 @@ export default function QuickStats({ tasksPromise, userProjects }: { tasksPromis
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className='shrink-0 w-full md:min-w-[200px] max-w-[350px]'>
                     <CardContent className="pt-4">
                         <div className="flex items-center justify-between">
                             <div>

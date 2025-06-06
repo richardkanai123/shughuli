@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import { z } from "zod";
+import { createActivity } from "../activity/create-activity";
 const projectSchema = z.object({
 	name: z.string().min(3, {
 		message: 'Project name must be at least 3 characters.',
@@ -101,6 +102,23 @@ export const UpdateProject = async (projectId: string, data: ProjectData) => {
 				...validatedData,
 			},
 		});
+
+		
+		// Create a new activity
+		const link = `/dashboard/projects/${updatedProject.slug}`;
+		const content = `You have updated ${updatedProject.name}`;
+
+		const activityResult = await createActivity(
+			'PROJECT_UPDATED',
+			link,
+			content,
+			'',
+			updatedProject.id,
+		);
+
+		if (!activityResult.success) {
+			console.warn("Failed to create activity record for project update:", activityResult.message);
+		}
 
 		return {
 			success: true,

@@ -14,29 +14,30 @@ const DynamicBreadCrumbs = () => {
     const pathname = usePathname();
     const pathSegments = pathname.split("/").filter(Boolean);
 
-    // Get the current section (last part of the path)
-    const currentSection = pathSegments[pathSegments.length - 1];
-    const currentIndex = pathSegments.length - 1;
+    // Memoize the breadcrumb segments to avoid unnecessary recalculations
+    const breadcrumbSegments = useMemo(() => {
+        return pathSegments.map((segment, index) => {
+            const isLast = index === pathSegments.length - 1;
+            const segmentName = isIdSegment(segment)
+                ? `${getEntityTypeFromPath(pathSegments, index)} Details`
+                : getFriendlyName(segment, pathSegments, index);
 
-    // Dynamically determine the header name and icon
-    const headerInfo = useMemo(() => {
-        const name = getFriendlyName(currentSection, pathSegments, currentIndex);
-        const icon = getIconForSection(currentSection, pathSegments, currentIndex);
-        return { name, icon };
-    }, [currentSection, pathSegments, currentIndex]);
+            return {
+                name: segmentName,
+                icon: getIconForSection(segment, pathSegments, index),
+                isLast
+            };
+        });
+    }, [pathSegments]);
+
     return (
         <div className="flex items-center gap-4 bg-background/70  p-2 ">
             <Breadcrumb>
                 <BreadcrumbList>
 
-                    {pathSegments.map((segment, index) => {
+                    {breadcrumbSegments.map((segment, index) => {
                         const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
                         const isLast = index === pathSegments.length - 1;
-
-                        // Get a meaningful name instead of showing IDs
-                        const segmentName = isIdSegment(segment)
-                            ? `${getEntityTypeFromPath(pathSegments, index)} Details`
-                            : getFriendlyName(segment);
 
                         return (
                             <BreadcrumbItem key={path}>
@@ -44,14 +45,14 @@ const DynamicBreadCrumbs = () => {
 
                                 {isLast ? (
                                     <BreadcrumbPage className="capitalize">
-                                        {segmentName}
+                                        {segment.name}
                                     </BreadcrumbPage>
                                 ) : (
                                     <BreadcrumbLink
                                         href={path}
                                         className="capitalize text-muted-foreground hover:text-foreground"
                                     >
-                                        {segmentName}
+                                        {segment.name}
                                     </BreadcrumbLink>
                                 )}
                             </BreadcrumbItem>

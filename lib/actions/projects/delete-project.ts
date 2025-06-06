@@ -1,10 +1,10 @@
-'use server';
+"use server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
+import { createActivity } from "../activity/create-activity";
 
 export const DeleteProject = async (id: string) => {
-
 	console.log("DeleteProject called with ID:", id);
 	try {
 		if (!id) {
@@ -32,6 +32,7 @@ export const DeleteProject = async (id: string) => {
 			select: {
 				name: true,
 				ownerId: true,
+				slug: true,
 			},
 		});
 
@@ -47,6 +48,26 @@ export const DeleteProject = async (id: string) => {
 				success: false,
 				message: "Project not found",
 			};
+		}
+
+		// Create a new activity
+		const link = `/dashboard/projects`;
+		const content = `You have deleted ${targetProject.name}`;
+
+		const activityResult = await createActivity(
+			"PROJECT_DELETED",
+			link,
+			content,
+			"",
+			id
+		);
+		// Check if the activity was created successfully
+		// Log a warning if the activity creation failed
+		if (!activityResult.success) {
+			console.warn(
+				"Failed to create activity record for project deletion:",
+				activityResult.message
+			);
 		}
 
 		return {
