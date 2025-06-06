@@ -1,5 +1,4 @@
 'use client'
-
 import { Activity } from "@/lib/generated/prisma";
 import { useEffect, useRef, useState } from "react";
 import ActivityItem from "./ActivityItem";
@@ -9,25 +8,15 @@ const ClientSideActivityFeed = ({ activities }: { activities: Activity[] }) => {
     const scrollRef = useRef(null);
     const [visibleActivities, setVisibleActivities] = useState<Activity[]>([]);
 
-    // Progressive loading effect
     useEffect(() => {
-        const loadActivities = async () => {
-            const activityChunks = [];
-            const chunkSize = 5;
+        // Initialize with the first 3 activities
+        setVisibleActivities(activities.slice(0, 3));
 
-            for (let i = 0; i < activities.length; i += chunkSize) {
-                activityChunks.push(activities.slice(i, i + chunkSize));
-            }
-
-            for (const chunk of activityChunks) {
-                setVisibleActivities(prev => [...prev, ...chunk]);
-                if (activityChunks.indexOf(chunk) < activityChunks.length - 1) {
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                }
-            }
-        };
-
-        loadActivities();
+        // Scroll to the bottom of the activity feed
+        if (scrollRef.current) {
+            const scrollElement = scrollRef.current as HTMLDivElement;
+            scrollElement.scrollTop = scrollElement.scrollHeight;
+        }
     }, [activities]);
 
     return (

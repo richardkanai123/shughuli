@@ -26,7 +26,7 @@ const ActivityFeed = async ({ activitiesPromise }: ActivityFeedProps) => {
             <Card className="transition-all hover:shadow-md animate-in fade-in-50 duration-300">
                 <CardHeader className="pb-3">
                     <CardTitle className="text-lg font-semibold">Recent Activity</CardTitle>
-                    <CardDescription>Your latest project updates</CardDescription>
+                    <CardDescription>Your latest updates</CardDescription>
                 </CardHeader>
                 <CardContent className="text-center py-6 text-muted-foreground">
                     <div className="rounded-full bg-muted w-12 h-12 flex items-center justify-center mx-auto mb-3">
@@ -48,7 +48,7 @@ const ActivityFeed = async ({ activitiesPromise }: ActivityFeedProps) => {
                         {activities.length} {activities.length === 1 ? 'event' : 'events'}
                     </Badge>
                 </div>
-                <CardDescription>Your latest project updates</CardDescription>
+                <CardDescription>Your latest updates</CardDescription>
             </CardHeader>
             <CardContent>
                 <ScrollArea className="h-80 w-full pr-4">
