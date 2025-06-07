@@ -9,8 +9,8 @@ const ClientSideActivityFeed = ({ activities }: { activities: Activity[] }) => {
     const [visibleActivities, setVisibleActivities] = useState<Activity[]>([]);
 
     useEffect(() => {
-        // Initialize with the first 3 activities
-        setVisibleActivities(activities.slice(0, 3));
+        // Initialize with the first 5 activities
+        setVisibleActivities(activities.slice(0, 5));
 
         // Scroll to the bottom of the activity feed
         if (scrollRef.current) {
