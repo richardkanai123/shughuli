@@ -28,6 +28,7 @@ import {
 import ActiveProjects from "@/components/Dashboard_Components/ActiveProjects";
 import ActivityFeed from "@/components/Dashboard_Components/ActivityFeed";
 import NotificationsPanel from "@/components/Dashboard_Components/NotificationsPanel";
+import { GetUserNotifications } from "@/lib/actions/notifications/get-notifications";
 const Dashboard = async () => {
     const session = await auth.api.getSession({
         headers: await headers(), // you need to pass the headers object.
