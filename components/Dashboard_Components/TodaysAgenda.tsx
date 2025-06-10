@@ -1,3 +1,4 @@
+'use client';
 import { Calendar, CheckCircle2, ArrowRight, X } from "lucide-react";
 import {
     Card,
@@ -9,11 +10,10 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Task } from "@/lib/generated/prisma";
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 import { AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import AgendaTaskItem from "./TodayAgendaTaskItem";
-import { task } from "better-auth/react";
 
 interface TodaysAgendaProps {
     date: string;
@@ -24,8 +24,8 @@ interface TodaysAgendaProps {
     }>;
 }
 
-const TodaysAgenda = async ({ date, tasksPromise }: TodaysAgendaProps) => {
-    const { tasks, message, status } = await tasksPromise;
+const TodaysAgenda = ({ date, tasksPromise }: TodaysAgendaProps) => {
+    const { tasks, message, status } = use(tasksPromise);
     // Filter tasks due today with corrected date comparison
     const todaysTasks = tasks
         ?.filter((task) => {

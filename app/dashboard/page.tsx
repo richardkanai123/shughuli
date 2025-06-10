@@ -28,7 +28,6 @@ import {
 import ActiveProjects from "@/components/Dashboard_Components/ActiveProjects";
 import ActivityFeed from "@/components/Dashboard_Components/ActivityFeed";
 import NotificationsPanel from "@/components/Dashboard_Components/NotificationsPanel";
-import { TasksList } from "@/components/Dashboard_Components/tasks_components/TasksList";
 import TasksLister from "@/components/Dashboard_Components/tasks_components/TasksLister";
 const Dashboard = async () => {
     const session = await auth.api.getSession({
