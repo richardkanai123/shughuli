@@ -1,17 +1,14 @@
-import { auth } from "@/lib/auth";
+'use server';
 import { Notification } from "@/lib/generated/prisma";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
+import { Authenticate } from "../AuthProtection";
 
 export const GetUserNotifications = async (userId: string): Promise<{
     notifications: Notification[] | null;
     message: string;
     status: number;
 }> => {
-    const session = await auth.api.getSession({
-        headers: await headers()
-    })
-
+   const session = await Authenticate();
     if (!session || !userId) return { notifications: null, message: "Unauthorized", status: 401 };
 
     if(session.userId !== userId) return { notifications: null, message: "Unauthorized", status: 401 };

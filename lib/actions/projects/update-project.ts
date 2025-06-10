@@ -1,10 +1,8 @@
 'use server';
-// updates project details
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
 import { z } from "zod";
 import { createActivity } from "../activity/create-activity";
+import { Authenticate } from "../AuthProtection";
 const projectSchema = z.object({
 	name: z.string().min(3, {
 		message: 'Project name must be at least 3 characters.',
@@ -52,18 +50,7 @@ export const UpdateProject = async (projectId: string, data: ProjectData) => {
 				message: projectData.error.errors.map(err => err.message).join(", "),
 			};
 		}
-
-		const session = await auth.api.getSession({
-			headers: await headers(),
-		});
-
-		if (!session) {
-			return {
-				success: false,
-				message: "Unauthorized",
-			};
-		}
-
+		const session = await Authenticate();
 		const userId = session.userId;
 
 		// Check if the project exists and belongs to the user

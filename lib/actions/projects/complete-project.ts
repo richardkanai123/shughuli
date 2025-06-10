@@ -1,10 +1,8 @@
 
 'use server'
-// completes a project by setting its status to 'completed' and all tasks to 'completed' as well
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 import { createActivity } from "../activity/create-activity";
+import { Authenticate } from "../AuthProtection";
 
 export const completeProject = async (projectId: string) => {
     if (!projectId) {
@@ -15,15 +13,8 @@ export const completeProject = async (projectId: string) => {
     }
 
     try {
-        const session = await auth.api.getSession({
-            headers: await headers(),
-        });
-        if (!session) {
-            return {
-                success: false,
-                message: "Unauthorized",
-            };
-        }
+
+        const session = await Authenticate()
 
         const userId = session.userId;
 
@@ -32,7 +23,7 @@ export const completeProject = async (projectId: string) => {
             // Check if the project exists and belongs to the user
             const targetProject = await tx.project.findUnique({
                 where: { id: projectId },
-                include: { tasks: true } // Optionally include tasks to check their status
+                include: { tasks: true }
             });
             
             if (!targetProject) {

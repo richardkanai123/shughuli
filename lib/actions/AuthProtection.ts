@@ -1,18 +1,20 @@
-import { auth } from "../auth";
+import 'server-only'
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
-import { type NextRequest } from "next/server";
+import { auth } from "../auth";
+import { redirect } from 'next/navigation';
+import { cache } from 'react';
 
-export function withAuth(handler: (req: NextRequest) => Promise<Response>) {
-	return async function (request: NextRequest) {
-		const session = await auth.api.getSession({
+export const Authenticate = cache(async () => {
+	const session = await auth.api.getSession(
+		{
 			headers: await headers(),
-		});
-
-		if (!session) {
-		throw new Error("Unauthorized");
 		}
+	);
 
-		return NextResponse.next();
-	};
+	if (!session) {
+		redirect('/sign-in')
+	}
+
+	return session
 }
+)

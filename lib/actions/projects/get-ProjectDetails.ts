@@ -1,17 +1,12 @@
-import { auth } from "@/lib/auth";
+'use server';
 import { Project } from "@/lib/generated/prisma";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
+import { Authenticate } from "../AuthProtection";
 
 
 export const getProjectDetails = async (projectslug: string): Promise<{ project: Project | null; message: string; status: number; }> => {
     try {
-        const session = await auth.api.getSession({
-            headers: await headers()
-        })
-        if (!session) {
-            return { project: null, message: "Unauthorized", status: 401 };
-        }
+        const session = await Authenticate()
 
         const project = await prisma.project.findUnique({
             where: {

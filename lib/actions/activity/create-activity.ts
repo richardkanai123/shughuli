@@ -1,21 +1,11 @@
 "use server"
-import { auth } from "@/lib/auth"
 import { ActivityType } from "@/lib/generated/prisma"
 import prisma from "@/lib/prisma"
-import { headers } from "next/headers"
+import { Authenticate } from "../AuthProtection"
 
 export const createActivity = async (type:ActivityType, link:string, content:string, task:string, project:string) => {
     try {
-        const session = await auth.api.getSession({
-            headers: await headers()
-        })
-        if (!session) {
-            return { 
-                message: "Unauthorized access. Please log in to create an activity.",
-                success: false
-             }
-        }
-
+        const session = await Authenticate();
 
         const userId = session.userId
         if (!userId) {

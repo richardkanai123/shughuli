@@ -1,16 +1,14 @@
-import { auth } from "@/lib/auth";
+'use server';
 import {  Project } from "@/lib/generated/prisma";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
+import { Authenticate } from "../AuthProtection";
 export const GetUserProjects = async (userId: string): Promise<{
     projects: Project[] | null;
     message: string;
     status: number;
 }> => {
     try {
-        const session = await auth.api.getSession({
-            headers: await headers()
-        })
+        const session = await Authenticate()
     
         if (!session || !userId) return { projects: null, message: "Unauthorized", status: 401 };
         

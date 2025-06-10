@@ -51,11 +51,7 @@ const NotificationsPanel = async ({ userId }: NotificationsPanelProps) => {
                         <Badge>{unreadCount} unread</Badge>
                     )}</CardTitle>
 
-                    <div className="flex items-center space-x-2">
-                        <span className="text-sm text-muted-foreground">
-                            Clear all
-                        </span>
-                    </div>
+
                 </div>
                 <CardDescription>Your latest updates and alerts</CardDescription>
             </CardHeader>

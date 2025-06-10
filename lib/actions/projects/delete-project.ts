@@ -1,11 +1,9 @@
 "use server";
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
 import { createActivity } from "../activity/create-activity";
+import { Authenticate } from "../AuthProtection";
 
 export const DeleteProject = async (id: string) => {
-	console.log("DeleteProject called with ID:", id);
 	try {
 		if (!id) {
 			return {
@@ -14,16 +12,7 @@ export const DeleteProject = async (id: string) => {
 			};
 		}
 
-		const session = await auth.api.getSession({
-			headers: await headers(),
-		});
-
-		if (!session) {
-			return {
-				success: false,
-				message: "Unauthorized",
-			};
-		}
+		const session = await Authenticate();
 
 		const targetProject = await prisma.project.delete({
 			where: {

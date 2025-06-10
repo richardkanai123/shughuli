@@ -1,7 +1,6 @@
 "use server";
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
+import { Authenticate } from "../AuthProtection";
 
 export const DeleteNotification = async (
 	notificationId: string
@@ -10,9 +9,7 @@ export const DeleteNotification = async (
 	success: boolean;
 }> => {
 	try {
-		const session = await auth.api.getSession({
-			headers: await headers(),
-		});
+		const session = await Authenticate();
 
 		if (!session || !notificationId) {
 			return { message: "Unauthorized", success: false };

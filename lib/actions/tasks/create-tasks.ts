@@ -1,12 +1,13 @@
 "use server";
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { newTaskSchema, NewTaskSchemaType } from "@/lib/validation/schemas";
-import { headers } from "next/headers";
 import { createActivity } from "../activity/create-activity";
+import { Authenticate } from "../AuthProtection";
 
 export const createTask = async (taskData: NewTaskSchemaType) => {
 	try {
+
+		const session = await Authenticate()
 		const parsedData = newTaskSchema.safeParse(taskData);
 		if (!parsedData.success) {
 			return {
@@ -15,17 +16,7 @@ export const createTask = async (taskData: NewTaskSchemaType) => {
 				data: null,
 			};
 		}
-		const session = await auth.api.getSession({
-			headers: await headers(),
-		});
-		if (!session) {
-			return {
-				success: false,
-				message: "Unauthorized",
-				data: null,
-			};
-		}
-
+		
 		// check if project exists
 		const project = await prisma.project.findUnique({
 			where: {

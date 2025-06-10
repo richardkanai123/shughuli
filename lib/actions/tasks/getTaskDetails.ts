@@ -1,7 +1,7 @@
-import { auth } from "@/lib/auth";
+'use server';
 import { Task } from "@/lib/generated/prisma";
 import prisma from "@/lib/prisma";
-import { headers } from "next/headers";
+import { Authenticate } from "../AuthProtection";
 
 export async function getTaskDetails(taskId: string): Promise<{ task: Task | null; message: string; status: number; }> {
 
@@ -12,9 +12,7 @@ export async function getTaskDetails(taskId: string): Promise<{ task: Task | nul
 
     try {
 
-        const session = await auth.api.getSession({
-            headers: await headers()
-        })
+       const session = await Authenticate()
 
         if (!session) {
             return { task: null, message: "Unauthorized", status: 401 };
