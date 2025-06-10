@@ -7,7 +7,7 @@ import {
     ListChecks,
     AlertTriangle,
     Zap,
-    AlertCircle
+    AlertCircle,
 } from "lucide-react";
 import StatCard from "./StatCard";
 
@@ -24,7 +24,6 @@ interface OverviewCardsProps {
     }>;
 }
 
-
 const OverviewCards = ({
     tasksPromise,
     projectsPromise,
@@ -37,7 +36,11 @@ const OverviewCards = ({
     const cardData = useMemo(() => {
         // Destructure the data from the promises
         const { message: tasksMessage, status: tasksStatus, tasks } = tasksData;
-        const { message: projectsMessage, status: projectsStatus, projects } = projectsData;
+        const {
+            message: projectsMessage,
+            status: projectsStatus,
+            projects,
+        } = projectsData;
 
         // Check if we have valid data or error states
         const hasTasksError = !tasks || tasksStatus !== 200;
@@ -65,23 +68,43 @@ const OverviewCards = ({
         const totalProjects = !hasProjectsError ? projects.length : 0;
 
         // Calculate completion percentages
-        const projectCompletionPercentage = !hasProjectsError && totalProjects > 0
-            ? Math.round(
-                (projects.filter((p) => p.status === "COMPLETED").length / totalProjects) * 100
-            )
-            : 0;
+        const projectCompletionPercentage =
+            !hasProjectsError && totalProjects > 0
+                ? Math.round(
+                    (projects.filter((p) => p.status === "COMPLETED").length /
+                        totalProjects) *
+                    100
+                )
+                : 0;
 
-        const taskCompletionPercentage = !hasTasksError && totalTasks > 0
-            ? Math.round(
-                (tasks.filter((t) => t.status === "DONE").length / totalTasks) * 100
-            )
-            : 0;
+        const taskCompletionPercentage =
+            !hasTasksError && totalTasks > 0
+                ? Math.round(
+                    (tasks.filter((t) => t.status === "DONE").length / totalTasks) * 100
+                )
+                : 0;
 
         // Determine trends
-        const projectTrend: "up" | "down" | null = hasProjectsError ? null : (projectCompletionPercentage >= 50 ? "up" : "down");
-        const taskTrend: "up" | "down" | null = hasTasksError ? null : (taskCompletionPercentage >= 50 ? "up" : "down");
-        const overdueTrend: "up" | "down" | null = hasTasksError ? null : (overdueTasks === 0 ? "up" : "down");
-        const urgentTrend: "up" | "down" | null = hasTasksError ? null : (urgentTasks === 0 ? "up" : "down");
+        const projectTrend: "up" | "down" | null = hasProjectsError
+            ? null
+            : projectCompletionPercentage >= 50
+                ? "up"
+                : "down";
+        const taskTrend: "up" | "down" | null = hasTasksError
+            ? null
+            : taskCompletionPercentage >= 50
+                ? "up"
+                : "down";
+        const overdueTrend: "up" | "down" | null = hasTasksError
+            ? null
+            : overdueTasks === 0
+                ? "up"
+                : "down";
+        const urgentTrend: "up" | "down" | null = hasTasksError
+            ? null
+            : urgentTasks === 0
+                ? "up"
+                : "down";
 
         return [
             {
@@ -95,9 +118,11 @@ const OverviewCards = ({
                 gradient: hasProjectsError
                     ? "from-red-500/10 to-red-600/5"
                     : "from-blue-500/10 to-blue-600/5",
-                icon: hasProjectsError
-                    ? <AlertCircle className="h-5 w-5" />
-                    : <FolderKanbanIcon className="h-5 w-5" />,
+                icon: hasProjectsError ? (
+                    <AlertCircle className="h-5 w-5" />
+                ) : (
+                    <FolderKanbanIcon className="h-5 w-5" />
+                ),
                 trend: projectTrend,
                 hasError: hasProjectsError,
                 customIndex: 0,
@@ -113,9 +138,11 @@ const OverviewCards = ({
                 gradient: hasTasksError
                     ? "from-red-500/10 to-red-600/5"
                     : "from-purple-500/10 to-purple-600/5",
-                icon: hasTasksError
-                    ? <AlertCircle className="h-5 w-5" />
-                    : <ListChecks className="h-5 w-5" />,
+                icon: hasTasksError ? (
+                    <AlertCircle className="h-5 w-5" />
+                ) : (
+                    <ListChecks className="h-5 w-5" />
+                ),
                 trend: taskTrend,
                 hasError: hasTasksError,
                 customIndex: 1,
@@ -147,7 +174,11 @@ const OverviewCards = ({
                 gradient: hasTasksError
                     ? "from-red-500/10 to-red-600/5"
                     : "from-red-500/10 to-red-600/5",
-                icon: hasTasksError ? <AlertCircle className="h-5 w-5" /> : <Zap className="h-5 w-5" />,
+                icon: hasTasksError ? (
+                    <AlertCircle className="h-5 w-5" />
+                ) : (
+                    <Zap className="h-5 w-5" />
+                ),
                 trend: urgentTrend,
                 hasError: hasTasksError,
                 customIndex: 3,
@@ -158,7 +189,10 @@ const OverviewCards = ({
     return (
         <AnimatePresence>
             {cardData.map((card, index) => (
-                <StatCard key={`${card.title}-${index}`} card={card} />
+                <StatCard
+                    key={`${card.title}-${index}`}
+                    card={card}
+                />
             ))}
         </AnimatePresence>
     );

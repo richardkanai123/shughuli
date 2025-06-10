@@ -272,7 +272,6 @@ export default function DashboardTasksList({ tasks, limit = 10 }: TasksListProps
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead style={{ width: 50 }}></TableHead>
                                     <TableHead>Task</TableHead>
                                     <TableHead>Status</TableHead>
                                     <TableHead>Due Date</TableHead>
@@ -282,12 +281,6 @@ export default function DashboardTasksList({ tasks, limit = 10 }: TasksListProps
                             <TableBody>
                                 {paginatedTasks.map((task) => (
                                     <TableRow key={task.id}>
-                                        <TableCell>
-                                            <Checkbox
-                                                checked={task.status === 'DONE'}
-                                                onCheckedChange={() => handleCompleteTask(task.id, task.status)}
-                                            />
-                                        </TableCell>
                                         <TableCell>
                                             <div className="font-medium">{task.title}</div>
                                             {task.description && (

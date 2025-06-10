@@ -1,5 +1,4 @@
-import { format } from "date-fns";
-import { Calendar, CheckCircle2, ClockIcon, ArrowRight } from "lucide-react";
+import { Calendar, CheckCircle2, ArrowRight, X } from "lucide-react";
 import {
     Card,
     CardContent,
@@ -9,9 +8,12 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Task } from "@/lib/generated/prisma";
 import { Suspense } from "react";
+import { AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import AgendaTaskItem from "./TodayAgendaTaskItem";
+import { task } from "better-auth/react";
 
 interface TodaysAgendaProps {
     date: string;
@@ -24,23 +26,31 @@ interface TodaysAgendaProps {
 
 const TodaysAgenda = async ({ date, tasksPromise }: TodaysAgendaProps) => {
     const { tasks, message, status } = await tasksPromise;
+    // Filter tasks due today with corrected date comparison
+    const todaysTasks = tasks
+        ?.filter((task) => {
+            // Return false if no due date exists
+            if (!task.dueDate) return false;
 
-    // Get today's tasks (due today or scheduled for today)
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+            // Return false if task is already done
+            if (task.status === "DONE") return false;
 
+            // Get task due date and today's date
+            const taskDate = new Date(task.dueDate);
+            const todayDate = new Date();
 
-
-    const todaysTasks = tasks?.filter((task) => {
-        const taskDate = task.dueDate ? new Date(task.dueDate) : null;
-        if (!taskDate) return false;
-
-        taskDate.setHours(0, 0, 0, 0);
-        return taskDate.getTime() === today.getTime() && task.status !== "DONE";
-    })
+            // Compare only the date portions (year, month, day)
+            return (
+                taskDate.getFullYear() === todayDate.getFullYear() &&
+                taskDate.getMonth() === todayDate.getMonth() &&
+                taskDate.getDate() === todayDate.getDate()
+            );
+        })
         .slice(0, 3);
 
     const noOfTasks = todaysTasks?.length || 0;
+    const hasError = status !== 200;
+    const hasContent = !hasError && noOfTasks > 0;
 
     return (
         <Card className="transition-all hover:shadow-md animate-in fade-in-50 duration-300">
@@ -58,69 +68,33 @@ const TodaysAgenda = async ({ date, tasksPromise }: TodaysAgendaProps) => {
                 </div>
                 <CardDescription>Your scheduled tasks for today</CardDescription>
             </CardHeader>
-            <CardContent>
-                <Suspense fallback={
-                    <div className="text-center py-6 text-muted-foreground">
-                        <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
-                        <p>Loading today's tasks...</p>
-                        <p className="text-sm mt-1">Please wait a moment.</p>
-                    </div>
-                }>
 
-                    {status !== 200 && (
+            <CardContent>
+                <Suspense
+                    fallback={
+                        <div className="text-center py-6 text-muted-foreground">
+                            <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
+                            <p>Loading today's tasks...</p>
+                            <p className="text-sm mt-1">Please wait a moment.</p>
+                        </div>
+                    }>
+                    {hasError ? (
                         <div className="text-center py-6 text-red-500">
-                            <CheckCircle2 className="h-12 w-12 mx-auto mb-3" />
+                            <X className="h-12 w-12 mx-auto mb-3" />
                             <p>{message}</p>
                             <p className="text-sm mt-1">Please try again later.</p>
                         </div>
-                    )}
-
-                    {noOfTasks > 0 ? (
-                        <ul className="space-y-4">
-                            {todaysTasks?.map((task) => (
-                                <li
-                                    key={task.id}
-                                    className="flex items-start space-x-3 group animate-in fade-in-50">
-                                    <div className="mt-1 relative">
-                                        <Checkbox
-                                            disabled
-                                            id={`task-${task.id}`}
-                                            className="data-[state=checked]:bg-green-500 data-[state=checked]:text-white"
-                                            defaultChecked={task.status === "DONE"}
-                                        />
-                                        <div className="absolute inset-0 h-full w-full scale-0 rounded-full bg-green-500/20 group-hover:scale-150 transition-all duration-300" />
-                                    </div>
-                                    <div className="flex-1 space-y-1">
-                                        <label
-                                            htmlFor={`task-${task.id}`}
-                                            className="font-medium leading-none group-hover:text-green-600 transition-colors">
-                                            {task.title}
-                                        </label>
-                                        {task.description && (
-                                            <p className="text-sm text-muted-foreground line-clamp-1">
-                                                {task.description}
-                                            </p>
-                                        )}
-                                        <div className="flex items-center text-xs text-muted-foreground">
-                                            <ClockIcon className="h-3 w-3 mr-1" />
-                                            {task.dueDate && format(new Date(task.dueDate), "h:mm a")}
-                                            {task.priority && (
-                                                <Badge
-                                                    variant="outline"
-                                                    className={`ml-2 ${task.priority === "HIGH"
-                                                        ? "text-red-500 border-red-200"
-                                                        : task.priority === "MEDIUM"
-                                                            ? "text-amber-500 border-amber-200"
-                                                            : "text-blue-500 border-blue-200"
-                                                        }`}>
-                                                    {task.priority.toLowerCase()}
-                                                </Badge>
-                                            )}
-                                        </div>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                    ) : noOfTasks > 0 ? (
+                        <AnimatePresence>
+                            <ul className="space-y-4">
+                                {todaysTasks?.map((task) => (
+                                    <AgendaTaskItem
+                                        key={task.id}
+                                        task={task}
+                                    />
+                                ))}
+                            </ul>
+                        </AnimatePresence>
                     ) : (
                         <div className="text-center py-6 text-muted-foreground">
                             <CheckCircle2 className="h-12 w-12 mx-auto mb-3 text-muted-foreground/30" />
@@ -128,17 +102,17 @@ const TodaysAgenda = async ({ date, tasksPromise }: TodaysAgendaProps) => {
                             <p className="text-sm mt-1">Enjoy your day!</p>
                         </div>
                     )}
-
                 </Suspense>
             </CardContent>
-            {noOfTasks > 0 && (
+
+            {hasContent && (
                 <CardFooter className="pt-0">
-                    <a
+                    <Link
                         href="/dashboard/tasks"
                         className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center group">
                         View all tasks
                         <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                    </a>
+                    </Link>
                 </CardFooter>
             )}
         </Card>

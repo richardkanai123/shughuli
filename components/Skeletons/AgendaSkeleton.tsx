@@ -5,8 +5,10 @@ const AgendaSkeleton = () => (
     <Card>
         <CardHeader>
             <div className="flex items-center justify-between">
-                <div className="h-5 w-32 bg-muted animate-pulse rounded"></div>
-                <div className="h-5 w-24 bg-muted animate-pulse rounded"></div>
+                <div className="h-5 w-32 bg-muted animate-pulse rounded">Today's Agenda</div>
+                <div className="h-5 w-24 bg-muted animate-pulse rounded">
+
+                </div>
             </div>
             <div className="h-3 w-48 bg-muted animate-pulse rounded mt-2"></div>
         </CardHeader>

@@ -28,7 +28,6 @@ import {
 import ActiveProjects from "@/components/Dashboard_Components/ActiveProjects";
 import ActivityFeed from "@/components/Dashboard_Components/ActivityFeed";
 import NotificationsPanel from "@/components/Dashboard_Components/NotificationsPanel";
-import { GetUserNotifications } from "@/lib/actions/notifications/get-notifications";
 const Dashboard = async () => {
     const session = await auth.api.getSession({
         headers: await headers(), // you need to pass the headers object.
@@ -94,12 +93,6 @@ const Dashboard = async () => {
                                     tasksPromise={tasksData}
                                 />
                             </Suspense>
-
-                            {/* Task Progress */}
-                            <Suspense fallback={<TaskProgressSkeleton />}>
-                                <TaskProgress tasksPromise={tasksData} />
-                            </Suspense>
-
                             {/* Active Projects */}
                             <Suspense fallback={<ActiveProjectsSkeleton />}>
                                 <ActiveProjects projectsPromise={userProjects} />
@@ -135,12 +128,14 @@ const Dashboard = async () => {
                 <TabsContent
                     value="tasks"
                     className="animate-in fade-in-50 duration-300">
-                    <Suspense fallback={<TaskStatusSummarySkeleton />}>
-                        <DashboardTasksList
-                            tasks={tasksData}
-                            limit={15}
-                        />
-                    </Suspense>
+                    <div className="w-full space-y-4">
+                        <Suspense fallback={<TaskProgressSkeleton />}>
+                            <TaskProgress tasksPromise={tasksData} />
+                        </Suspense>
+                        <Suspense fallback={<TaskStatusSummarySkeleton />}>
+                            <DashboardTasksList tasks={tasksData} />
+                        </Suspense>
+                    </div>
                 </TabsContent>
             </Tabs>
         </div>
