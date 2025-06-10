@@ -35,10 +35,13 @@ export const getEntityTypeFromPath = (pathSegments: string[], currentIndex: numb
         tasks: "Task",
         projects: "Project",
         users: "User",
+        notifications: "Notification",
+        files: "File",
+        New: "Create",
         // Add more mappings as needed
     };
 
-    return entityMap[parentSegment] || "Item";
+    return entityMap[parentSegment] || "";
 };
 
 // Helper function to get a friendly name from path segment
@@ -57,6 +60,13 @@ export const getFriendlyName = (segment: string, pathSegments: string[] = [], in
     // Handle specific segments with custom naming
     const specialNames: Record<string, string> = {
         dashboard: 'Dashboard',
+        files: 'Files',
+        projects: 'Projects',
+        tasks: 'Tasks',
+        notifications: 'Notifications',
+        users: 'Users',
+        new: 'Create',
+
         // Add more custom names as needed
     };
 

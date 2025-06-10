@@ -28,6 +28,8 @@ import {
 import ActiveProjects from "@/components/Dashboard_Components/ActiveProjects";
 import ActivityFeed from "@/components/Dashboard_Components/ActivityFeed";
 import NotificationsPanel from "@/components/Dashboard_Components/NotificationsPanel";
+import { TasksList } from "@/components/Dashboard_Components/tasks_components/TasksList";
+import TasksLister from "@/components/Dashboard_Components/tasks_components/TasksLister";
 const Dashboard = async () => {
     const session = await auth.api.getSession({
         headers: await headers(), // you need to pass the headers object.
@@ -133,7 +135,7 @@ const Dashboard = async () => {
                             <TaskProgress tasksPromise={tasksData} />
                         </Suspense>
                         <Suspense fallback={<TaskStatusSummarySkeleton />}>
-                            <DashboardTasksList tasks={tasksData} />
+                            <TasksLister tasksPromise={tasksData} />
                         </Suspense>
                     </div>
                 </TabsContent>
