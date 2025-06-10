@@ -58,6 +58,7 @@ export const completeProject = async (projectId: string) => {
                     status: 'COMPLETED',
                     progress: 100,
                     updatedAt: new Date(),
+                    endDate: new Date()
                 },
             });
 

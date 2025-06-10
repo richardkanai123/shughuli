@@ -20,6 +20,7 @@ model User {
   role          Role     @default(MEMBER)
 
   projects      Project[]      @relation("ProjectOwner")
+  // contractedProjects Project[]      @relation("ProjectClient")
   assignedTasks Task[]         @relation("TaskAssignee")
   createdTasks  Task[]         @relation("TaskCreator")
   Comments      Comment[]
@@ -94,6 +95,8 @@ model Project {
   owner       User          @relation("ProjectOwner", fields: [ownerId], references: [id])
   tasks       Task[]
   activities  Activity[]
+  // clientid    String
+  // client      User          @relation("ProjectClient", fields: [clientid], references: [id])
 }
 
 model Task {
