@@ -1,7 +1,21 @@
+'use client'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 const Footer = () => {
+
+    // check pathname, do not display footer on dashboard or auth pages
+    const pathname = usePathname()
+
+    const UnwantedPaths = [
+        '/dashboard', '/signin', '/signup', '/forgot-password',
+        '/reset-password', '/verify-email',]
+
+    if (UnwantedPaths.includes(pathname)) {
+        return null
+    }
+
     return (
         <footer className="w-full bg-gray-100 dark:bg-gray-900 py-8 mt-auto">
             <div className="container px-4 mx-auto">

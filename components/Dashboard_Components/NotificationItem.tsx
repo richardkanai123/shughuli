@@ -4,7 +4,6 @@ import { formatDistanceToNow, format } from "date-fns";
 import { Bell, Check, Trash2, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ReadNotificationBtn from "./buttons/ReadNotificationBtn";
 import DeleteNotificationBtn from "./buttons/DeleteNotifcationBtn";
@@ -39,22 +38,26 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
             return "Unknown date";
         }
     };
+
     return (
-        <Link
-            href={notification.link || "/dashboard/notifications"}
-            passHref>
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                transition={{ duration: 0.2 }}
-                className={cn(
-                    "p-4 rounded-lg border mb-2 transition-all duration-200 cursor-pointer",
-                    isRead
-                        ? "bg-card hover:bg-muted/50"
-                        : "bg-primary/5 hover:bg-primary/10 border-primary/20"
-                )}>
-                <div className="flex items-start space-x-3 relative">
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.2 }}
+            className={cn(
+                "p-4 rounded-lg border mb-2 transition-all duration-200",
+                isRead
+                    ? "bg-card hover:bg-muted/50"
+                    : "bg-primary/5 hover:bg-primary/10 border-primary/20"
+            )}
+        >
+            <div className="flex flex-col space-y-3">
+                {/* Main notification content as a link */}
+                <Link
+                    href={notification.link || "/dashboard/notifications"}
+                    className="flex items-start space-x-3 cursor-pointer"
+                >
                     {/* Notification indicator/icon */}
                     <motion.div
                         className={cn(
@@ -62,18 +65,20 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
                             isRead ? "bg-muted" : "bg-primary/10"
                         )}
                         whileHover={{ scale: 1.1 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 10 }}>
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
                         {getNotificationIcon()}
                     </motion.div>
 
                     {/* Content */}
-                    <div className="flex-1 pt-1">
+                    <div className="flex-1">
                         <div className="flex justify-between items-start">
                             <h4
                                 className={cn(
                                     "font-medium line-clamp-1",
                                     !isRead && "font-semibold"
-                                )}>
+                                )}
+                            >
                                 {notification.title}
                             </h4>
                             <span className="text-xs text-muted-foreground ml-2 whitespace-nowrap">
@@ -84,25 +89,23 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
                         <p className="text-sm text-muted-foreground my-1">
                             {notification.message}
                         </p>
+                    </div>
+                </Link>
 
-                        {/* Action buttons - always visible now */}
-                        <div className="flex justify-between items-center mt-2">
-                            <div className="flex space-x-1">
-                                {
-                                    !isRead && (
-                                        <ReadNotificationBtn
-                                            isRead={isRead}
-                                            notificationId={notification.id}
-                                        />
-                                    )
-                                }
-                                < DeleteNotificationBtn notificationId={notification.id} />
-                            </div>
-                        </div>
+                {/* Action buttons - kept outside the link */}
+                <div className="flex justify-end items-center">
+                    <div className="flex space-x-1">
+                        {!isRead && (
+                            <ReadNotificationBtn
+                                isRead={isRead}
+                                notificationId={notification.id}
+                            />
+                        )}
+                        <DeleteNotificationBtn notificationId={notification.id} />
                     </div>
                 </div>
-            </motion.div>
-        </Link>
+            </div>
+        </motion.div>
     );
 };
 
