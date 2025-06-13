@@ -111,67 +111,10 @@ const TaskDetails = ({ task }: { task: Task }) => {
                         </CardContent>
                     </Card>
 
-                    <Card>
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-base font-medium flex items-center">
-                                <FolderOpen className="h-4 w-4 mr-2" />
-                                Project
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-
-                            <p className='text-sm text-muted-foreground italic'>
-                                {task.projectId}
-                            </p>
-                        </CardContent>
-                    </Card>
                 </div>
             </div>
 
-            {/* Additional Details */}
-            <Card>
-                <CardHeader className="pb-2">
-                    <CardTitle className="text-base font-medium flex items-center">
-                        <CheckCircle className="h-4 w-4 mr-2" />
-                        Additional Information
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="space-y-1">
-                            <p className="text-sm font-medium flex items-center">
-                                <User className="h-4 w-4 mr-2" />
-                                Created By
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                {task.creatorId}
-                            </p>
-                        </div>
 
-                        {task.assigneeId && (
-                            <div className="space-y-1">
-                                <p className="text-sm font-medium flex items-center">
-                                    <User className="h-4 w-4 mr-2" />
-                                    Assigned To
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                    {task.assigneeId}
-                                </p>
-                            </div>
-                        )}
-
-                        <div className="space-y-1">
-                            <p className="text-sm font-medium flex items-center">
-                                <Flag className="h-4 w-4 mr-2" />
-                                Task ID
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                {task.id}
-                            </p>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
 
             <div className="flex items-center flex-wrap justify-center-safe gap-2 shrink-0">
 

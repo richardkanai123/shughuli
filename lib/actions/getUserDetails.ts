@@ -3,7 +3,6 @@ import { UserDetails } from "@/lib/CustomTypes";
 import { headers } from "next/headers";
 import { auth } from "../auth";
 import prisma from "../prisma";
-const BASEURL = process.env.BASE_URL;
 interface UserDetailsProps {
     user: UserDetails | null;
     error: string | null;
@@ -13,12 +12,16 @@ export const getCurrentUserDetails = async (id: string): Promise<UserDetailsProp
 
         if (!id) return { error: "User not found", user: null };
 
+        // Check if the user is authenticated
         const session = await auth.api.getSession({
-            headers: await headers()
+            headers: await headers(),
         })
 
-        if (!session) return { error: "Unauthorized", user: null };
+        if (!session) {
+            return { error: "Unauthorized", user: null };
+        }
 
+ 
         const user = await prisma.user.findUnique({
             where: {
                 id: id,

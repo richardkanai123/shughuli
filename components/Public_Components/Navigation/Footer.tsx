@@ -12,7 +12,8 @@ const Footer = () => {
         '/dashboard', '/signin', '/signup', '/forgot-password',
         '/reset-password', '/verify-email',]
 
-    if (UnwantedPaths.includes(pathname)) {
+    if (UnwantedPaths.includes(pathname) || pathname.startsWith('/dashboard')) {
+        // If the pathname is in the unwanted paths, do not render the footer
         return null
     }
 
