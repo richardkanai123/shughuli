@@ -6,10 +6,12 @@ import {
 } from "@/lib/validation/schemas";
 import { createActivity } from "../activity/create-activity";
 import { Authenticate } from "../AuthProtection";
+
 export const createProject = async (
 	projectData: NewProjectSchemaType
 ): Promise<{ status: number; message: string; data: string | null }> => {
 	try {
+		// Validate input exists
 		if (!projectData) {
 			return {
 				status: 400,
@@ -18,33 +20,36 @@ export const createProject = async (
 			};
 		}
 
+		// Authenticate user
 		const session = await Authenticate();
 
-		//  verify ownerid
+		// Verify ownership
 		if (session.userId !== projectData.ownerId) {
-			return { status: 401, message: "Unauthorized", data: null };
-		}
-
-		const newProject = {
-			name: projectData.name,
-			description: projectData.description,
-			dueDate: projectData.dueDate,
-			isPublic: projectData.isPublic,
-			status: projectData.status,
-			slug: projectData.slug,
-			ownerId: projectData.ownerId,
-			startDate: projectData.startDate || new Date(), // Default to current date if not provided
-		};
-
-		// validate
-		const isValid = await newProjectSchema.safeParse(newProject);
-		if (!isValid.success) {
 			return {
-				status: 400,
-				message: `${isValid.error.message} due to ${isValid.error.cause || "unknown input data error"}`,
+				status: 401,
+				message: "Unauthorized - you can only create projects for yourself",
 				data: null,
 			};
 		}
+
+		// Add default start date if not provided
+		const dataWithDefaults = {
+			...projectData,
+			startDate: projectData.startDate || new Date(),
+		};
+
+		// Validate with schema
+		const validationResult = newProjectSchema.safeParse(dataWithDefaults);
+		if (!validationResult.success) {
+			return {
+				status: 400,
+				message:
+					"Invalid project data. Please check your inputs and try again.",
+				data: null,
+			};
+		}
+
+		// Extract validated data
 		const {
 			name,
 			description,
@@ -54,57 +59,84 @@ export const createProject = async (
 			status,
 			dueDate,
 			startDate,
-		} = isValid.data;
-		const project = await prisma.project.create({
-			data: {
-				name,
-				slug,
-				description,
-				ownerId,
-				isPublic,
-				status,
-				dueDate,
-				startDate,
-			},
-		});
+		} = validationResult.data;
 
-		if (!project) {
+		try {
+			// Use transaction for atomicity
+			const [project, activityResult] = await prisma.$transaction(
+				async (tx) => {
+					// Create the project
+					const newProject = await tx.project.create({
+						data: {
+							name,
+							slug,
+							description,
+							ownerId,
+							isPublic,
+							status,
+							dueDate,
+							startDate,
+						},
+					});
+
+					// Create an activity record
+					const link = `/dashboard/projects/${newProject.slug}`;
+					const content = `You have created ${newProject.name}`;
+
+					const activity = await createActivity(
+						"PROJECT_CREATED",
+						link,
+						content,
+						"",
+						newProject.id
+					);
+
+					return [newProject, activity];
+				}
+			);
+
+			// Log warning if activity creation failed but don't fail the operation
+			if (!activityResult.success) {
+				console.warn("Activity creation failed", {
+					error: activityResult.message,
+					projectId: project.id,
+				});
+			}
+
+			// Return success response
+			return {
+				status: 201,
+				message: "Project created successfully",
+				data: `${project.name} has been created successfully.`,
+			};
+		} catch (dbError: any) {
+			// Handle specific database errors
+			if (dbError.code === "P2002" && dbError.meta?.target?.includes("slug")) {
+				return {
+					status: 409,
+					message:
+						"A project with this name already exists. Please use a different name.",
+					data: null,
+				};
+			}
+
+			// Re-throw for general handler
+			throw dbError;
+		}
+	} catch (error) {
+		// Return appropriate error response
+		if (error instanceof Error) {
 			return {
 				status: 500,
-				message: "Internal Server Error: Failed to create project",
+				message: `Internal Server Error: ${error.message}`,
 				data: null,
 			};
 		}
 
-		// Create a new activity
-		const link = `/dashboard/projects/${project.slug}`;
-		const content = `You have completed ${project.name}`;
-
-		const activityResult = await createActivity(
-			"PROJECT_CREATED",
-			link,
-			content,
-			"",
-			project.id
-		);
-
-		if (!activityResult.success) {
-			console.warn(
-				"Failed to create activity record for project completion:",
-				activityResult.message
-			);
-		}
-
 		return {
-			status: 201,
-			message: "Project created successfully",
-			data: `${project.name} has been added for ${session.username}`,
+			status: 500,
+			message: "An unexpected error occurred",
+			data: null,
 		};
-	} catch (error) {
-		console.log(error);
-		if (error instanceof Error) {
-			return { status: 500, message: error.message, data: null };
-		}
-		return { status: 500, message: "Internal Server Error", data: null };
 	}
 };

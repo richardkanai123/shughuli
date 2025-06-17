@@ -14,7 +14,9 @@ export const DeleteProject = async (id: string) => {
 
 		const session = await Authenticate();
 
-		const targetProject = await prisma.project.delete({
+
+
+		const targetProject = await prisma.project.findUnique({
 			where: {
 				id: id,
 			},
@@ -25,6 +27,15 @@ export const DeleteProject = async (id: string) => {
 			},
 		});
 
+		// Check if the project exists and if the user is the owner
+		if (!targetProject) {
+			return {
+				success: false,
+				message: "Project not found",
+			};
+		}
+
+
 		if (targetProject.ownerId !== session.userId) {
 			return {
 				success: false,
@@ -32,12 +43,12 @@ export const DeleteProject = async (id: string) => {
 			};
 		}
 
-		if (!targetProject) {
-			return {
-				success: false,
-				message: "Project not found",
-			};
-		}
+		// Delete the project
+		const deleteResult = await prisma.project.delete({
+			where: {
+				id: id,
+			},
+		});
 
 		// Create a new activity
 		const link = `/dashboard/projects`;
@@ -52,7 +63,7 @@ export const DeleteProject = async (id: string) => {
 		);
 		// Check if the activity was created successfully
 		// Log a warning if the activity creation failed
-		if (!activityResult.success) {
+		if (!activityResult.success || !deleteResult) {
 			console.warn(
 				"Failed to create activity record for project deletion:",
 				activityResult.message
@@ -72,7 +83,7 @@ export const DeleteProject = async (id: string) => {
 		}
 		return {
 			success: false,
-			message: "Internal Server Error",
+			message: "Internal Server Error Occurred, please try again later.",
 		};
 	}
 };

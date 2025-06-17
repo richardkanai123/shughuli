@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider className="relative">
             <AppSidebar variant="inset" />
-            <div className="w-full h-full overflow-hidden ">
+            <div className="w-full h-full overflow-hidden px-2 border-l border-gray-200 dark:border-gray-700">
                 <DynamicHeader />
                 <DynamicBreadCrumbs />
 

@@ -50,23 +50,19 @@ export const changeVisibility = async (
 		});
 
 		// Create a new activity
-		const link = `/dashboard/projects/${updatedProject.slug}`;
-		const content = `You have completed ${updatedProject.name}`;
+		const activityLink = `/dashboard/projects/${updatedProject.slug}`;
+		const activityContent = `You have completed ${updatedProject.name}`;
 
-		const activityResult = await createActivity(
-			"PROJECT_UPDATED",
-			link,
-			content,
+		 await createActivity(
+			"PROJECT_UPDATED", 
+			activityLink,
+			activityContent,
 			"",
 			updatedProject.id
 		);
 
-		if (!activityResult.success) {
-			console.warn(
-				"Failed to create activity record for project completion:",
-				activityResult.message
-			);
-		}
+		
+		// Return the updated project
 		return {
 			success: true,
 			message: `Project visibility changed to ${updatedProject.isPublic ? "public" : "private"}`,
