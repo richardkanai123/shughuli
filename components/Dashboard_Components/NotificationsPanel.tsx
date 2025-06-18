@@ -42,6 +42,24 @@ const NotificationsPanel = async ({ userId }: NotificationsPanelProps) => {
     }
 
     const unreadCount = notifications.filter(n => !n.isRead).length;
+    if (unreadCount === 0) {
+        return (
+            <Card className="transition-all hover:shadow-md animate-in fade-in-50 duration-300">
+                <CardHeader className="pb-3">
+                    <CardTitle className="text-lg font-semibold">Notifications</CardTitle>
+                    <CardDescription>All caught up!</CardDescription>
+                </CardHeader>
+                <CardContent className="text-center py-6 text-muted-foreground">
+                    <div className="rounded-full bg-muted w-12 h-12 flex items-center justify-center mx-auto mb-3">
+                        <CheckCircle2 className="h-6 w-6 text-muted-foreground/50" />
+                    </div>
+                    <p>No unread notifications</p>
+                </CardContent>
+            </Card>
+        );
+    }
+
+
 
     return (
         <Card className="transition-all hover:shadow-md animate-in fade-in-50 duration-300">
@@ -57,7 +75,7 @@ const NotificationsPanel = async ({ userId }: NotificationsPanelProps) => {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {notifications.slice(0, 5).map((notification) => (
+                    {notifications.slice(0, 3).map((notification) => (
                         <NotificationItem key={notification.id} notification={notification} />
                     ))}
                 </div>

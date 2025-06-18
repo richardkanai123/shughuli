@@ -5,12 +5,14 @@ import { Loader2, Trash2 } from "lucide-react";
 import { DeleteNotification } from "@/lib/actions/notifications/deleteNotification";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 const DeleteNotificationBtn = ({
     notificationId,
 }: {
     notificationId: string;
 }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const Router = useRouter();
 
     const handleDeleteNotification = async () => {
         try {
@@ -23,6 +25,7 @@ const DeleteNotificationBtn = ({
                 success: ({ message, success }) => {
                     if (success) {
                         setIsLoading(false);
+                        Router.refresh(); // Refresh the page to update notifications
                         return message || "Notification deleted successfully";
                     } else {
                         setIsLoading(false);
@@ -31,6 +34,7 @@ const DeleteNotificationBtn = ({
                 },
                 error: (error) => {
                     setIsLoading(false);
+                    Router.refresh(); // Refresh the page to update notifications
                     return error.message || "Failed to delete notification";
                 },
             });
@@ -40,6 +44,7 @@ const DeleteNotificationBtn = ({
                     error.message || "An error occurred while deleting the notification"
                 );
             }
+            Router.refresh(); // Refresh the page to update notifications
             setIsLoading(false);
         }
     };

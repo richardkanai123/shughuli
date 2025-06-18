@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MarkNotificationAsRead } from "@/lib/actions/notifications/ReadNotifcation";
 import { motion } from "framer-motion";
 import { Check, CheckCheck, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 const ReadNotificationBtn = ({
@@ -14,6 +15,7 @@ const ReadNotificationBtn = ({
     notificationId: string;
 }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const Router = useRouter()
 
     const handleReadNotification = async () => {
         try {
@@ -26,6 +28,7 @@ const ReadNotificationBtn = ({
                 success: ({ message, success }) => {
                     if (success) {
                         setIsLoading(false);
+                        Router.refresh(); // Refresh the page to update notifications
                         return message || "Notification marked as read successfully";
                     } else {
                         setIsLoading(false);
@@ -34,6 +37,7 @@ const ReadNotificationBtn = ({
                 },
                 error: (error) => {
                     setIsLoading(false);
+                    Router.refresh(); // Refresh the page to update notifications
                     return error.message || "Failed to mark notification as read";
                 },
             });

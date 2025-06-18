@@ -47,6 +47,10 @@ const ProjectDates = ({
         return Math.ceil((new Date(dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
     }, [dueDate]);
 
+    if (error) {
+        return <p className="text-red-500">Error loading project dates: {error.message}</p>
+    }
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

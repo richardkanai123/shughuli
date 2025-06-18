@@ -6,8 +6,11 @@ import { Authenticate } from "../AuthProtection";
 
 export const createTask = async (taskData: NewTaskSchemaType) => {
 	try {
+		// Authenticate user
+		const session = await Authenticate();
+		const userId = session.userId;
 
-		const session = await Authenticate()
+		// Validate input data
 		const parsedData = newTaskSchema.safeParse(taskData);
 		if (!parsedData.success) {
 			return {
@@ -16,53 +19,65 @@ export const createTask = async (taskData: NewTaskSchemaType) => {
 				data: null,
 			};
 		}
-		
-		// check if project exists
-		const project = await prisma.project.findUnique({
+
+		// Extract validated data
+		const validatedTaskData = parsedData.data;
+		const { projectId, assigneeId } = validatedTaskData;
+
+		// Check if project exists AND user has permission (single query)
+		const project = await prisma.project.findFirst({
 			where: {
-				id: parsedData.data.projectId,
+				id: projectId,
+				OR: [
+					{ ownerId: userId }, // User is project owner
+				],
+			},
+			select: {
+				id: true,
+				name: true,
+				ownerId: true,
 			},
 		});
+
 		if (!project) {
 			return {
 				success: false,
-				message: "Project not found",
+				message:
+					"Project not found or you don't have permission to create tasks in this project",
 				data: null,
 			};
 		}
 
-		const newTask = await prisma.task.create({
-			data: {
-				title: parsedData.data.title,
-				description: parsedData.data.description,
-				projectId: parsedData.data.projectId,
-				creatorId: session.userId,
-				status: parsedData.data.status,
-				priority: parsedData.data.priority,
-				dueDate: parsedData.data.dueDate,
-				assigneeId: parsedData.data.assigneeId,
-				parentId: parsedData.data.parentId,
-				startDate: parsedData.data.startDate,
-				completedAt: parsedData.data.completedAt,
-			},
-			select: {
-				id: true,
-				title: true,
-			},
+		// Use transaction for atomicity
+		const [newTask, activityResult] = await prisma.$transaction(async (tx) => {
+			// Create the task
+			const task = await tx.task.create({
+				data: {
+					...validatedTaskData,
+					creatorId: userId, // Ensure creator is current user
+				},
+				select: {
+					id: true,
+					title: true,
+				},
+			});
+
+			// Create activity record
+			const link = `/dashboard/tasks/${task.id}`;
+			const content = `You have created a new task: ${task.title}`;
+
+			const activity = await createActivity(
+				"TASK_CREATED",
+				link,
+				content,
+				projectId,
+				task.id
+			);
+
+			return [task, activity];
 		});
 
-		// Create a new activity
-		const link = `/dashboard/tasks/${newTask.id}`;
-		const content = `You have created a new task: ${newTask.title}`;
-
-		const activityResult = await createActivity(
-			"TASK_CREATED",
-			link,
-			content,
-			project.id,
-			newTask.id
-		);
-
+		// Log warning if activity creation failed
 		if (!activityResult.success) {
 			console.warn(
 				"Failed to create activity record for task creation:",

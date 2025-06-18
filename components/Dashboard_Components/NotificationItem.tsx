@@ -46,7 +46,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.2 }}
             className={cn(
-                "p-4 rounded-lg border mb-2 transition-all duration-200",
+                "p-4 rounded-lg border mb-2 transition-all duration-200 hover:shadow-sm",
                 isRead
                     ? "bg-card hover:bg-muted/50"
                     : "bg-primary/5 hover:bg-primary/10 border-primary/20"
@@ -81,9 +81,7 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
                             >
                                 {notification.title}
                             </h4>
-                            <span className="text-xs text-muted-foreground ml-2 whitespace-nowrap">
-                                {formatTimeAgo(new Date(notification.createdAt))}
-                            </span>
+
                         </div>
 
                         <p className="text-sm text-muted-foreground my-1">
@@ -93,8 +91,11 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
                 </Link>
 
                 {/* Action buttons - kept outside the link */}
-                <div className="flex justify-end items-center">
-                    <div className="flex space-x-1">
+                <div className="flex justify-around ">
+                    <span className="text-xs text-muted-foreground ml-2 whitespace-nowrap">
+                        {formatTimeAgo(new Date(notification.createdAt))}
+                    </span>
+                    <div className="flex space-x-1 justify-end items-end ml-auto">
                         {!isRead && (
                             <ReadNotificationBtn
                                 isRead={isRead}

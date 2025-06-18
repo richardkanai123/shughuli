@@ -19,8 +19,7 @@ const TasksPage = async ({ params }: { params: Promise<{ taskid: string }> }) =>
     return (
         <div className='p-4'>
             <TaskDetails task={task} />
-            {/* You can add more components or details here as needed */}
-            {/* Additional Details */}
+
             <Card>
                 <CardHeader className="pb-2">
                     <CardTitle className="text-base font-medium flex items-center">
