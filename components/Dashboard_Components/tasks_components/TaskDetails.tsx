@@ -4,7 +4,7 @@ import { Task } from '@/lib/generated/prisma'
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { format, formatDistanceToNow, isAfter } from "date-fns"
+import { format, formatDistanceToNow, formatDistanceToNowStrict, isAfter } from "date-fns"
 import { motion } from "framer-motion"
 import {
     Calendar,
@@ -45,6 +45,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import UpdateTaskProgressBtn from './UpdateTaskProgressBtn'
 
 const TaskDetails = ({ task }: { task: Task }) => {
     const { data: session } = useSession()
@@ -58,7 +59,6 @@ const TaskDetails = ({ task }: { task: Task }) => {
         description,
         updatedAt,
         id,
-        projectId,
         creatorId,
         assigneeId
     } = task
@@ -83,7 +83,7 @@ const TaskDetails = ({ task }: { task: Task }) => {
 
     // Get formatted dates
     const formattedCreatedAt = createdAt ? format(new Date(createdAt), 'PPP') : 'Unknown'
-    const formattedUpdatedAt = updatedAt ? format(new Date(updatedAt), 'PPP') : 'Unknown'
+    const formattedUpdatedAt = formatDistanceToNowStrict(updatedAt, { addSuffix: true })
     const formattedDueDate = dueDate ? format(new Date(dueDate), 'PPP') : 'No due date'
     const timeFromCreation = createdAt ? formatDistanceToNow(new Date(createdAt), { addSuffix: true }) : 'Unknown'
 
@@ -145,7 +145,14 @@ const TaskDetails = ({ task }: { task: Task }) => {
                     </h3>
                     <span className="text-sm font-medium">{progress || 0}%</span>
                 </div>
-                <Progress value={progress || 0} className="h-2" />
+
+                <div className="flex flex-col w-full mx-auto p-2 mb-2">
+                    <Progress value={progress || 0} className="h-2" />
+                    <div className="self-end mr-0">
+                        <UpdateTaskProgressBtn taskId={id} currentProgress={progress} />
+                    </div>
+                </div>
+
                 <p className="text-xs text-muted-foreground">
                     {status === "DONE" ? (
                         <span className="flex items-center">
@@ -163,7 +170,7 @@ const TaskDetails = ({ task }: { task: Task }) => {
             </div>
 
             {/* Task Details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
                 {/* First Column - Description */}
                 <Card>
                     <CardHeader className="pb-2">
@@ -182,36 +189,6 @@ const TaskDetails = ({ task }: { task: Task }) => {
                                 No description provided
                             </p>
                         )}
-                    </CardContent>
-                </Card>
-
-                {/* Second Column - People */}
-                <Card>
-                    <CardHeader className="pb-2">
-                        <CardTitle className="text-base font-medium flex items-center">
-                            <User className="h-4 w-4 mr-2" />
-                            People
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium">Created by:</span>
-                            <span className="text-sm text-muted-foreground">
-                                {creatorId || 'Unknown'}
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium">Assigned to:</span>
-                            <span className="text-sm text-muted-foreground">
-                                {assigneeId || 'Unassigned'}
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium">Project:</span>
-                            <Link href={`/dashboard/projects/${projectId}`} className="text-sm text-blue-600 hover:underline">
-                                {projectId || 'Unknown'}
-                            </Link>
-                        </div>
                     </CardContent>
                 </Card>
             </div>

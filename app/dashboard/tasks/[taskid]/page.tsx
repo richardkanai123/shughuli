@@ -2,7 +2,7 @@ import TaskDetails from '@/components/Dashboard_Components/tasks_components/Task
 import { getTaskDetails } from '@/lib/actions/tasks/getTaskDetails';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, User } from 'lucide-react';
-import UserSheet from '@/components/Dashboard_Components/UserSheet';
+// import UserSheet from '@/components/Dashboard_Components/UserSheet';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import ProjectSheet from '@/components/Dashboard_Components/ProjectSheet';
@@ -29,7 +29,7 @@ const TasksPage = async ({ params }: { params: Promise<{ taskid: string }> }) =>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="flex items-center gap-2">
+                        {/* <div className="flex items-center gap-2">
                             <p className="text-sm font-medium flex items-center">
                                 <User className="h-4 w-4 mr-2" />
                                 Created By
@@ -42,7 +42,7 @@ const TasksPage = async ({ params }: { params: Promise<{ taskid: string }> }) =>
                             }>
                                 <UserSheet userid={task.creatorId} />
                             </Suspense>
-                        </div>
+                        </div> */}
 
                         {task.assigneeId && (
                             <div className="flex items-center gap-2">

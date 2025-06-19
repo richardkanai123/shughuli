@@ -8,7 +8,7 @@ import * as z from 'zod';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-
+import { UpdateTask } from '@/lib/actions/tasks/update_Task';
 // UI Components
 import { Button } from '@/components/ui/button';
 import {
@@ -95,22 +95,28 @@ const EditTask = ({ task, projectPromise }: EditTaskProps) => {
         setIsSubmitting(true);
 
         try {
-            // Log the data instead of sending to server
-            console.log('Task edit form submitted with values:', values);
-            console.log('Original task data:', task);
-            console.log('Task ID that would be updated:', task.id);
+            const taskData = {
+                title: values.title,
+                description: values.description || '',
+                status: values.status as TaskStatus, // Ensure correct type
+                priority: values.priority as TaskPriority, // Ensure correct type
+                dueDate: values.dueDate as Date,
+                progress: values.progress,
+            }
 
-            // Simulate a delay for demonstration
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Mock success toast
-            toast.success('Task updated successfully (mock)');
-
-            // Optionally redirect
-            // router.push(`/dashboard/tasks/${task.id}`);
+            const { success, message } = await UpdateTask(task.id, taskData);
+            if (success) {
+                toast.success(message);
+                setIsSubmitting(false);
+                router.push(`/dashboard/tasks/${task.id}`);
+            } else {
+                toast.error(message);
+            }
         } catch (error) {
-            console.error('Error updating task:', error);
-            toast.error('Failed to update task');
+            toast.error(error instanceof Error
+                ? `Failed to update task: ${error.message}`
+                : "An unexpected error occurred while updating the task");
+
         } finally {
             setIsSubmitting(false);
         }
@@ -413,70 +419,5 @@ const EditTask = ({ task, projectPromise }: EditTaskProps) => {
     );
 };
 
-// For demonstration purposes, here's a page component that would use this EditTask component
-// You can create a separate page.tsx file that fetches the task and passes it to EditTask
-/*
-'use client';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
-import EditTask from '@/components/Dashboard_Components/tasks_components/EditTask';
-import ErrorAlert from '@/components/Public_Components/ErrorAlert';
-import { Task } from '@/lib/generated/prisma';
-
-// You would replace this with your actual fetch function
-const fetchTask = async (taskId: string) => {
-  // Mock fetch
-  return {
-    status: 200,
-    message: 'Task fetched successfully',
-    task: {
-      id: taskId,
-      title: 'Sample Task',
-      // ...other task properties
-    } as Task
-  };
-};
-
-export default function EditTaskPage() {
-  const params = useParams();
-  const taskId = params.taskId as string;
-  const [taskData, setTaskData] = useState<{task: Task | null, status: number, message: string} | null>(null);
-  const [loading, setLoading] = useState(true);
-  
-  useEffect(() => {
-    const getTask = async () => {
-      try {
-        const data = await fetchTask(taskId);
-        setTaskData(data);
-      } catch (error) {
-        setTaskData({
-          task: null,
-          status: 500,
-          message: 'Failed to fetch task'
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    getTask();
-  }, [taskId]);
-  
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-  
-  if (!taskData?.task) {
-    return <ErrorAlert ErrorMessage={taskData?.message || 'Task not found'} />;
-  }
-  
-  return <EditTask task={taskData.task} />;
-}
-*/
 
 export default EditTask;

@@ -10,15 +10,13 @@ import {
     SheetClose
 } from "@/components/ui/sheet"
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Separator } from '@/components/ui/separator'
 import { format, formatDistanceToNowStrict } from 'date-fns'
-import { CalendarIcon, Clock, Edit2, ExternalLink, EyeIcon, FolderIcon, TrendingUp, Users } from 'lucide-react'
+import { CalendarIcon, Clock, Edit2, ExternalLink, EyeIcon, FolderIcon } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+
 
 const ProjectSheet = async ({ projectid }: { projectid: string }) => {
     const { project, message, status } = await getProjectDetails(projectid);
@@ -55,7 +53,6 @@ const ProjectSheet = async ({ projectid }: { projectid: string }) => {
         progress,
         startDate,
         endDate,
-        isPublic,
         slug
     } = project;
 
@@ -67,11 +64,8 @@ const ProjectSheet = async ({ projectid }: { projectid: string }) => {
     // Calculate days remaining or overdue
     const getDaysRemaining = () => {
         if (!dueDate) return null;
-
         const due = new Date(dueDate);
-        const today = new Date();
-
-        const diff = formatDistanceToNowStrict(due, { addSuffix: true });
+        const diff = formatDistanceToNowStrict(due, { addSuffix: true, unit: 'day' });
         return diff;
     };
 
@@ -82,7 +76,7 @@ const ProjectSheet = async ({ projectid }: { projectid: string }) => {
             <SheetTrigger asChild>
                 <Button variant="outline">
                     <EyeIcon className="h-4 w-4 mr-2" />
-                    View Project
+                    {project.name}
                 </Button>
             </SheetTrigger>
             <SheetContent className="w-full p-4 ">
