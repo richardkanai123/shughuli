@@ -1,54 +1,48 @@
-'use client'
+"use client";
 
-import { Task } from '@/lib/generated/prisma'
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { format, formatDistanceToNow, formatDistanceToNowStrict, isAfter } from "date-fns"
-import { motion } from "framer-motion"
+import { Task } from "@/lib/generated/prisma";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import {
+    format,
+    formatDistanceToNow,
+    formatDistanceToNowStrict,
+    isAfter,
+} from "date-fns";
+import { motion } from "framer-motion";
 import {
     Calendar,
     Clock,
     FileText,
     Edit2,
-    User,
     AlertCircle,
     Edit,
     CheckCircle2,
     BarChart3,
-    Tag
-} from "lucide-react"
-import { Button } from '@/components/ui/button'
-import { getStatusStyles } from '@/lib/TaskStatusStyle'
-import { getPriorityStyles } from '@/lib/TaskPriorityStyle'
-import CompleteTaskBtn from '../buttons/Complete-TaskBtn'
-import DeletetaskBtn from '../buttons/delete-taskBtn'
-import Link from 'next/link'
-import { useMemo, useState } from 'react'
-import { useSession } from '@/lib/auth-client'
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { cn } from '@/lib/utils'
-import { Progress } from '@/components/ui/progress'
+    Tag,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { getStatusStyles } from "@/lib/TaskStatusStyle";
+import { getPriorityStyles } from "@/lib/TaskPriorityStyle";
+import CompleteTaskBtn from "../buttons/Complete-TaskBtn";
+import DeletetaskBtn from "../buttons/delete-taskBtn";
+import Link from "next/link";
+import { useMemo } from "react";
+import { useSession } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "@/components/ui/tooltip"
-import UpdateTaskProgressBtn from './UpdateTaskProgressBtn'
+} from "@/components/ui/tooltip";
+import UpdateTaskProgressBtn from "./UpdateTaskProgressBtn";
+import UpdateTaskDueDate from "./UpdateTaskDueDate";
 
 const TaskDetails = ({ task }: { task: Task }) => {
-    const { data: session } = useSession()
+    const { data: session } = useSession();
     const {
         status,
         priority,
@@ -60,59 +54,73 @@ const TaskDetails = ({ task }: { task: Task }) => {
         updatedAt,
         id,
         creatorId,
-        assigneeId
-    } = task
+        assigneeId,
+    } = task;
 
     // Check if current user is creator or assignee of the task
-    const isTaskOwner = useMemo(() =>
-        creatorId === session?.userId || assigneeId === session?.userId,
+    const isTaskOwner = useMemo(
+        () => creatorId === session?.userId || assigneeId === session?.userId,
         [creatorId, assigneeId, session]
-    )
+    );
 
     // Check if task is overdue
     const isOverdue = useMemo(() => {
-        if (!dueDate) return false
-        return isAfter(new Date(), new Date(dueDate))
-    }, [dueDate])
+        if (!dueDate) return false;
+        return (
+            status !== "DONE" &&
+            status !== "ARCHIVED" &&
+            isAfter(new Date(), new Date(dueDate))
+        );
+    }, [dueDate]);
 
     // Calculate days remaining
     const daysRemaining = useMemo(() => {
-        if (!dueDate) return null
-        return Math.ceil((new Date(dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
-    }, [dueDate])
+        if (!dueDate) return null;
+        return Math.ceil(
+            (new Date(dueDate).getTime() - new Date().getTime()) /
+            (1000 * 60 * 60 * 24)
+        );
+    }, [dueDate]);
 
     // Get formatted dates
-    const formattedCreatedAt = createdAt ? format(new Date(createdAt), 'PPP') : 'Unknown'
-    const formattedUpdatedAt = formatDistanceToNowStrict(updatedAt, { addSuffix: true })
-    const formattedDueDate = dueDate ? format(new Date(dueDate), 'PPP') : 'No due date'
-    const timeFromCreation = createdAt ? formatDistanceToNow(new Date(createdAt), { addSuffix: true }) : 'Unknown'
+    const formattedCreatedAt = createdAt
+        ? format(new Date(createdAt), "PPP")
+        : "Unknown";
+    const formattedUpdatedAt = formatDistanceToNowStrict(updatedAt, {
+        addSuffix: true,
+    });
+    const formattedDueDate = dueDate
+        ? format(new Date(dueDate), "PPP")
+        : "No due date";
+    const timeFromCreation = createdAt
+        ? formatDistanceToNow(new Date(createdAt), { addSuffix: true })
+        : "Unknown";
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="space-y-6"
-        >
+            className="space-y-6">
             {/* Task Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                 <div>
-                    <h1 className='text-2xl font-bold'>{title}</h1>
+                    <h1 className="text-2xl font-bold">{title}</h1>
                     <div className="flex flex-wrap items-center gap-2 mt-2">
                         <Badge
                             variant="outline"
-                            className={getStatusStyles(status)}
-                        >
+                            className={getStatusStyles(status)}>
                             {status}
                         </Badge>
                         <Badge
                             variant="outline"
-                            className={getPriorityStyles(priority)}
-                        >
+                            className={getPriorityStyles(priority)}>
                             {priority} Priority
                         </Badge>
                         {isOverdue && (
-                            <Badge variant="destructive" className="text-xs font-normal">
+                            <Badge
+                                variant="destructive"
+                                className="text-xs font-normal">
                                 <AlertCircle className="h-3.5 w-3.5 mr-1" />
                                 Overdue
                             </Badge>
@@ -122,7 +130,10 @@ const TaskDetails = ({ task }: { task: Task }) => {
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Button disabled variant="outline" className="shrink-0">
+                            <Button
+                                disabled
+                                variant="outline"
+                                className="shrink-0">
                                 <Clock className="h-4 w-4 mr-2" />
                                 Created {timeFromCreation}
                             </Button>
@@ -147,9 +158,15 @@ const TaskDetails = ({ task }: { task: Task }) => {
                 </div>
 
                 <div className="flex flex-col w-full mx-auto p-2 mb-2">
-                    <Progress value={progress || 0} className="h-2" />
-                    <div className="self-end mr-0">
-                        <UpdateTaskProgressBtn taskId={id} currentProgress={progress} />
+                    <Progress
+                        value={progress || 0}
+                        className="h-2"
+                    />
+                    <div className="self-end mr-0 mt-2">
+                        <UpdateTaskProgressBtn
+                            taskId={id}
+                            currentProgress={progress}
+                        />
                     </div>
                 </div>
 
@@ -181,11 +198,11 @@ const TaskDetails = ({ task }: { task: Task }) => {
                     </CardHeader>
                     <CardContent>
                         {description ? (
-                            <p className='text-sm text-muted-foreground whitespace-pre-wrap'>
+                            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                                 {description}
                             </p>
                         ) : (
-                            <p className='text-sm text-muted-foreground italic'>
+                            <p className="text-sm text-muted-foreground italic">
                                 No description provided
                             </p>
                         )}
@@ -234,54 +251,46 @@ const TaskDetails = ({ task }: { task: Task }) => {
                             </div>
 
                             {isTaskOwner && (
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button variant="ghost" size="sm" className="h-7 px-2">
-                                            <Edit className="h-3.5 w-3.5 mr-1" />
-                                            <span className="text-xs">
-                                                {dueDate ? 'Change' : 'Set'}
-                                            </span>
-                                        </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Set Due Date</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                Choose when this task should be completed by.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <div className="py-4">
-                                            {/* Date picker would go here */}
-                                            <div className="border rounded-md p-4 text-center text-muted-foreground">
-                                                Date Picker Placeholder
-                                            </div>
-                                        </div>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction>Save</AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
+                                <UpdateTaskDueDate
+                                    taskid={id}
+                                    dueDate={dueDate as Date}
+                                    createdAt={createdAt as Date}
+                                />
                             )}
                         </div>
 
                         {dueDate ? (
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <p className={cn(
-                                        "text-sm font-medium",
-                                        isOverdue && "text-red-500"
-                                    )}>
+                                    <p
+                                        className={cn(
+                                            "text-sm font-medium",
+                                            isOverdue && "text-red-500"
+                                        )}>
                                         {formattedDueDate}
                                     </p>
 
                                     {isOverdue ? (
-                                        <Badge variant="destructive" className="text-xs font-normal">Overdue</Badge>
-                                    ) : daysRemaining && daysRemaining <= 3 ? (
-                                        <Badge variant="outline" className="text-xs font-normal bg-amber-100 text-amber-800 border-amber-200">
-                                            Due soon
+                                        <Badge
+                                            variant="destructive"
+                                            className="text-xs font-normal">
+                                            Overdue
                                         </Badge>
-                                    ) : null}
+                                    ) : status === "DONE" ? (
+                                        <Badge
+                                            variant="outline"
+                                            className="text-xs font-normal bg-amber-100 text-amber-800 border-amber-200">
+                                            {status}
+                                        </Badge>
+                                    ) : (
+                                        <Badge
+                                            variant="outline"
+                                            className="text-xs font-normal bg-amber-100 text-amber-800 border-amber-200">
+                                            {daysRemaining
+                                                ? `${daysRemaining} days left`
+                                                : "No deadline"}
+                                        </Badge>
+                                    )}
                                 </div>
 
                                 {isOverdue ? (
@@ -289,11 +298,16 @@ const TaskDetails = ({ task }: { task: Task }) => {
                                         <AlertCircle className="h-3.5 w-3.5" />
                                         <span>Overdue by {Math.abs(daysRemaining!)} days</span>
                                     </div>
-                                ) : daysRemaining ? (
-                                    <p className="text-xs text-muted-foreground">
-                                        {daysRemaining} days remaining
-                                    </p>
-                                ) : null}
+                                ) : (
+                                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                        <Clock className="h-3.5 w-3.5" />
+                                        <span>
+                                            {daysRemaining !== null
+                                                ? `${daysRemaining} days remaining`
+                                                : "No deadline set"}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <div className="space-y-1">
@@ -337,10 +351,17 @@ const TaskDetails = ({ task }: { task: Task }) => {
 
             {/* Actions */}
             <div className="flex items-center flex-wrap justify-center gap-3 p-2 border-t pt-4">
-                <CompleteTaskBtn taskId={id} isComplete={status === "DONE"} />
+                <CompleteTaskBtn
+                    taskId={id}
+                    isComplete={status === "DONE"}
+                />
 
-                <Button variant="secondary" asChild>
-                    <Link href={`/dashboard/tasks/${id}/edit`} className="flex items-center gap-2">
+                <Button
+                    variant="secondary"
+                    asChild>
+                    <Link
+                        href={`/dashboard/tasks/${id}/edit`}
+                        className="flex items-center gap-2">
                         <Edit2 className="h-4 w-4" />
                         Edit Task
                     </Link>
@@ -348,9 +369,8 @@ const TaskDetails = ({ task }: { task: Task }) => {
 
                 <DeletetaskBtn taskId={id} />
             </div>
-
         </motion.div>
-    )
-}
+    );
+};
 
-export default TaskDetails
+export default TaskDetails;

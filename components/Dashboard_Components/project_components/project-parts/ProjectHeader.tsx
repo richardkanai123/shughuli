@@ -16,7 +16,7 @@ import {
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import DeleteProjectbtn from "../../buttons/DeleteProjectbtn";
-import ProjectVisibilityBtn from "../../buttons/ProjectVisibilityBtn";
+// import ProjectVisibilityBtn from "../../buttons/ProjectVisibilityBtn";
 import CompleteProjectBtn from "../../buttons/CompleteProjectBtn";
 
 const ProjectHeader = ({ project }: { project: Project }) => {
@@ -58,12 +58,12 @@ const ProjectHeader = ({ project }: { project: Project }) => {
                     }
 
                     {/* Project Visibility Button */}
-                    {isOwner && (
+                    {/* {isOwner && (
                         <ProjectVisibilityBtn
                             projectId={id}
                             isPublic={isPublic}
                         />
-                    )}
+                    )} */}
 
                     {/* edit project */}
                     {isOwner && (

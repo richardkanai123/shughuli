@@ -5,19 +5,9 @@ import { format, isAfter, formatDistanceToNow } from "date-fns"
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
 import { useMemo } from "react"
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { useSession } from "@/lib/auth-client"
+import UpdateProjectDueDate from "../UpdateProjectDueDate"
 
 interface ProjectDatesProps {
     startDate?: Date | string | null
@@ -33,6 +23,7 @@ const ProjectDates = ({
     dueDate,
     projectId,
     ownerId
+
 }: ProjectDatesProps) => {
     const { data, error, isPending } = useSession()
     const isOwner = useMemo(() => ownerId === data?.userId, [ownerId, data]);
@@ -123,34 +114,11 @@ const ProjectDates = ({
 
                     }
                     {(!isPending && isOwner) &&
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button variant="ghost" size="sm" className="h-7 px-2">
-                                    <Edit className="h-3.5 w-3.5 mr-1" />
-                                    <span className="text-xs">
-                                        {dueDate ? 'Change' : 'Set'}
-                                    </span>
-                                </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>Set Due Date</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        Choose when this project should be completed by.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <div className="py-4">
-                                    {/* Date picker would go here */}
-                                    <div className="border rounded-md p-4 text-center text-muted-foreground">
-                                        Date Picker Placeholder
-                                    </div>
-                                </div>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction>Save</AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        <UpdateProjectDueDate
+                            projectId={projectId}
+                            dueDate={dueDate as Date}
+                            startDate={startDate as Date}
+                        />
                     }
 
                 </div>
