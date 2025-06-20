@@ -39,7 +39,7 @@ const TaskStatusCard = ({ label, count, status }: TaskStatusCardProps) => {
         <motion.div
             variants={cardVariants}
             whileHover="hover"
-            className={`group rounded-lg border bg-card text-card-foreground shadow-sm p-3 transition-colors cursor-pointer ${styles}`}>
+            className={`group rounded-lg border bg-card text-card-foreground shadow-sm p-3 transition-colors cursor-pointer flex-shrink-0 min-w-[150px] md:min-w-[200px] mx-auto ${styles}`}>
             <div
                 className={`text-sm font-medium text-muted-foreground transition-colors`}>
                 {label}

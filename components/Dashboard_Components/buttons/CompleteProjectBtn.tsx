@@ -11,142 +11,114 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { CheckCircle, Loader, TicketCheck, TriangleAlertIcon } from "lucide-react"
+import { CheckCircle2, Loader2, AlertCircle } from "lucide-react"
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Badge } from "@/components/ui/badge"
 import { completeProject } from "@/lib/actions/projects/complete-project"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import toast from "react-hot-toast"
 
-
 const CompleteProjectBtn = ({ projectId }: { projectId: string }) => {
-
     const [isLoading, setIsLoading] = useState(false);
     const Router = useRouter()
 
     const handleCompleteProject = async () => {
         try {
-            setIsLoading
+            setIsLoading(true);
             if (!projectId) return;
 
-            toast.promise(
-                completeProject(projectId),
-                {
-                    loading: "Completing Project",
-                    success: ({ message, success }) => {
-                        if (success) {
-                            return message
-                        }
-                        else {
-                            return message
-                        }
-                    },
-                    error: (error) => {
-                        return error.message || "Failed to change project visibility";
-                    }
-                },
-                {
-                    position: "top-right",
-                    loading: {
-                        icon: <Loader className="h-4 w-4 animate-spin" />,
-                        position: "top-right",
-                        removeDelay: 500,
-                        iconTheme: {
-                            primary: '#4a5568', // Gray-700
-                            secondary: '#fff', // White
-                        },
-                        style: {
-                            background: '#edf2f7', // Gray-100
-                            color: '#2d3748', // Gray-800
-                        }
+            const result = await completeProject(projectId);
 
-                    },
-                    success: {
-                        icon: <CheckCircle className="h-4 text-lime-400 w-4" />,
-                        position: "top-right",
-                        removeDelay: 500,
-                        iconTheme: {
-                            primary: '#38a169', // Green-600
-                            secondary: '#fff', // White
-                        },
-                        style: {
-                            background: '#f0fff4', // Green-50
-                            color: '#2f855a', // Green-700
-                        }
-                    },
-                    error: {
-                        icon: <TriangleAlertIcon className="h-4 w-4" />,
-                        position: "top-right",
-                        removeDelay: 500,
-                        iconTheme: {
-                            primary: '#e53e3e',
-                            secondary: '#fff', // White
-                        },
-                        style: {
-                            background: '#fff5f5', // Red-50
-                            color: '#c53030', // Red-600
-                        }
-                    }
-                }
-            )
-
-            setIsLoading(false);
-            Router.refresh(); // Refresh the page to reflect changes
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message || "An unexpected error occurred", {
-                    duration: 3000,
-                    position: "top-right",
-                });
-                Router.refresh(); // Refresh the page to reflect changes
-                setIsLoading(false);
-                return;
+            if (result.success) {
+                toast.success(result.message || "Project completed successfully");
+                Router.refresh();
+            } else {
+                toast.error(result.message || "Failed to complete project");
             }
-            toast.error("An unexpected error occurred while changing visibility, please try again later.", {
-                duration: 3000,
-                position: "top-right",
-            });
+        } catch (error) {
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "An unexpected error occurred"
+            );
+        } finally {
             setIsLoading(false);
         }
     }
-
 
     return (
         <Tooltip>
             <TooltipTrigger asChild>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button variant="ghost" size="sm" className="bg-lime-500 hover:bg-lime-100 text-accent-foreground">
-                            Complete <TicketCheck className="h-4 w-4" />
+                        <Button
+                            variant="default"
+                            size="sm"
+                            className="h-9 bg-green-600 hover:bg-green-700 text-white"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? (
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            ) : (
+                                <CheckCircle2 className="h-4 w-4 mr-2" />
+                            )}
+                            Complete
                         </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className="max-w-md">
                         <AlertDialogHeader>
-                            <AlertDialogTitle>
-                                Complete Project
-                            </AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Are you sure you want to mark this project as completed? This action cannot be undone.
-                                <br />
-                                <br />
-                                Once completed, the project will be archived and you will not be able to make further changes.
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="p-2 rounded-lg bg-green-100 dark:bg-green-900/30">
+                                    <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+                                </div>
+                                <AlertDialogTitle>Complete Project</AlertDialogTitle>
+                            </div>
+                            <AlertDialogDescription className="space-y-3">
+                                <p>Are you sure you want to mark this project as completed?</p>
+
+                                <div className="p-3 bg-amber-50 dark:bg-amber-950/20 rounded-lg border border-amber-200 dark:border-amber-800">
+                                    <div className="flex items-start gap-2">
+                                        <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                                        <div className="text-sm text-amber-700 dark:text-amber-300">
+                                            <p className="font-medium mb-1">Important:</p>
+                                            <p>Once completed, the project will be archived and you won't be able to make further changes.</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction disabled={isLoading} onClick={handleCompleteProject}>
-                                Complete Project
+                            <AlertDialogCancel disabled={isLoading}>
+                                Cancel
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                                disabled={isLoading}
+                                onClick={handleCompleteProject}
+                                className="bg-green-600 hover:bg-green-700"
+                            >
+                                {isLoading ? (
+                                    <>
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                        Completing...
+                                    </>
+                                ) : (
+                                    <>
+                                        <CheckCircle2 className="h-4 w-4 mr-2" />
+                                        Complete Project
+                                    </>
+                                )}
                             </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
             </TooltipTrigger>
-            <TooltipContent>
-                <p>Close project</p>
+            <TooltipContent side="bottom">
+                <p>Mark project as completed</p>
             </TooltipContent>
         </Tooltip>
     )

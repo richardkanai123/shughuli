@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { toast } from "react-hot-toast"
 import { useSearchParams } from "next/navigation"
-
+import { Mail, Loader2, Send } from "lucide-react"
 
 const ResetPasswordSchema = z.object({
     email: z.string().email("Please enter a valid email address"),
@@ -24,10 +24,8 @@ const ResetPasswordSchema = z.object({
 type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>
 
 const ResetPasswordForm = () => {
-
     const searchParams = useSearchParams()
     const emailParam = searchParams.get('email')
-
 
     const form = useForm<ResetPasswordInput>({
         resolver: zodResolver(ResetPasswordSchema),
@@ -39,7 +37,6 @@ const ResetPasswordForm = () => {
     const onSubmit = async (data: ResetPasswordInput) => {
         console.log(data)
         try {
-
             // TODO: Implement password reset logic
             toast.success("If an account exists with this email, you will receive reset instructions.")
             form.reset()
@@ -50,7 +47,7 @@ const ResetPasswordForm = () => {
     }
 
     return (
-        <div className="p-6">
+        <div className="space-y-6">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField
@@ -58,42 +55,63 @@ const ResetPasswordForm = () => {
                         name="email"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="text-base font-semibold">
+                                <FormLabel className="text-sm font-medium">
                                     Email address
                                 </FormLabel>
                                 <FormControl>
-                                    <Input
-                                        {...field}
-                                        type="email"
-                                        placeholder="name@example.com"
-
-                                        className="h-11 px-4 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500"
-                                    />
+                                    <div className="relative">
+                                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                                        <Input
+                                            {...field}
+                                            type="email"
+                                            placeholder="name@example.com"
+                                            className="pl-10 h-11"
+                                            autoComplete="email"
+                                            autoFocus
+                                        />
+                                    </div>
                                 </FormControl>
-                                <FormMessage className="text-red-500" />
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
 
+                    {/* Form error display */}
+                    {form.formState.errors.root && (
+                        <div className="rounded-md bg-destructive/15 p-3">
+                            <FormMessage className="text-destructive font-medium">
+                                {form.formState.errors.root.message}
+                            </FormMessage>
+                        </div>
+                    )}
+
                     <Button
                         type="submit"
                         disabled={form.formState.isLoading || form.formState.isSubmitting}
-                        className="w-full h-11 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
+                        className="w-full h-11"
+                        size="lg"
                     >
                         {form.formState.isLoading || form.formState.isSubmitting ? (
-                            <div className="flex items-center justify-center gap-2">
-                                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                </svg>
-                                Sending...
-                            </div>
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Sending instructions...
+                            </>
                         ) : (
-                            "Send Reset Instructions"
+                            <>
+                                <Send className="mr-2 h-4 w-4" />
+                                Send Reset Instructions
+                            </>
                         )}
                     </Button>
                 </form>
             </Form>
+
+            {/* Help text */}
+            <div className="text-center">
+                <p className="text-xs text-muted-foreground">
+                    You'll receive an email with instructions to reset your password if an account exists with this email address.
+                </p>
+            </div>
         </div>
     )
 }

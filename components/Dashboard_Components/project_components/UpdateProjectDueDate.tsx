@@ -19,11 +19,18 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { ChevronDownIcon, Edit } from "lucide-react";
+import {
+    Calendar as CalendarIcon,
+    Edit,
+    Clock,
+    Loader2
+} from "lucide-react";
 import { updateProjectDueDate } from "@/lib/actions/projects/UpdateProjectDueDate";
 import toast from "react-hot-toast";
-import { formatDate } from "date-fns";
+import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+
 const UpdateProjectDueDate = ({
     projectId,
     dueDate,
@@ -33,35 +40,36 @@ const UpdateProjectDueDate = ({
     dueDate: Date;
     startDate: Date;
 }) => {
-    const [updatedDueDate, setUpdatedDueDate] = useState<Date | undefined>(
-        undefined
-    );
-    const [open, setOpen] = useState(false);
+    const [updatedDueDate, setUpdatedDueDate] = useState<Date | undefined>(dueDate);
+    const [selectedTime, setSelectedTime] = useState("23:59");
+    const [calendarOpen, setCalendarOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
-    const dueDateReadable = formatDate(dueDate, "PPP ' at 'p 'UTC'");
 
-    const Router = useRouter()
+    const Router = useRouter();
+
     const handleUpdateDueDate = async () => {
         try {
             setIsUpdating(true);
             if (!updatedDueDate) {
                 toast.error("Please select a due date.");
-                setIsUpdating(false);
                 return;
             }
 
-            const { message, success } = await updateProjectDueDate(projectId, updatedDueDate);
+            // Combine date and time
+            const [hours, minutes] = selectedTime.split(':').map(Number);
+            const finalDateTime = new Date(updatedDueDate);
+            finalDateTime.setHours(hours, minutes, 0);
+
+            const { message, success } = await updateProjectDueDate(projectId, finalDateTime);
             if (!success) {
                 toast.error(message || "Failed to update due date.");
-                setIsUpdating(false);
                 return;
             }
 
             toast.success(message);
             Router.refresh();
-            setOpen(false);
-            setUpdatedDueDate(undefined);
-            setIsUpdating(false);
+            setDialogOpen(false);
         } catch (error) {
             toast.error(
                 error instanceof Error
@@ -73,90 +81,122 @@ const UpdateProjectDueDate = ({
         }
     };
 
+    const hasChanges = updatedDueDate?.getTime() !== dueDate?.getTime() || selectedTime !== "23:59";
+
     return (
-        <AlertDialog>
+        <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <AlertDialogTrigger asChild>
                 <Button
                     variant="ghost"
                     size="sm"
-                    className="h-7 px-2">
-                    <Edit className="h-3.5 w-3.5 mr-1" />
-                    <span className="text-xs">
-                        {isUpdating ? "Updating..." : dueDate ? "Change" : "Set"}
-                    </span>
+                    className="h-8 px-3 text-xs hover:bg-primary/10"
+                    disabled={isUpdating}
+                >
+                    {isUpdating ? (
+                        <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                    ) : (
+                        <Edit className="h-3 w-3 mr-1" />
+                    )}
+                    Edit
                 </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent>
+
+            <AlertDialogContent className="max-w-sm">
                 <AlertDialogHeader>
-                    <AlertDialogTitle>{dueDate ? `Change Due Date: ${dueDateReadable}` : "Set Due Date"}</AlertDialogTitle>
+                    <AlertDialogTitle className="flex items-center gap-2">
+                        <CalendarIcon className="h-4 w-4" />
+                        Update Due Date
+                    </AlertDialogTitle>
                     <AlertDialogDescription>
-                        Choose when this project should be completed by.
+                        Modify when this project should be completed
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <div className="py-4 space-y-2">
-                    <div className="flex flex-col gap-3">
-                        <Label
-                            htmlFor="date-picker"
-                            className="px-1">
-                            Date
-                        </Label>
-                        <Popover
-                            open={open}
-                            onOpenChange={setOpen}>
+
+                <div className="space-y-4">
+                    {/* Date Selection */}
+                    <div className="space-y-2">
+                        <Label className="text-sm font-medium">Date</Label>
+                        <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                             <PopoverTrigger asChild>
                                 <Button
                                     variant="outline"
-                                    id="date-picker"
-                                    className="w-32 justify-between font-normal">
-                                    {updatedDueDate
-                                        ? updatedDueDate.toLocaleDateString()
-                                        : "Select date"}
-                                    <ChevronDownIcon />
+                                    className={cn(
+                                        "w-full justify-start text-left font-normal",
+                                        !updatedDueDate && "text-muted-foreground"
+                                    )}
+                                    onClick={() => setCalendarOpen(true)}
+                                >
+                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                    {updatedDueDate ? (
+                                        format(updatedDueDate, "PPP")
+                                    ) : (
+                                        "Pick a date"
+                                    )}
                                 </Button>
                             </PopoverTrigger>
-                            <PopoverContent
-                                className="w-auto overflow-hidden p-0"
-                                align="start">
+                            <PopoverContent className="w-auto p-0" align="start">
                                 <Calendar
                                     mode="single"
                                     selected={updatedDueDate}
-                                    // date must not be before the project creation date
-
-                                    disabled={
-                                        (date) =>
-                                            date < startDate
-                                    }
-                                    captionLayout="dropdown"
                                     onSelect={(date) => {
                                         setUpdatedDueDate(date);
-                                        setOpen(false);
+                                        setCalendarOpen(false);
                                     }}
+                                    disabled={(date) => date < startDate}
+                                    initialFocus
                                 />
                             </PopoverContent>
                         </Popover>
+                        {startDate && (
+                            <p className="text-xs text-muted-foreground">
+                                Must be after {format(startDate, "MMM dd, yyyy")}
+                            </p>
+                        )}
                     </div>
-                    <div className="flex flex-col gap-3">
-                        <Label
-                            htmlFor="time-picker"
-                            className="px-1">
-                            Time
-                        </Label>
-                        <Input
-                            type="time"
-                            id="time-picker"
-                            step="1"
-                            defaultValue="00:00:00"
-                            className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                        />
+
+                    {/* Time Selection */}
+                    <div className="space-y-2">
+                        <Label className="text-sm font-medium">Time</Label>
+                        <div className="relative">
+                            <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                type="time"
+                                value={selectedTime}
+                                onChange={(e) => setSelectedTime(e.target.value)}
+                                className="pl-10"
+                            />
+                        </div>
                     </div>
+
+                    {/* Preview */}
+                    {updatedDueDate && (
+                        <div className="p-3 bg-muted/50 rounded-lg">
+                            <p className="text-sm font-medium">Preview:</p>
+                            <p className="text-sm text-muted-foreground">
+                                {format(updatedDueDate, "PPPP")} at{" "}
+                                {format(new Date(`2000-01-01T${selectedTime}`), "h:mm a")}
+                            </p>
+                        </div>
+                    )}
                 </div>
+
                 <AlertDialogFooter>
+                    <AlertDialogCancel disabled={isUpdating}>
+                        Cancel
+                    </AlertDialogCancel>
                     <AlertDialogAction
-                        disabled={isUpdating}
-                        onClick={handleUpdateDueDate}>
-                        {isUpdating ? "Updating..." : "Update"}
+                        disabled={isUpdating || !updatedDueDate || !hasChanges}
+                        onClick={handleUpdateDueDate}
+                    >
+                        {isUpdating ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Updating...
+                            </>
+                        ) : (
+                            "Update"
+                        )}
                     </AlertDialogAction>
-                    <AlertDialogCancel disabled={isUpdating}>Cancel</AlertDialogCancel>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

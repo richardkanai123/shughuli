@@ -17,7 +17,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Loader2Icon, Trash2Icon } from "lucide-react";
+import { Loader2, Trash2, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -31,33 +31,18 @@ const DeleteProjectbtn = ({ projectid }: { projectid: string }) => {
 
         try {
             setIsPending(true);
-
-            // Call the delete function and capture its response
             const response = await DeleteProject(projectid);
 
-            // Check the response
             if (response.success) {
-                toast.success(response.message || "Project deleted successfully", {
-                    duration: 3000,
-                    position: "top-right",
-                });
-
-                // Redirect to projects list or dashboard
+                toast.success(response.message || "Project deleted successfully");
                 router.push("/dashboard/projects");
                 router.refresh();
             } else {
-                toast.error(response.message || "Failed to delete project", {
-                    duration: 3000,
-                    position: "top-right",
-                });
+                toast.error(response.message || "Failed to delete project");
             }
         } catch (error) {
-            // Handle unexpected errors
             console.error("Delete project error:", error);
-            toast.error("An unexpected error occurred", {
-                duration: 3000,
-                position: "top-right",
-            });
+            toast.error("An unexpected error occurred");
         } finally {
             setIsPending(false);
         }
@@ -75,47 +60,66 @@ const DeleteProjectbtn = ({ projectid }: { projectid: string }) => {
                         <Button
                             disabled={isPending}
                             variant="destructive"
-                            size="sm">
+                            size="sm"
+                            className="h-9"
+                        >
                             {isPending ? (
-                                <>
-                                    Delete <Loader2Icon className="h-4 w-4 animate-spin ml-1" />
-                                </>
+                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                             ) : (
-                                <>
-                                    Delete <Trash2Icon className="h-4 w-4 ml-1" />
-                                </>
+                                <Trash2 className="h-4 w-4 mr-2" />
                             )}
+                            Delete
                         </Button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent>
+                    <AlertDialogContent className="max-w-md">
                         <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Project</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Are you sure you want to delete this project? This action cannot
-                                be undone.
+                            <div className="flex items-center gap-3 mb-2">
+                                <div className="p-2 rounded-lg bg-destructive/10">
+                                    <AlertTriangle className="h-5 w-5 text-destructive" />
+                                </div>
+                                <AlertDialogTitle>Delete Project</AlertDialogTitle>
+                            </div>
+                            <AlertDialogDescription className="space-y-3">
+                                <p>Are you sure you want to delete this project?</p>
+
+                                <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                                    <div className="flex items-start gap-2">
+                                        <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" />
+                                        <div className="text-sm text-destructive">
+                                            <p className="font-medium mb-1">Warning:</p>
+                                            <p>This action cannot be undone. All project data, tasks, and attachments will be permanently deleted.</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel disabled={isPending}>
+                                Cancel
+                            </AlertDialogCancel>
                             <AlertDialogAction
                                 onClick={handleDelete}
-                                className="bg-red-500 hover:bg-red-600 text-white"
-                                disabled={isPending}>
+                                className="bg-destructive hover:bg-destructive/90"
+                                disabled={isPending}
+                            >
                                 {isPending ? (
                                     <>
-                                        <Loader2Icon className="h-4 w-4 animate-spin mr-1" />
+                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                                         Deleting...
                                     </>
                                 ) : (
-                                    "Delete"
+                                    <>
+                                        <Trash2 className="h-4 w-4 mr-2" />
+                                        Delete Project
+                                    </>
                                 )}
                             </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
             </TooltipTrigger>
-            <TooltipContent>
-                <p>Delete project</p>
+            <TooltipContent side="bottom">
+                <p>Delete project permanently</p>
             </TooltipContent>
         </Tooltip>
     );

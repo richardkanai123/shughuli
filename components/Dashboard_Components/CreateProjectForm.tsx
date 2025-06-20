@@ -12,7 +12,6 @@ import {
     newProjectSchema,
 } from '@/lib/validation/schemas'
 
-
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -30,12 +29,21 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 import {
     Calendar as CalendarIcon,
     Loader2,
     PlusIcon,
-    AlertCircle
+    AlertCircle,
+    Globe,
+    Lock,
+    FolderPlus,
+    Settings,
+    FileText,
+    Clock
 } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Textarea } from '@/components/ui/textarea'
@@ -54,7 +62,6 @@ import { cn } from '@/lib/utils'
 const isStartDateValid = (date: Date) => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
-
     return isValid(date) && !isBefore(date, today)
 }
 
@@ -73,15 +80,12 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
             status: 'OPEN',
             slug: '',
             ownerId: userId,
-            // Set explicit dates with new Date() to ensure they're always valid Date objects
             dueDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-            startDate: new Date(new Date().setHours(0, 0, 0, 0)), // Start date is today
+            startDate: new Date(new Date().setHours(0, 0, 0, 0)),
         },
         resolver: zodResolver(newProjectSchema),
         mode: 'onChange',
     })
-
-
 
     const onSubmit: SubmitHandler<NewProjectSchemaType> = async (values) => {
         try {
@@ -161,322 +165,381 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
 
     const startDate = form.watch('startDate')
     const dueDateDisabled = (date: Date) => !isDueDateValid(date, startDate as Date)
+    const isPublic = form.watch('isPublic')
 
     return (
         <ErrorBoundary fallback={
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="p-6 rounded-xl border border-red-200 bg-red-50 text-red-800"
+                className="p-6 rounded-lg border border-destructive/50 bg-destructive/10"
             >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-destructive">
                     <AlertCircle className="h-5 w-5" />
-                    <p>Something went wrong. Please refresh and try again.</p>
+                    <p className="font-medium">Something went wrong. Please refresh and try again.</p>
                 </div>
             </motion.div>
         }>
-            <Form {...form}>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                >
-                    <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-8 p-6 rounded-xl shadow-lg bg-card"
-                    >
-                        {/* Project Name */}
-                        <motion.div
-                            whileHover={{ x: 3 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        >
-                            <FormField
-                                control={form.control}
-                                name="name"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-base font-semibold">Project Name</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Enter project name"
-                                                {...field}
-                                                autoFocus
-                                                className="shadow-sm focus:ring-2 focus:ring-primary/20"
-                                            />
-                                        </FormControl>
-                                        <FormDescription className="text-sm opacity-80">
-                                            Choose a unique name for your project
-                                        </FormDescription>
-                                        <FormMessage className="text-sm font-medium" />
-                                    </FormItem>
-                                )}
-                            />
-                        </motion.div>
-
-                        {/* Description */}
-                        <motion.div
-                            whileHover={{ x: 3 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        >
-                            <FormField
-                                control={form.control}
-                                name="description"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-base font-semibold">Description</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder="Describe your project..."
-                                                className="resize-none min-h-[100px] shadow-sm focus:ring-2 focus:ring-primary/20"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormDescription className="text-sm opacity-80">
-                                            Brief description of your project goals and scope
-                                        </FormDescription>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </motion.div>
-
-                        {/* Dates */}
-                        <div className="grid gap-6 md:grid-cols-2">
-                            {/* Start Date */}
-                            <motion.div
-                                whileHover={{ y: -2 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                            >
-                                <FormField
-                                    control={form.control}
-                                    name="startDate"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-col">
-                                            <FormLabel className="text-base font-semibold">Start Date</FormLabel>
-                                            <Popover>
-                                                <PopoverTrigger asChild>
-                                                    <FormControl>
-                                                        <Button
-                                                            variant="outline"
-                                                            className={cn(
-                                                                "w-full pl-3 text-left font-normal shadow-sm",
-                                                                "transition-all duration-200",
-                                                                "hover:shadow-md focus:ring-2 focus:ring-primary/20",
-                                                                "active:scale-[0.98]"
-                                                            )}
-                                                        >
-                                                            {field.value ? (
-                                                                format(field.value, 'PPP')
-                                                            ) : (
-                                                                <span>Pick a date</span>
-                                                            )}
-                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                        </Button>
-                                                    </FormControl>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto p-0" align="start">
-                                                    <Calendar
-                                                        mode="single"
-                                                        selected={field.value instanceof Date && isValid(field.value) ? field.value : new Date()}
-                                                        onSelect={(date) => {
-                                                            // Ensure date is valid before setting
-                                                            if (date && isValid(date)) {
-                                                                field.onChange(date)
-
-                                                                // If due date is before new start date, update due date
-                                                                const currentDueDate = form.watch('dueDate')
-                                                                if (date && currentDueDate && isBefore(currentDueDate, date)) {
-                                                                    // Set due date to start date + 1 week
-                                                                    const newDueDate = new Date(date)
-                                                                    newDueDate.setDate(date.getDate() + 7)
-                                                                    form.setValue('dueDate', newDueDate)
-                                                                }
-                                                            } else {
-                                                                // Set to today if the selected date is invalid
-                                                                field.onChange(new Date())
-                                                            }
-                                                        }}
-                                                        disabled={(date) => !isStartDateValid(date)}
-                                                        initialFocus
-                                                    />
-                                                </PopoverContent>
-                                            </Popover>
-                                            <FormDescription className="text-sm opacity-80">
-                                                When does your project start?
-                                            </FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </motion.div>
-
-                            {/* Due Date */}
-                            <motion.div
-                                whileHover={{ y: -2 }}
-                                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                            >
-                                <FormField
-                                    control={form.control}
-                                    name="dueDate"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-col">
-                                            <FormLabel className="text-base font-semibold">Due Date</FormLabel>
-                                            <Popover>
-                                                <PopoverTrigger asChild>
-                                                    <FormControl>
-                                                        <Button
-                                                            variant="outline"
-                                                            className={cn(
-                                                                "w-full pl-3 text-left font-normal shadow-sm",
-                                                                "transition-all duration-200",
-                                                                "hover:shadow-md focus:ring-2 focus:ring-primary/20",
-                                                                "active:scale-[0.98]"
-                                                            )}
-                                                        >
-                                                            {field.value ? (
-                                                                format(field.value, 'PPP')
-                                                            ) : (
-                                                                <span>Pick a date</span>
-                                                            )}
-                                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                                        </Button>
-                                                    </FormControl>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto p-0" align="start">
-                                                    <Calendar
-                                                        mode="single"
-                                                        selected={field.value instanceof Date && isValid(field.value) ? field.value : new Date()}
-                                                        onSelect={field.onChange}
-                                                        disabled={dueDateDisabled}
-                                                        initialFocus
-                                                        fromDate={startDate}
-                                                    />
-                                                </PopoverContent>
-                                            </Popover>
-                                            <FormDescription className="text-sm opacity-80">
-                                                When is your project due? (Must be after start date)
-                                            </FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className="max-w-4xl mx-auto"
+            >
+                <Card className="shadow-lg border-0 bg-card">
+                    <CardHeader className="space-y-1 pb-6 bg-gradient-to-r from-primary/5 to-primary/10 rounded-t-lg">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 rounded-lg bg-primary/10">
+                                <FolderPlus className="h-6 w-6 text-primary" />
+                            </div>
+                            <div>
+                                <CardTitle className="text-2xl font-bold">Create New Project</CardTitle>
+                                <CardDescription className="text-muted-foreground">
+                                    Set up your project details and start managing your tasks
+                                </CardDescription>
+                            </div>
                         </div>
+                    </CardHeader>
 
-                        {/* Status */}
-                        <motion.div
-                            whileHover={{ x: 3 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        >
-                            <FormField
-                                control={form.control}
-                                name="status"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="text-base font-semibold">Project Status</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                            <FormControl>
-                                                <SelectTrigger className="shadow-sm focus:ring-2 focus:ring-primary/20">
-                                                    <SelectValue placeholder="Select project status" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent className="shadow-lg">
-                                                <SelectItem value="OPEN">Open</SelectItem>
-                                                <SelectItem value="ONGOING">Ongoing</SelectItem>
-                                                <SelectItem value="COMPLETED">Completed</SelectItem>
-                                                <SelectItem value="ARCHIVED">Archived</SelectItem>
-                                                <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </motion.div>
-
-                        {/* Public Toggle */}
-                        <motion.div
-                            whileHover={{ x: 3 }}
-                            whileTap={{ scale: 0.99 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        >
-                            <FormField
-                                control={form.control}
-                                name="isPublic"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 shadow-sm">
-                                        <div className="space-y-0.5">
-                                            <FormLabel className="text-base font-semibold">Public Project</FormLabel>
-                                            <FormDescription className="text-sm opacity-80">
-                                                Make this project visible to everyone
-                                            </FormDescription>
-                                        </div>
-                                        <FormControl>
-                                            <motion.div whileTap={{ scale: 0.9 }}>
-                                                <Switch
-                                                    checked={field.value}
-                                                    onCheckedChange={field.onChange}
-                                                    className="data-[state=checked]:bg-primary"
-                                                />
-                                            </motion.div>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </motion.div>
-
-                        {/* Error message */}
-                        <AnimatePresence>
-                            {form.formState.errors.root && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="p-3 rounded-md w-full bg-red-50 border border-red-200"
-                                >
-                                    <div className="flex items-center gap-2 text-red-600">
-                                        <AlertCircle className="h-4 w-4" />
-                                        <p className="text-sm font-medium">{form.formState.errors.root.message}</p>
+                    <CardContent className="p-6">
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                                {/* Basic Information Section */}
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <FileText className="h-5 w-5 text-primary" />
+                                        <h3 className="text-lg font-semibold">Basic Information</h3>
                                     </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
 
-                        {/* Submit Button */}
-                        <motion.div
-                            whileHover={{ scale: form.formState.isSubmitting ? 1 : 1.01 }}
-                            whileTap={{ scale: form.formState.isSubmitting ? 1 : 0.98 }}
-                        >
-                            <Button
-                                type="submit"
-                                className="w-full shadow-md"
-                                disabled={form.formState.isSubmitting || !form.formState.isValid}
-                            >
-                                {form.formState.isSubmitting ? (
-                                    <motion.div
-                                        className="flex items-center justify-center gap-2"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
+                                    {/* Project Name */}
+                                    <FormField
+                                        control={form.control}
+                                        name="name"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-sm font-medium flex items-center gap-2">
+                                                    Project Name
+                                                    <Badge variant="secondary" className="text-xs">Required</Badge>
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="e.g., Website Redesign, Mobile App Development"
+                                                        {...field}
+                                                        autoFocus
+                                                        className="h-11"
+                                                    />
+                                                </FormControl>
+                                                <FormDescription>
+                                                    Choose a descriptive name that clearly identifies your project
+                                                </FormDescription>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    {/* Description */}
+                                    <FormField
+                                        control={form.control}
+                                        name="description"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-sm font-medium">Description</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        placeholder="Describe your project goals, scope, and key objectives..."
+                                                        className="resize-none min-h-[120px]"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormDescription>
+                                                    Provide context about your project to help team members understand its purpose
+                                                </FormDescription>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <Separator />
+
+                                {/* Timeline Section */}
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <Clock className="h-5 w-5 text-primary" />
+                                        <h3 className="text-lg font-semibold">Project Timeline</h3>
+                                    </div>
+
+                                    <div className="grid gap-6 md:grid-cols-2">
+                                        {/* Start Date */}
+                                        <FormField
+                                            control={form.control}
+                                            name="startDate"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-col">
+                                                    <FormLabel className="text-sm font-medium flex items-center gap-2">
+                                                        Start Date
+                                                        <Badge variant="secondary" className="text-xs">Required</Badge>
+                                                    </FormLabel>
+                                                    <Popover>
+                                                        <PopoverTrigger asChild>
+                                                            <FormControl>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    className={cn(
+                                                                        "w-full pl-3 text-left font-normal h-11",
+                                                                        !field.value && "text-muted-foreground"
+                                                                    )}
+                                                                >
+                                                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                                                    {field.value ? (
+                                                                        format(field.value, 'PPP')
+                                                                    ) : (
+                                                                        <span>Select start date</span>
+                                                                    )}
+                                                                </Button>
+                                                            </FormControl>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent className="w-auto p-0" align="start">
+                                                            <Calendar
+                                                                mode="single"
+                                                                selected={field.value instanceof Date && isValid(field.value) ? field.value : new Date()}
+                                                                onSelect={(date) => {
+                                                                    if (date && isValid(date)) {
+                                                                        field.onChange(date)
+                                                                        const currentDueDate = form.watch('dueDate')
+                                                                        if (date && currentDueDate && isBefore(currentDueDate, date)) {
+                                                                            const newDueDate = new Date(date)
+                                                                            newDueDate.setDate(date.getDate() + 7)
+                                                                            form.setValue('dueDate', newDueDate)
+                                                                        }
+                                                                    } else {
+                                                                        field.onChange(new Date())
+                                                                    }
+                                                                }}
+                                                                disabled={(date) => !isStartDateValid(date)}
+                                                                initialFocus
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                    <FormDescription>
+                                                        When will you begin working on this project?
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        {/* Due Date */}
+                                        <FormField
+                                            control={form.control}
+                                            name="dueDate"
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-col">
+                                                    <FormLabel className="text-sm font-medium flex items-center gap-2">
+                                                        Due Date
+                                                        <Badge variant="secondary" className="text-xs">Required</Badge>
+                                                    </FormLabel>
+                                                    <Popover>
+                                                        <PopoverTrigger asChild>
+                                                            <FormControl>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    className={cn(
+                                                                        "w-full pl-3 text-left font-normal h-11",
+                                                                        !field.value && "text-muted-foreground"
+                                                                    )}
+                                                                >
+                                                                    <CalendarIcon className="mr-2 h-4 w-4" />
+                                                                    {field.value ? (
+                                                                        format(field.value, 'PPP')
+                                                                    ) : (
+                                                                        <span>Select due date</span>
+                                                                    )}
+                                                                </Button>
+                                                            </FormControl>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent className="w-auto p-0" align="start">
+                                                            <Calendar
+                                                                mode="single"
+                                                                selected={field.value instanceof Date && isValid(field.value) ? field.value : new Date()}
+                                                                onSelect={field.onChange}
+                                                                disabled={dueDateDisabled}
+                                                                initialFocus
+                                                                fromDate={startDate}
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                    <FormDescription>
+                                                        Target completion date (must be after start date)
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                </div>
+
+                                <Separator />
+
+                                {/* Settings Section */}
+                                <div className="space-y-6">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <Settings className="h-5 w-5 text-primary" />
+                                        <h3 className="text-lg font-semibold">Project Settings</h3>
+                                    </div>
+
+                                    <div className="grid gap-6 md:grid-cols-2">
+                                        {/* Status */}
+                                        <FormField
+                                            control={form.control}
+                                            name="status"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="text-sm font-medium">Initial Status</FormLabel>
+                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <FormControl>
+                                                            <SelectTrigger className="h-11">
+                                                                <SelectValue placeholder="Select project status" />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent>
+                                                            <SelectItem value="OPEN">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                                                                    Open
+                                                                </div>
+                                                            </SelectItem>
+                                                            <SelectItem value="ONGOING">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                                                                    Ongoing
+                                                                </div>
+                                                            </SelectItem>
+                                                            <SelectItem value="COMPLETED">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                                                                    Completed
+                                                                </div>
+                                                            </SelectItem>
+                                                            <SelectItem value="ARCHIVED">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-2 h-2 rounded-full bg-gray-500"></div>
+                                                                    Archived
+                                                                </div>
+                                                            </SelectItem>
+                                                            <SelectItem value="CANCELLED">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                                                                    Cancelled
+                                                                </div>
+                                                            </SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    <FormDescription>
+                                                        You can change this later in project settings
+                                                    </FormDescription>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        {/* Public Toggle */}
+                                        <FormField
+                                            control={form.control}
+                                            name="isPublic"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="text-sm font-medium">Visibility</FormLabel>
+                                                    <Card className={cn(
+                                                        "transition-colors duration-200",
+                                                        isPublic ? "border-primary/20 bg-primary/5" : "border-muted-foreground/20"
+                                                    )}>
+                                                        <CardContent className="p-4">
+                                                            <div className="flex items-center justify-between">
+                                                                <div className="flex items-center space-x-3">
+                                                                    {isPublic ? (
+                                                                        <Globe className="h-5 w-5 text-primary" />
+                                                                    ) : (
+                                                                        <Lock className="h-5 w-5 text-muted-foreground" />
+                                                                    )}
+                                                                    <div>
+                                                                        <p className="text-sm font-medium">
+                                                                            {isPublic ? 'Public Project' : 'Private Project'}
+                                                                        </p>
+                                                                        <p className="text-xs text-muted-foreground">
+                                                                            {isPublic
+                                                                                ? 'Visible to everyone in your organization'
+                                                                                : 'Only visible to project members'
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <FormControl>
+                                                                    <Switch
+                                                                        checked={field.value}
+                                                                        onCheckedChange={field.onChange}
+                                                                    />
+                                                                </FormControl>
+                                                            </div>
+                                                        </CardContent>
+                                                    </Card>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Error message */}
+                                <AnimatePresence>
+                                    {form.formState.errors.root && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="p-4 rounded-lg bg-destructive/10 border border-destructive/20"
+                                        >
+                                            <div className="flex items-center gap-2 text-destructive">
+                                                <AlertCircle className="h-4 w-4" />
+                                                <p className="text-sm font-medium">{form.formState.errors.root.message}</p>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
+                                {/* Submit Button */}
+                                <div className="flex items-center justify-end gap-4 pt-6 border-t">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => router.back()}
+                                        className="h-11 px-6"
                                     >
-                                        <Loader2 className="h-5 w-5 animate-spin text-white" />
-                                        <span>Creating...</span>
-                                    </motion.div>
-                                ) : (
-                                    <motion.div
-                                        className="flex items-center justify-center gap-2"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        className="h-11 px-6 min-w-[140px]"
+                                        disabled={form.formState.isSubmitting || !form.formState.isValid}
                                     >
-                                        <PlusIcon className="h-5 w-5" />
-                                        <span>Create Project</span>
-                                    </motion.div>
-                                )}
-                            </Button>
-                        </motion.div>
-                    </form>
-                </motion.div>
-            </Form>
+                                        {form.formState.isSubmitting ? (
+                                            <div className="flex items-center gap-2">
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                <span>Creating...</span>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2">
+                                                <PlusIcon className="h-4 w-4" />
+                                                <span>Create Project</span>
+                                            </div>
+                                        )}
+                                    </Button>
+                                </div>
+                            </form>
+                        </Form>
+                    </CardContent>
+                </Card>
+            </motion.div>
         </ErrorBoundary>
     )
 }

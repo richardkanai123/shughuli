@@ -2,7 +2,7 @@
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Edit2, Link as LinkIcon } from "lucide-react";
+import { Edit2, Link as LinkIcon, FolderOpen } from "lucide-react";
 import { getStatusColor } from "@/lib/ProjectColorByStatus";
 import { Project } from "@/lib/generated/prisma";
 import { motion } from "framer-motion";
@@ -16,78 +16,90 @@ import {
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import DeleteProjectbtn from "../../buttons/DeleteProjectbtn";
-// import ProjectVisibilityBtn from "../../buttons/ProjectVisibilityBtn";
 import CompleteProjectBtn from "../../buttons/CompleteProjectBtn";
 
 const ProjectHeader = ({ project }: { project: Project }) => {
-    const { name, slug, status, isPublic, id } = project;
+    const { name, slug, status, id } = project;
 
     const session = useSession();
     const user = session.data?.userId;
     const isOwner = user === project.ownerId;
 
     return (
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
-                className="space-y-1">
-                <CardTitle className="text-2xl">{name}</CardTitle>
-                <CardDescription className="flex items-center gap-2">
-                    <LinkIcon className="h-4 w-4" />
-                    {slug}
-                </CardDescription>
-            </motion.div>
-            <div className="flex items-center gap-2 flex-wrap">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: 0.2 }}>
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4"
+        >
+            {/* Project Info */}
+            <div className="space-y-3 flex-1">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
+                        <FolderOpen className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <CardTitle className="text-2xl font-bold truncate">
+                            {name}
+                        </CardTitle>
+                        <CardDescription className="flex items-center gap-2 mt-1">
+                            <LinkIcon className="h-3.5 w-3.5 flex-shrink-0" />
+                            <span className="text-xs font-medium text-muted-foreground truncate">
+                                {slug}
+                            </span>
+                        </CardDescription>
+                    </div>
+                </div>
+
+                {/* Status Badge */}
+                <div className="flex items-center gap-2">
                     <Badge
-                        variant="secondary"
-                        className={cn("text-sm py-1.5 px-3", getStatusColor(status))}>
-                        {status}
+                        variant="outline"
+                        className={cn(
+                            "text-xs font-medium px-2.5 py-1",
+                            getStatusColor(status)
+                        )}
+                    >
+                        {status.replace('_', ' ')}
                     </Badge>
-                </motion.div>
+                </div>
+            </div>
 
-                <TooltipProvider skipDelayDuration={100}>
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
+                <TooltipProvider delayDuration={300}>
                     {/* Complete Project Button */}
-                    {status !== "COMPLETED" &&
+                    {status !== "COMPLETED" && isOwner && (
                         <CompleteProjectBtn projectId={id} />
-                    }
+                    )}
 
-                    {/* Project Visibility Button */}
-                    {/* {isOwner && (
-                        <ProjectVisibilityBtn
-                            projectId={id}
-                            isPublic={isPublic}
-                        />
-                    )} */}
-
-                    {/* edit project */}
+                    {/* Edit Project Button */}
                     {isOwner && (
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                <Button variant="outline">
-                                    <Link
-                                        className="flex align-middle justify-center items-center gap-2"
-                                        href={`/dashboard/projects/${project.slug}/edit`}>
-                                        Edit <Edit2 className="h-4 w-4" />
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="h-9"
+                                    asChild
+                                >
+                                    <Link href={`/dashboard/projects/${project.slug}/edit`}>
+                                        <Edit2 className="h-4 w-4 mr-2" />
+                                        Edit
                                     </Link>
                                 </Button>
                             </TooltipTrigger>
-                            <TooltipContent>
+                            <TooltipContent side="bottom">
                                 <p>Edit project details</p>
                             </TooltipContent>
                         </Tooltip>
                     )}
 
-                    {/* delete Project Button */}
+                    {/* Delete Project Button */}
                     {isOwner && <DeleteProjectbtn projectid={project.id} />}
                 </TooltipProvider>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

@@ -10,6 +10,8 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,8 +21,12 @@ import { useRouter } from "next/navigation"
 import { BetterAuthError } from "better-auth"
 import { signInSchema, SignInSchemaType } from '@/lib/validation/schemas'
 import GoogleAuthBtn from '../Buttons/GoogleAuthBtn'
+import { Mail, Lock, Eye, EyeOff, LogIn, Loader2 } from "lucide-react";
+import { useState } from "react";
+
 const SignInForm = () => {
     const Router = useRouter()
+    const [showPassword, setShowPassword] = useState(false);
 
     const form = useForm<SignInSchemaType>({
         resolver: zodResolver(signInSchema),
@@ -66,129 +72,146 @@ const SignInForm = () => {
         }
     }
 
-
-
-
-
     return (
-        <div className='w-full max-w-screen-sm mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-xl overflow-hidden'>
-            <div className="p-6 bg-gradient-to-r from-blue-600 to-purple-600">
-                <h3 className="text-3xl font-bold text-white">Sign In</h3>
-                <p className="text-gray-100 mt-2">
-                    Sign in to Shughuli and start managing your projects efficiently
-                </p>
-            </div>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6 p-6">
-                    <div className="space-y-6">
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-base font-semibold">Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type='email'
-                                            placeholder="your@email.com"
-                                            {...field}
-                                            className="h-11 px-4 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </FormControl>
-                                    <FormDescription className="text-sm text-gray-500">
-                                        Your email address
-                                    </FormDescription>
-                                    <FormMessage className="text-red-500" />
-                                </FormItem>
+        <div className="w-full max-w-md mx-auto">
+            <Card className="shadow-lg">
+                <CardHeader className="space-y-1 text-center">
+                    <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-primary/10">
+                        <LogIn className="w-6 h-6 text-primary" />
+                    </div>
+                    <CardTitle className="text-2xl font-bold tracking-tight">
+                        Welcome back
+                    </CardTitle>
+                    <CardDescription>
+                        Sign in to Shughuli and start managing your projects efficiently
+                    </CardDescription>
+                </CardHeader>
+                
+                <CardContent className="space-y-6">
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email address</FormLabel>
+                                        <FormControl>
+                                            <div className="relative">
+                                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                                                <Input
+                                                    type='email'
+                                                    placeholder="your@email.com"
+                                                    {...field}
+                                                    className="pl-10 h-11"
+                                                    autoComplete="email"
+                                                />
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Password</FormLabel>
+                                        <FormControl>
+                                            <div className="relative">
+                                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                                                <Input
+                                                    type={showPassword ? "text" : "password"}
+                                                    placeholder="Enter your password"
+                                                    {...field}
+                                                    className="pl-10 pr-10 h-11"
+                                                    autoComplete="current-password"
+                                                />
+                                                <Button
+                                                    type="button"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                    tabIndex={-1}
+                                                >
+                                                    {showPassword ? (
+                                                        <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                                    ) : (
+                                                        <Eye className="h-4 w-4 text-muted-foreground" />
+                                                    )}
+                                                </Button>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Form error display */}
+                            {form.formState.errors.root && (
+                                <div className="rounded-md bg-destructive/15 p-3">
+                                    <FormMessage className="text-destructive font-medium">
+                                        {form.formState.errors.root.message}
+                                    </FormMessage>
+                                </div>
                             )}
-                        />
 
-                        <FormField
-                            control={form.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-base font-semibold">Password</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type='password'
-                                            placeholder="••••••••"
-                                            {...field}
-                                            className="h-11 px-4 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500"
-                                        />
-                                    </FormControl>
-                                    <FormDescription className="text-sm text-gray-500">
-                                        Your password
-                                    </FormDescription>
-                                    <FormMessage className="text-red-500" />
-                                </FormItem>
-                            )}
-                        />
+                            <Button
+                                disabled={form.formState.isSubmitting}
+                                type="submit"
+                                className="w-full h-11"
+                                size="lg"
+                            >
+                                {form.formState.isSubmitting ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Signing in...
+                                    </>
+                                ) : (
+                                    "Sign in"
+                                )}
+                            </Button>
+                        </form>
+                    </Form>
+
+                    {/* Navigation Links */}
+                    <div className="flex flex-col space-y-2 text-sm text-center">
+                        <div>
+                            <span className="text-muted-foreground">Don't have an account? </span>
+                            <Link href="/sign-up" className="text-primary hover:text-primary/80 underline-offset-4 hover:underline">
+                                Sign up
+                            </Link>
+                        </div>
+                        <div>
+                            <Link 
+                                href={`/reset-password?email=${form.getValues('email')}`} 
+                                className="text-primary hover:text-primary/80 underline-offset-4 hover:underline"
+                            >
+                                Forgot your password?
+                            </Link>
+                        </div>
                     </div>
 
-                    {/* form error */}
-
-                    {form.formState.errors.root && <FormMessage className="text-red-500 py-2">{form.formState.errors.root.message} </FormMessage>}
-
-
-                    <Button
-                        disabled={form.formState.isSubmitting}
-                        type="submit"
-                        className="w-full h-11 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-[1.02]"
-                    >
-                        {
-                            form.formState.isSubmitting ? (
-                                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                </svg>
-                            ) : (
-                                "Sign In"
-                            )
-                        }
-                    </Button>
-                </form>
-            </Form>
-
-
-
-            <div className="p-6 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-500">
-                    <p className="text-center">
-                        Don&apos;t have an account?
-                        <Link href="/sign-up" className="ml-2 text-blue-600 hover:underline">
-                            Sign Up
-                        </Link>
-                    </p>
-                    <span className="hidden sm:inline text-gray-300">|</span>
-                    <p className="text-center">
-                        Forgot your password?
-                        <Link href={`/reset-password?email=${form.getValues('email')}`} className="ml-2 text-blue-600 hover:underline">
-                            Reset Password
-                        </Link>
-                    </p>
-                </div>
-            </div>
-
-
-
-
-            <div className="px-6 pb-6">
-                <div className="relative my-4">
-                    <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
+                    {/* Separator */}
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <Separator className="w-full" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-background px-2 text-muted-foreground">
+                                Or continue with
+                            </span>
+                        </div>
                     </div>
-                    <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-white dark:bg-gray-800 text-gray-500">
-                            Or continue with
-                        </span>
-                    </div>
-                </div>
 
-                <GoogleAuthBtn />
-            </div>
-
+                    {/* Google Auth */}
+                    <GoogleAuthBtn />
+                </CardContent>
+            </Card>
         </div>
-
     )
 }
 
