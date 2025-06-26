@@ -58,6 +58,11 @@ export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
  * 
  */
 export type Activity = $Result.DefaultSelection<Prisma.$ActivityPayload>
+/**
+ * Model Attachments
+ * 
+ */
+export type Attachments = $Result.DefaultSelection<Prisma.$AttachmentsPayload>
 
 /**
  * Enums
@@ -358,6 +363,16 @@ export class PrismaClient<
     * ```
     */
   get activity(): Prisma.ActivityDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.attachments`: Exposes CRUD operations for the **Attachments** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Attachments
+    * const attachments = await prisma.attachments.findMany()
+    * ```
+    */
+  get attachments(): Prisma.AttachmentsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -416,8 +431,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.8.2
-   * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+   * Prisma Client JS version: 6.10.1
+   * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
    */
   export type PrismaVersion = {
     client: string
@@ -806,7 +821,8 @@ export namespace Prisma {
     Task: 'Task',
     Comment: 'Comment',
     Notification: 'Notification',
-    Activity: 'Activity'
+    Activity: 'Activity',
+    Attachments: 'Attachments'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -825,7 +841,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "project" | "task" | "comment" | "notification" | "activity"
+      modelProps: "user" | "session" | "account" | "verification" | "project" | "task" | "comment" | "notification" | "activity" | "attachments"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1495,6 +1511,80 @@ export namespace Prisma {
           }
         }
       }
+      Attachments: {
+        payload: Prisma.$AttachmentsPayload<ExtArgs>
+        fields: Prisma.AttachmentsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AttachmentsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AttachmentsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>
+          }
+          findFirst: {
+            args: Prisma.AttachmentsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AttachmentsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>
+          }
+          findMany: {
+            args: Prisma.AttachmentsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>[]
+          }
+          create: {
+            args: Prisma.AttachmentsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>
+          }
+          createMany: {
+            args: Prisma.AttachmentsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AttachmentsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>[]
+          }
+          delete: {
+            args: Prisma.AttachmentsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>
+          }
+          update: {
+            args: Prisma.AttachmentsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>
+          }
+          deleteMany: {
+            args: Prisma.AttachmentsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AttachmentsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AttachmentsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>[]
+          }
+          upsert: {
+            args: Prisma.AttachmentsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AttachmentsPayload>
+          }
+          aggregate: {
+            args: Prisma.AttachmentsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAttachments>
+          }
+          groupBy: {
+            args: Prisma.AttachmentsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AttachmentsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AttachmentsCountArgs<ExtArgs>
+            result: $Utils.Optional<AttachmentsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1588,6 +1678,7 @@ export namespace Prisma {
     comment?: CommentOmit
     notification?: NotificationOmit
     activity?: ActivityOmit
+    attachments?: AttachmentsOmit
   }
 
   /* Types for Logging */
@@ -1690,6 +1781,7 @@ export namespace Prisma {
     Activities: number
     accounts: number
     sessions: number
+    Attachments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1701,6 +1793,7 @@ export namespace Prisma {
     Activities?: boolean | UserCountOutputTypeCountActivitiesArgs
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+    Attachments?: boolean | UserCountOutputTypeCountAttachmentsArgs
   }
 
   // Custom InputTypes
@@ -1770,6 +1863,13 @@ export namespace Prisma {
     where?: SessionWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttachmentsWhereInput
+  }
+
 
   /**
    * Count Type ProjectCountOutputType
@@ -1778,11 +1878,13 @@ export namespace Prisma {
   export type ProjectCountOutputType = {
     tasks: number
     activities: number
+    Attachments: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tasks?: boolean | ProjectCountOutputTypeCountTasksArgs
     activities?: boolean | ProjectCountOutputTypeCountActivitiesArgs
+    Attachments?: boolean | ProjectCountOutputTypeCountAttachmentsArgs
   }
 
   // Custom InputTypes
@@ -1808,6 +1910,13 @@ export namespace Prisma {
    */
   export type ProjectCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ActivityWhereInput
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttachmentsWhereInput
   }
 
 
@@ -2099,6 +2208,7 @@ export namespace Prisma {
     Activities?: boolean | User$ActivitiesArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    Attachments?: boolean | User$AttachmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2148,6 +2258,7 @@ export namespace Prisma {
     Activities?: boolean | User$ActivitiesArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    Attachments?: boolean | User$AttachmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2164,6 +2275,7 @@ export namespace Prisma {
       Activities: Prisma.$ActivityPayload<ExtArgs>[]
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
+      Attachments: Prisma.$AttachmentsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2577,6 +2689,7 @@ export namespace Prisma {
     Activities<T extends User$ActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, User$ActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Attachments<T extends User$AttachmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$AttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3192,6 +3305,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.Attachments
+   */
+  export type User$AttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    where?: AttachmentsWhereInput
+    orderBy?: AttachmentsOrderByWithRelationInput | AttachmentsOrderByWithRelationInput[]
+    cursor?: AttachmentsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AttachmentsScalarFieldEnum | AttachmentsScalarFieldEnum[]
   }
 
   /**
@@ -6544,7 +6681,6 @@ export namespace Prisma {
     startDate: number
     endDate: number
     dueDate: number
-    attachments: number
     ownerId: number
     progress: number
     _all: number
@@ -6603,7 +6739,6 @@ export namespace Prisma {
     startDate?: true
     endDate?: true
     dueDate?: true
-    attachments?: true
     ownerId?: true
     progress?: true
     _all?: true
@@ -6707,7 +6842,6 @@ export namespace Prisma {
     startDate: Date | null
     endDate: Date | null
     dueDate: Date
-    attachments: string[]
     ownerId: string
     progress: number
     _count: ProjectCountAggregateOutputType | null
@@ -6743,12 +6877,12 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     dueDate?: boolean
-    attachments?: boolean
     ownerId?: boolean
     progress?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
     tasks?: boolean | Project$tasksArgs<ExtArgs>
     activities?: boolean | Project$activitiesArgs<ExtArgs>
+    Attachments?: boolean | Project$AttachmentsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -6764,7 +6898,6 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     dueDate?: boolean
-    attachments?: boolean
     ownerId?: boolean
     progress?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
@@ -6782,7 +6915,6 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     dueDate?: boolean
-    attachments?: boolean
     ownerId?: boolean
     progress?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
@@ -6800,16 +6932,16 @@ export namespace Prisma {
     startDate?: boolean
     endDate?: boolean
     dueDate?: boolean
-    attachments?: boolean
     ownerId?: boolean
     progress?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "slug" | "isPublic" | "status" | "startDate" | "endDate" | "dueDate" | "attachments" | "ownerId" | "progress", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "name" | "description" | "slug" | "isPublic" | "status" | "startDate" | "endDate" | "dueDate" | "ownerId" | "progress", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     tasks?: boolean | Project$tasksArgs<ExtArgs>
     activities?: boolean | Project$activitiesArgs<ExtArgs>
+    Attachments?: boolean | Project$AttachmentsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6825,6 +6957,7 @@ export namespace Prisma {
       owner: Prisma.$UserPayload<ExtArgs>
       tasks: Prisma.$TaskPayload<ExtArgs>[]
       activities: Prisma.$ActivityPayload<ExtArgs>[]
+      Attachments: Prisma.$AttachmentsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6838,7 +6971,6 @@ export namespace Prisma {
       startDate: Date | null
       endDate: Date | null
       dueDate: Date
-      attachments: string[]
       ownerId: string
       progress: number
     }, ExtArgs["result"]["project"]>
@@ -7238,6 +7370,7 @@ export namespace Prisma {
     owner<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     tasks<T extends Project$tasksArgs<ExtArgs> = {}>(args?: Subset<T, Project$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     activities<T extends Project$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, Project$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Attachments<T extends Project$AttachmentsArgs<ExtArgs> = {}>(args?: Subset<T, Project$AttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7278,7 +7411,6 @@ export namespace Prisma {
     readonly startDate: FieldRef<"Project", 'DateTime'>
     readonly endDate: FieldRef<"Project", 'DateTime'>
     readonly dueDate: FieldRef<"Project", 'DateTime'>
-    readonly attachments: FieldRef<"Project", 'String[]'>
     readonly ownerId: FieldRef<"Project", 'String'>
     readonly progress: FieldRef<"Project", 'Int'>
   }
@@ -7722,6 +7854,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ActivityScalarFieldEnum | ActivityScalarFieldEnum[]
+  }
+
+  /**
+   * Project.Attachments
+   */
+  export type Project$AttachmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    where?: AttachmentsWhereInput
+    orderBy?: AttachmentsOrderByWithRelationInput | AttachmentsOrderByWithRelationInput[]
+    cursor?: AttachmentsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AttachmentsScalarFieldEnum | AttachmentsScalarFieldEnum[]
   }
 
   /**
@@ -12507,6 +12663,1111 @@ export namespace Prisma {
 
 
   /**
+   * Model Attachments
+   */
+
+  export type AggregateAttachments = {
+    _count: AttachmentsCountAggregateOutputType | null
+    _min: AttachmentsMinAggregateOutputType | null
+    _max: AttachmentsMaxAggregateOutputType | null
+  }
+
+  export type AttachmentsMinAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    url: string | null
+    projectId: string | null
+    userId: string | null
+    fileName: string | null
+    fileType: string | null
+  }
+
+  export type AttachmentsMaxAggregateOutputType = {
+    id: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    url: string | null
+    projectId: string | null
+    userId: string | null
+    fileName: string | null
+    fileType: string | null
+  }
+
+  export type AttachmentsCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    updatedAt: number
+    url: number
+    projectId: number
+    userId: number
+    fileName: number
+    fileType: number
+    _all: number
+  }
+
+
+  export type AttachmentsMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    url?: true
+    projectId?: true
+    userId?: true
+    fileName?: true
+    fileType?: true
+  }
+
+  export type AttachmentsMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    url?: true
+    projectId?: true
+    userId?: true
+    fileName?: true
+    fileType?: true
+  }
+
+  export type AttachmentsCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    url?: true
+    projectId?: true
+    userId?: true
+    fileName?: true
+    fileType?: true
+    _all?: true
+  }
+
+  export type AttachmentsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Attachments to aggregate.
+     */
+    where?: AttachmentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Attachments to fetch.
+     */
+    orderBy?: AttachmentsOrderByWithRelationInput | AttachmentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AttachmentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Attachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Attachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Attachments
+    **/
+    _count?: true | AttachmentsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AttachmentsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AttachmentsMaxAggregateInputType
+  }
+
+  export type GetAttachmentsAggregateType<T extends AttachmentsAggregateArgs> = {
+        [P in keyof T & keyof AggregateAttachments]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAttachments[P]>
+      : GetScalarType<T[P], AggregateAttachments[P]>
+  }
+
+
+
+
+  export type AttachmentsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AttachmentsWhereInput
+    orderBy?: AttachmentsOrderByWithAggregationInput | AttachmentsOrderByWithAggregationInput[]
+    by: AttachmentsScalarFieldEnum[] | AttachmentsScalarFieldEnum
+    having?: AttachmentsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AttachmentsCountAggregateInputType | true
+    _min?: AttachmentsMinAggregateInputType
+    _max?: AttachmentsMaxAggregateInputType
+  }
+
+  export type AttachmentsGroupByOutputType = {
+    id: string
+    createdAt: Date
+    updatedAt: Date
+    url: string
+    projectId: string
+    userId: string
+    fileName: string
+    fileType: string
+    _count: AttachmentsCountAggregateOutputType | null
+    _min: AttachmentsMinAggregateOutputType | null
+    _max: AttachmentsMaxAggregateOutputType | null
+  }
+
+  type GetAttachmentsGroupByPayload<T extends AttachmentsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AttachmentsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AttachmentsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AttachmentsGroupByOutputType[P]>
+            : GetScalarType<T[P], AttachmentsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AttachmentsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    url?: boolean
+    projectId?: boolean
+    userId?: boolean
+    fileName?: boolean
+    fileType?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attachments"]>
+
+  export type AttachmentsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    url?: boolean
+    projectId?: boolean
+    userId?: boolean
+    fileName?: boolean
+    fileType?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attachments"]>
+
+  export type AttachmentsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    url?: boolean
+    projectId?: boolean
+    userId?: boolean
+    fileName?: boolean
+    fileType?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["attachments"]>
+
+  export type AttachmentsSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    url?: boolean
+    projectId?: boolean
+    userId?: boolean
+    fileName?: boolean
+    fileType?: boolean
+  }
+
+  export type AttachmentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "url" | "projectId" | "userId" | "fileName" | "fileType", ExtArgs["result"]["attachments"]>
+  export type AttachmentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AttachmentsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AttachmentsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AttachmentsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Attachments"
+    objects: {
+      project: Prisma.$ProjectPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      createdAt: Date
+      updatedAt: Date
+      url: string
+      projectId: string
+      userId: string
+      fileName: string
+      fileType: string
+    }, ExtArgs["result"]["attachments"]>
+    composites: {}
+  }
+
+  type AttachmentsGetPayload<S extends boolean | null | undefined | AttachmentsDefaultArgs> = $Result.GetResult<Prisma.$AttachmentsPayload, S>
+
+  type AttachmentsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AttachmentsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AttachmentsCountAggregateInputType | true
+    }
+
+  export interface AttachmentsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Attachments'], meta: { name: 'Attachments' } }
+    /**
+     * Find zero or one Attachments that matches the filter.
+     * @param {AttachmentsFindUniqueArgs} args - Arguments to find a Attachments
+     * @example
+     * // Get one Attachments
+     * const attachments = await prisma.attachments.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AttachmentsFindUniqueArgs>(args: SelectSubset<T, AttachmentsFindUniqueArgs<ExtArgs>>): Prisma__AttachmentsClient<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Attachments that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AttachmentsFindUniqueOrThrowArgs} args - Arguments to find a Attachments
+     * @example
+     * // Get one Attachments
+     * const attachments = await prisma.attachments.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AttachmentsFindUniqueOrThrowArgs>(args: SelectSubset<T, AttachmentsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AttachmentsClient<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Attachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentsFindFirstArgs} args - Arguments to find a Attachments
+     * @example
+     * // Get one Attachments
+     * const attachments = await prisma.attachments.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AttachmentsFindFirstArgs>(args?: SelectSubset<T, AttachmentsFindFirstArgs<ExtArgs>>): Prisma__AttachmentsClient<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Attachments that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentsFindFirstOrThrowArgs} args - Arguments to find a Attachments
+     * @example
+     * // Get one Attachments
+     * const attachments = await prisma.attachments.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AttachmentsFindFirstOrThrowArgs>(args?: SelectSubset<T, AttachmentsFindFirstOrThrowArgs<ExtArgs>>): Prisma__AttachmentsClient<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Attachments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Attachments
+     * const attachments = await prisma.attachments.findMany()
+     * 
+     * // Get first 10 Attachments
+     * const attachments = await prisma.attachments.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const attachmentsWithIdOnly = await prisma.attachments.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AttachmentsFindManyArgs>(args?: SelectSubset<T, AttachmentsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Attachments.
+     * @param {AttachmentsCreateArgs} args - Arguments to create a Attachments.
+     * @example
+     * // Create one Attachments
+     * const Attachments = await prisma.attachments.create({
+     *   data: {
+     *     // ... data to create a Attachments
+     *   }
+     * })
+     * 
+     */
+    create<T extends AttachmentsCreateArgs>(args: SelectSubset<T, AttachmentsCreateArgs<ExtArgs>>): Prisma__AttachmentsClient<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Attachments.
+     * @param {AttachmentsCreateManyArgs} args - Arguments to create many Attachments.
+     * @example
+     * // Create many Attachments
+     * const attachments = await prisma.attachments.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AttachmentsCreateManyArgs>(args?: SelectSubset<T, AttachmentsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Attachments and returns the data saved in the database.
+     * @param {AttachmentsCreateManyAndReturnArgs} args - Arguments to create many Attachments.
+     * @example
+     * // Create many Attachments
+     * const attachments = await prisma.attachments.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Attachments and only return the `id`
+     * const attachmentsWithIdOnly = await prisma.attachments.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AttachmentsCreateManyAndReturnArgs>(args?: SelectSubset<T, AttachmentsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Attachments.
+     * @param {AttachmentsDeleteArgs} args - Arguments to delete one Attachments.
+     * @example
+     * // Delete one Attachments
+     * const Attachments = await prisma.attachments.delete({
+     *   where: {
+     *     // ... filter to delete one Attachments
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AttachmentsDeleteArgs>(args: SelectSubset<T, AttachmentsDeleteArgs<ExtArgs>>): Prisma__AttachmentsClient<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Attachments.
+     * @param {AttachmentsUpdateArgs} args - Arguments to update one Attachments.
+     * @example
+     * // Update one Attachments
+     * const attachments = await prisma.attachments.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AttachmentsUpdateArgs>(args: SelectSubset<T, AttachmentsUpdateArgs<ExtArgs>>): Prisma__AttachmentsClient<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Attachments.
+     * @param {AttachmentsDeleteManyArgs} args - Arguments to filter Attachments to delete.
+     * @example
+     * // Delete a few Attachments
+     * const { count } = await prisma.attachments.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AttachmentsDeleteManyArgs>(args?: SelectSubset<T, AttachmentsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Attachments
+     * const attachments = await prisma.attachments.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AttachmentsUpdateManyArgs>(args: SelectSubset<T, AttachmentsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Attachments and returns the data updated in the database.
+     * @param {AttachmentsUpdateManyAndReturnArgs} args - Arguments to update many Attachments.
+     * @example
+     * // Update many Attachments
+     * const attachments = await prisma.attachments.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Attachments and only return the `id`
+     * const attachmentsWithIdOnly = await prisma.attachments.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AttachmentsUpdateManyAndReturnArgs>(args: SelectSubset<T, AttachmentsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Attachments.
+     * @param {AttachmentsUpsertArgs} args - Arguments to update or create a Attachments.
+     * @example
+     * // Update or create a Attachments
+     * const attachments = await prisma.attachments.upsert({
+     *   create: {
+     *     // ... data to create a Attachments
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Attachments we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AttachmentsUpsertArgs>(args: SelectSubset<T, AttachmentsUpsertArgs<ExtArgs>>): Prisma__AttachmentsClient<$Result.GetResult<Prisma.$AttachmentsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentsCountArgs} args - Arguments to filter Attachments to count.
+     * @example
+     * // Count the number of Attachments
+     * const count = await prisma.attachments.count({
+     *   where: {
+     *     // ... the filter for the Attachments we want to count
+     *   }
+     * })
+    **/
+    count<T extends AttachmentsCountArgs>(
+      args?: Subset<T, AttachmentsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AttachmentsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AttachmentsAggregateArgs>(args: Subset<T, AttachmentsAggregateArgs>): Prisma.PrismaPromise<GetAttachmentsAggregateType<T>>
+
+    /**
+     * Group by Attachments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AttachmentsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AttachmentsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AttachmentsGroupByArgs['orderBy'] }
+        : { orderBy?: AttachmentsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AttachmentsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAttachmentsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Attachments model
+   */
+  readonly fields: AttachmentsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Attachments.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AttachmentsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Attachments model
+   */
+  interface AttachmentsFieldRefs {
+    readonly id: FieldRef<"Attachments", 'String'>
+    readonly createdAt: FieldRef<"Attachments", 'DateTime'>
+    readonly updatedAt: FieldRef<"Attachments", 'DateTime'>
+    readonly url: FieldRef<"Attachments", 'String'>
+    readonly projectId: FieldRef<"Attachments", 'String'>
+    readonly userId: FieldRef<"Attachments", 'String'>
+    readonly fileName: FieldRef<"Attachments", 'String'>
+    readonly fileType: FieldRef<"Attachments", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Attachments findUnique
+   */
+  export type AttachmentsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachments to fetch.
+     */
+    where: AttachmentsWhereUniqueInput
+  }
+
+  /**
+   * Attachments findUniqueOrThrow
+   */
+  export type AttachmentsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachments to fetch.
+     */
+    where: AttachmentsWhereUniqueInput
+  }
+
+  /**
+   * Attachments findFirst
+   */
+  export type AttachmentsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachments to fetch.
+     */
+    where?: AttachmentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Attachments to fetch.
+     */
+    orderBy?: AttachmentsOrderByWithRelationInput | AttachmentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Attachments.
+     */
+    cursor?: AttachmentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Attachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Attachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Attachments.
+     */
+    distinct?: AttachmentsScalarFieldEnum | AttachmentsScalarFieldEnum[]
+  }
+
+  /**
+   * Attachments findFirstOrThrow
+   */
+  export type AttachmentsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachments to fetch.
+     */
+    where?: AttachmentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Attachments to fetch.
+     */
+    orderBy?: AttachmentsOrderByWithRelationInput | AttachmentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Attachments.
+     */
+    cursor?: AttachmentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Attachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Attachments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Attachments.
+     */
+    distinct?: AttachmentsScalarFieldEnum | AttachmentsScalarFieldEnum[]
+  }
+
+  /**
+   * Attachments findMany
+   */
+  export type AttachmentsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * Filter, which Attachments to fetch.
+     */
+    where?: AttachmentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Attachments to fetch.
+     */
+    orderBy?: AttachmentsOrderByWithRelationInput | AttachmentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Attachments.
+     */
+    cursor?: AttachmentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Attachments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Attachments.
+     */
+    skip?: number
+    distinct?: AttachmentsScalarFieldEnum | AttachmentsScalarFieldEnum[]
+  }
+
+  /**
+   * Attachments create
+   */
+  export type AttachmentsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Attachments.
+     */
+    data: XOR<AttachmentsCreateInput, AttachmentsUncheckedCreateInput>
+  }
+
+  /**
+   * Attachments createMany
+   */
+  export type AttachmentsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Attachments.
+     */
+    data: AttachmentsCreateManyInput | AttachmentsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Attachments createManyAndReturn
+   */
+  export type AttachmentsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * The data used to create many Attachments.
+     */
+    data: AttachmentsCreateManyInput | AttachmentsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Attachments update
+   */
+  export type AttachmentsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Attachments.
+     */
+    data: XOR<AttachmentsUpdateInput, AttachmentsUncheckedUpdateInput>
+    /**
+     * Choose, which Attachments to update.
+     */
+    where: AttachmentsWhereUniqueInput
+  }
+
+  /**
+   * Attachments updateMany
+   */
+  export type AttachmentsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Attachments.
+     */
+    data: XOR<AttachmentsUpdateManyMutationInput, AttachmentsUncheckedUpdateManyInput>
+    /**
+     * Filter which Attachments to update
+     */
+    where?: AttachmentsWhereInput
+    /**
+     * Limit how many Attachments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Attachments updateManyAndReturn
+   */
+  export type AttachmentsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * The data used to update Attachments.
+     */
+    data: XOR<AttachmentsUpdateManyMutationInput, AttachmentsUncheckedUpdateManyInput>
+    /**
+     * Filter which Attachments to update
+     */
+    where?: AttachmentsWhereInput
+    /**
+     * Limit how many Attachments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Attachments upsert
+   */
+  export type AttachmentsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Attachments to update in case it exists.
+     */
+    where: AttachmentsWhereUniqueInput
+    /**
+     * In case the Attachments found by the `where` argument doesn't exist, create a new Attachments with this data.
+     */
+    create: XOR<AttachmentsCreateInput, AttachmentsUncheckedCreateInput>
+    /**
+     * In case the Attachments was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AttachmentsUpdateInput, AttachmentsUncheckedUpdateInput>
+  }
+
+  /**
+   * Attachments delete
+   */
+  export type AttachmentsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+    /**
+     * Filter which Attachments to delete.
+     */
+    where: AttachmentsWhereUniqueInput
+  }
+
+  /**
+   * Attachments deleteMany
+   */
+  export type AttachmentsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Attachments to delete
+     */
+    where?: AttachmentsWhereInput
+    /**
+     * Limit how many Attachments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Attachments without action
+   */
+  export type AttachmentsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Attachments
+     */
+    select?: AttachmentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Attachments
+     */
+    omit?: AttachmentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AttachmentsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12592,7 +13853,6 @@ export namespace Prisma {
     startDate: 'startDate',
     endDate: 'endDate',
     dueDate: 'dueDate',
-    attachments: 'attachments',
     ownerId: 'ownerId',
     progress: 'progress'
   };
@@ -12660,6 +13920,20 @@ export namespace Prisma {
   };
 
   export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
+
+
+  export const AttachmentsScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    url: 'url',
+    projectId: 'projectId',
+    userId: 'userId',
+    fileName: 'fileName',
+    fileType: 'fileType'
+  };
+
+  export type AttachmentsScalarFieldEnum = (typeof AttachmentsScalarFieldEnum)[keyof typeof AttachmentsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -12848,6 +14122,7 @@ export namespace Prisma {
     Activities?: ActivityListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
+    Attachments?: AttachmentsListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -12868,6 +14143,7 @@ export namespace Prisma {
     Activities?: ActivityOrderByRelationAggregateInput
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
+    Attachments?: AttachmentsOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -12891,6 +14167,7 @@ export namespace Prisma {
     Activities?: ActivityListRelationFilter
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
+    Attachments?: AttachmentsListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -13160,12 +14437,12 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     dueDate?: DateTimeFilter<"Project"> | Date | string
-    attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
     progress?: IntFilter<"Project"> | number
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     tasks?: TaskListRelationFilter
     activities?: ActivityListRelationFilter
+    Attachments?: AttachmentsListRelationFilter
   }
 
   export type ProjectOrderByWithRelationInput = {
@@ -13180,12 +14457,12 @@ export namespace Prisma {
     startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
     dueDate?: SortOrder
-    attachments?: SortOrder
     ownerId?: SortOrder
     progress?: SortOrder
     owner?: UserOrderByWithRelationInput
     tasks?: TaskOrderByRelationAggregateInput
     activities?: ActivityOrderByRelationAggregateInput
+    Attachments?: AttachmentsOrderByRelationAggregateInput
   }
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -13203,12 +14480,12 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     dueDate?: DateTimeFilter<"Project"> | Date | string
-    attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
     progress?: IntFilter<"Project"> | number
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     tasks?: TaskListRelationFilter
     activities?: ActivityListRelationFilter
+    Attachments?: AttachmentsListRelationFilter
   }, "id" | "slug">
 
   export type ProjectOrderByWithAggregationInput = {
@@ -13223,7 +14500,6 @@ export namespace Prisma {
     startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
     dueDate?: SortOrder
-    attachments?: SortOrder
     ownerId?: SortOrder
     progress?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
@@ -13248,7 +14524,6 @@ export namespace Prisma {
     startDate?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
     endDate?: DateTimeNullableWithAggregatesFilter<"Project"> | Date | string | null
     dueDate?: DateTimeWithAggregatesFilter<"Project"> | Date | string
-    attachments?: StringNullableListFilter<"Project">
     ownerId?: StringWithAggregatesFilter<"Project"> | string
     progress?: IntWithAggregatesFilter<"Project"> | number
   }
@@ -13598,6 +14873,79 @@ export namespace Prisma {
     link?: StringWithAggregatesFilter<"Activity"> | string
   }
 
+  export type AttachmentsWhereInput = {
+    AND?: AttachmentsWhereInput | AttachmentsWhereInput[]
+    OR?: AttachmentsWhereInput[]
+    NOT?: AttachmentsWhereInput | AttachmentsWhereInput[]
+    id?: StringFilter<"Attachments"> | string
+    createdAt?: DateTimeFilter<"Attachments"> | Date | string
+    updatedAt?: DateTimeFilter<"Attachments"> | Date | string
+    url?: StringFilter<"Attachments"> | string
+    projectId?: StringFilter<"Attachments"> | string
+    userId?: StringFilter<"Attachments"> | string
+    fileName?: StringFilter<"Attachments"> | string
+    fileType?: StringFilter<"Attachments"> | string
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AttachmentsOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+    project?: ProjectOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AttachmentsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AttachmentsWhereInput | AttachmentsWhereInput[]
+    OR?: AttachmentsWhereInput[]
+    NOT?: AttachmentsWhereInput | AttachmentsWhereInput[]
+    createdAt?: DateTimeFilter<"Attachments"> | Date | string
+    updatedAt?: DateTimeFilter<"Attachments"> | Date | string
+    url?: StringFilter<"Attachments"> | string
+    projectId?: StringFilter<"Attachments"> | string
+    userId?: StringFilter<"Attachments"> | string
+    fileName?: StringFilter<"Attachments"> | string
+    fileType?: StringFilter<"Attachments"> | string
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type AttachmentsOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+    _count?: AttachmentsCountOrderByAggregateInput
+    _max?: AttachmentsMaxOrderByAggregateInput
+    _min?: AttachmentsMinOrderByAggregateInput
+  }
+
+  export type AttachmentsScalarWhereWithAggregatesInput = {
+    AND?: AttachmentsScalarWhereWithAggregatesInput | AttachmentsScalarWhereWithAggregatesInput[]
+    OR?: AttachmentsScalarWhereWithAggregatesInput[]
+    NOT?: AttachmentsScalarWhereWithAggregatesInput | AttachmentsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Attachments"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Attachments"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Attachments"> | Date | string
+    url?: StringWithAggregatesFilter<"Attachments"> | string
+    projectId?: StringWithAggregatesFilter<"Attachments"> | string
+    userId?: StringWithAggregatesFilter<"Attachments"> | string
+    fileName?: StringWithAggregatesFilter<"Attachments"> | string
+    fileType?: StringWithAggregatesFilter<"Attachments"> | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -13616,6 +14964,7 @@ export namespace Prisma {
     Activities?: ActivityCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13636,6 +14985,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -13656,6 +15006,7 @@ export namespace Prisma {
     Activities?: ActivityUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13676,6 +15027,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -13976,11 +15328,11 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     progress?: number
     owner: UserCreateNestedOneWithoutProjectsInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
     activities?: ActivityCreateNestedManyWithoutProjectInput
+    Attachments?: AttachmentsCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateInput = {
@@ -13995,11 +15347,11 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
     progress?: number
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     activities?: ActivityUncheckedCreateNestedManyWithoutProjectInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUpdateInput = {
@@ -14014,11 +15366,11 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     progress?: IntFieldUpdateOperationsInput | number
     owner?: UserUpdateOneRequiredWithoutProjectsNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     activities?: ActivityUpdateManyWithoutProjectNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
@@ -14033,11 +15385,11 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
     progress?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     activities?: ActivityUncheckedUpdateManyWithoutProjectNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateManyInput = {
@@ -14052,7 +15404,6 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
     progress?: number
   }
@@ -14069,7 +15420,6 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     progress?: IntFieldUpdateOperationsInput | number
   }
 
@@ -14085,7 +15435,6 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
     progress?: IntFieldUpdateOperationsInput | number
   }
@@ -14445,6 +15794,81 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
   }
 
+  export type AttachmentsCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    fileName: string
+    fileType: string
+    project: ProjectCreateNestedOneWithoutAttachmentsInput
+    user: UserCreateNestedOneWithoutAttachmentsInput
+  }
+
+  export type AttachmentsUncheckedCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    projectId: string
+    userId: string
+    fileName: string
+    fileType: string
+  }
+
+  export type AttachmentsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    project?: ProjectUpdateOneRequiredWithoutAttachmentsNestedInput
+    user?: UserUpdateOneRequiredWithoutAttachmentsNestedInput
+  }
+
+  export type AttachmentsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AttachmentsCreateManyInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    projectId: string
+    userId: string
+    fileName: string
+    fileType: string
+  }
+
+  export type AttachmentsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AttachmentsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -14540,6 +15964,12 @@ export namespace Prisma {
     none?: SessionWhereInput
   }
 
+  export type AttachmentsListRelationFilter = {
+    every?: AttachmentsWhereInput
+    some?: AttachmentsWhereInput
+    none?: AttachmentsWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14570,6 +16000,10 @@ export namespace Prisma {
   }
 
   export type SessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AttachmentsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14822,14 +16256,6 @@ export namespace Prisma {
     not?: NestedEnumProjectStatusFilter<$PrismaModel> | $Enums.ProjectStatus
   }
 
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -14853,7 +16279,6 @@ export namespace Prisma {
     startDate?: SortOrder
     endDate?: SortOrder
     dueDate?: SortOrder
-    attachments?: SortOrder
     ownerId?: SortOrder
     progress?: SortOrder
   }
@@ -14936,6 +16361,14 @@ export namespace Prisma {
     in?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
     notIn?: $Enums.TaskPriority[] | ListEnumTaskPriorityFieldRefInput<$PrismaModel>
     not?: NestedEnumTaskPriorityFilter<$PrismaModel> | $Enums.TaskPriority
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
   }
 
   export type ProjectScalarRelationFilter = {
@@ -15161,6 +16594,39 @@ export namespace Prisma {
     _max?: NestedEnumActivityTypeFilter<$PrismaModel>
   }
 
+  export type AttachmentsCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+  }
+
+  export type AttachmentsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+  }
+
+  export type AttachmentsMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    url?: SortOrder
+    projectId?: SortOrder
+    userId?: SortOrder
+    fileName?: SortOrder
+    fileType?: SortOrder
+  }
+
   export type ProjectCreateNestedManyWithoutOwnerInput = {
     create?: XOR<ProjectCreateWithoutOwnerInput, ProjectUncheckedCreateWithoutOwnerInput> | ProjectCreateWithoutOwnerInput[] | ProjectUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutOwnerInput | ProjectCreateOrConnectWithoutOwnerInput[]
@@ -15217,6 +16683,13 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
+  export type AttachmentsCreateNestedManyWithoutUserInput = {
+    create?: XOR<AttachmentsCreateWithoutUserInput, AttachmentsUncheckedCreateWithoutUserInput> | AttachmentsCreateWithoutUserInput[] | AttachmentsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AttachmentsCreateOrConnectWithoutUserInput | AttachmentsCreateOrConnectWithoutUserInput[]
+    createMany?: AttachmentsCreateManyUserInputEnvelope
+    connect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutOwnerInput = {
     create?: XOR<ProjectCreateWithoutOwnerInput, ProjectUncheckedCreateWithoutOwnerInput> | ProjectCreateWithoutOwnerInput[] | ProjectUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutOwnerInput | ProjectCreateOrConnectWithoutOwnerInput[]
@@ -15271,6 +16744,13 @@ export namespace Prisma {
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
     createMany?: SessionCreateManyUserInputEnvelope
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
+  export type AttachmentsUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AttachmentsCreateWithoutUserInput, AttachmentsUncheckedCreateWithoutUserInput> | AttachmentsCreateWithoutUserInput[] | AttachmentsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AttachmentsCreateOrConnectWithoutUserInput | AttachmentsCreateOrConnectWithoutUserInput[]
+    createMany?: AttachmentsCreateManyUserInputEnvelope
+    connect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -15405,6 +16885,20 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
+  export type AttachmentsUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AttachmentsCreateWithoutUserInput, AttachmentsUncheckedCreateWithoutUserInput> | AttachmentsCreateWithoutUserInput[] | AttachmentsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AttachmentsCreateOrConnectWithoutUserInput | AttachmentsCreateOrConnectWithoutUserInput[]
+    upsert?: AttachmentsUpsertWithWhereUniqueWithoutUserInput | AttachmentsUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AttachmentsCreateManyUserInputEnvelope
+    set?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    disconnect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    delete?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    connect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    update?: AttachmentsUpdateWithWhereUniqueWithoutUserInput | AttachmentsUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AttachmentsUpdateManyWithWhereWithoutUserInput | AttachmentsUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AttachmentsScalarWhereInput | AttachmentsScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutOwnerNestedInput = {
     create?: XOR<ProjectCreateWithoutOwnerInput, ProjectUncheckedCreateWithoutOwnerInput> | ProjectCreateWithoutOwnerInput[] | ProjectUncheckedCreateWithoutOwnerInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutOwnerInput | ProjectCreateOrConnectWithoutOwnerInput[]
@@ -15517,6 +17011,20 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
+  export type AttachmentsUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AttachmentsCreateWithoutUserInput, AttachmentsUncheckedCreateWithoutUserInput> | AttachmentsCreateWithoutUserInput[] | AttachmentsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AttachmentsCreateOrConnectWithoutUserInput | AttachmentsCreateOrConnectWithoutUserInput[]
+    upsert?: AttachmentsUpsertWithWhereUniqueWithoutUserInput | AttachmentsUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AttachmentsCreateManyUserInputEnvelope
+    set?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    disconnect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    delete?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    connect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    update?: AttachmentsUpdateWithWhereUniqueWithoutUserInput | AttachmentsUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AttachmentsUpdateManyWithWhereWithoutUserInput | AttachmentsUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AttachmentsScalarWhereInput | AttachmentsScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutSessionsInput = {
     create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
     connectOrCreate?: UserCreateOrConnectWithoutSessionsInput
@@ -15549,10 +17057,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountsInput, UserUpdateWithoutAccountsInput>, UserUncheckedUpdateWithoutAccountsInput>
   }
 
-  export type ProjectCreateattachmentsInput = {
-    set: string[]
-  }
-
   export type UserCreateNestedOneWithoutProjectsInput = {
     create?: XOR<UserCreateWithoutProjectsInput, UserUncheckedCreateWithoutProjectsInput>
     connectOrCreate?: UserCreateOrConnectWithoutProjectsInput
@@ -15573,6 +17077,13 @@ export namespace Prisma {
     connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
   }
 
+  export type AttachmentsCreateNestedManyWithoutProjectInput = {
+    create?: XOR<AttachmentsCreateWithoutProjectInput, AttachmentsUncheckedCreateWithoutProjectInput> | AttachmentsCreateWithoutProjectInput[] | AttachmentsUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: AttachmentsCreateOrConnectWithoutProjectInput | AttachmentsCreateOrConnectWithoutProjectInput[]
+    createMany?: AttachmentsCreateManyProjectInputEnvelope
+    connect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+  }
+
   export type TaskUncheckedCreateNestedManyWithoutProjectInput = {
     create?: XOR<TaskCreateWithoutProjectInput, TaskUncheckedCreateWithoutProjectInput> | TaskCreateWithoutProjectInput[] | TaskUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutProjectInput | TaskCreateOrConnectWithoutProjectInput[]
@@ -15587,13 +17098,15 @@ export namespace Prisma {
     connect?: ActivityWhereUniqueInput | ActivityWhereUniqueInput[]
   }
 
-  export type EnumProjectStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ProjectStatus
+  export type AttachmentsUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<AttachmentsCreateWithoutProjectInput, AttachmentsUncheckedCreateWithoutProjectInput> | AttachmentsCreateWithoutProjectInput[] | AttachmentsUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: AttachmentsCreateOrConnectWithoutProjectInput | AttachmentsCreateOrConnectWithoutProjectInput[]
+    createMany?: AttachmentsCreateManyProjectInputEnvelope
+    connect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
   }
 
-  export type ProjectUpdateattachmentsInput = {
-    set?: string[]
-    push?: string | string[]
+  export type EnumProjectStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProjectStatus
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -15640,6 +17153,20 @@ export namespace Prisma {
     deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
   }
 
+  export type AttachmentsUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<AttachmentsCreateWithoutProjectInput, AttachmentsUncheckedCreateWithoutProjectInput> | AttachmentsCreateWithoutProjectInput[] | AttachmentsUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: AttachmentsCreateOrConnectWithoutProjectInput | AttachmentsCreateOrConnectWithoutProjectInput[]
+    upsert?: AttachmentsUpsertWithWhereUniqueWithoutProjectInput | AttachmentsUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: AttachmentsCreateManyProjectInputEnvelope
+    set?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    disconnect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    delete?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    connect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    update?: AttachmentsUpdateWithWhereUniqueWithoutProjectInput | AttachmentsUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: AttachmentsUpdateManyWithWhereWithoutProjectInput | AttachmentsUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: AttachmentsScalarWhereInput | AttachmentsScalarWhereInput[]
+  }
+
   export type TaskUncheckedUpdateManyWithoutProjectNestedInput = {
     create?: XOR<TaskCreateWithoutProjectInput, TaskUncheckedCreateWithoutProjectInput> | TaskCreateWithoutProjectInput[] | TaskUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: TaskCreateOrConnectWithoutProjectInput | TaskCreateOrConnectWithoutProjectInput[]
@@ -15666,6 +17193,20 @@ export namespace Prisma {
     update?: ActivityUpdateWithWhereUniqueWithoutProjectInput | ActivityUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: ActivityUpdateManyWithWhereWithoutProjectInput | ActivityUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: ActivityScalarWhereInput | ActivityScalarWhereInput[]
+  }
+
+  export type AttachmentsUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<AttachmentsCreateWithoutProjectInput, AttachmentsUncheckedCreateWithoutProjectInput> | AttachmentsCreateWithoutProjectInput[] | AttachmentsUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: AttachmentsCreateOrConnectWithoutProjectInput | AttachmentsCreateOrConnectWithoutProjectInput[]
+    upsert?: AttachmentsUpsertWithWhereUniqueWithoutProjectInput | AttachmentsUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: AttachmentsCreateManyProjectInputEnvelope
+    set?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    disconnect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    delete?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    connect?: AttachmentsWhereUniqueInput | AttachmentsWhereUniqueInput[]
+    update?: AttachmentsUpdateWithWhereUniqueWithoutProjectInput | AttachmentsUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: AttachmentsUpdateManyWithWhereWithoutProjectInput | AttachmentsUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: AttachmentsScalarWhereInput | AttachmentsScalarWhereInput[]
   }
 
   export type TaskCreateattachmentsInput = {
@@ -16021,6 +17562,34 @@ export namespace Prisma {
     update?: XOR<XOR<TaskUpdateToOneWithWhereWithoutActivitiesInput, TaskUpdateWithoutActivitiesInput>, TaskUncheckedUpdateWithoutActivitiesInput>
   }
 
+  export type ProjectCreateNestedOneWithoutAttachmentsInput = {
+    create?: XOR<ProjectCreateWithoutAttachmentsInput, ProjectUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutAttachmentsInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutAttachmentsInput = {
+    create?: XOR<UserCreateWithoutAttachmentsInput, UserUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAttachmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProjectUpdateOneRequiredWithoutAttachmentsNestedInput = {
+    create?: XOR<ProjectCreateWithoutAttachmentsInput, ProjectUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutAttachmentsInput
+    upsert?: ProjectUpsertWithoutAttachmentsInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutAttachmentsInput, ProjectUpdateWithoutAttachmentsInput>, ProjectUncheckedUpdateWithoutAttachmentsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutAttachmentsNestedInput = {
+    create?: XOR<UserCreateWithoutAttachmentsInput, UserUncheckedCreateWithoutAttachmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAttachmentsInput
+    upsert?: UserUpsertWithoutAttachmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAttachmentsInput, UserUpdateWithoutAttachmentsInput>, UserUncheckedUpdateWithoutAttachmentsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -16292,10 +17861,10 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     progress?: number
     tasks?: TaskCreateNestedManyWithoutProjectInput
     activities?: ActivityCreateNestedManyWithoutProjectInput
+    Attachments?: AttachmentsCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutOwnerInput = {
@@ -16310,10 +17879,10 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     progress?: number
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
     activities?: ActivityUncheckedCreateNestedManyWithoutProjectInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutOwnerInput = {
@@ -16588,6 +18157,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AttachmentsCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    fileName: string
+    fileType: string
+    project: ProjectCreateNestedOneWithoutAttachmentsInput
+  }
+
+  export type AttachmentsUncheckedCreateWithoutUserInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    projectId: string
+    fileName: string
+    fileType: string
+  }
+
+  export type AttachmentsCreateOrConnectWithoutUserInput = {
+    where: AttachmentsWhereUniqueInput
+    create: XOR<AttachmentsCreateWithoutUserInput, AttachmentsUncheckedCreateWithoutUserInput>
+  }
+
+  export type AttachmentsCreateManyUserInputEnvelope = {
+    data: AttachmentsCreateManyUserInput | AttachmentsCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProjectUpsertWithWhereUniqueWithoutOwnerInput = {
     where: ProjectWhereUniqueInput
     update: XOR<ProjectUpdateWithoutOwnerInput, ProjectUncheckedUpdateWithoutOwnerInput>
@@ -16619,7 +18218,6 @@ export namespace Prisma {
     startDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     endDate?: DateTimeNullableFilter<"Project"> | Date | string | null
     dueDate?: DateTimeFilter<"Project"> | Date | string
-    attachments?: StringNullableListFilter<"Project">
     ownerId?: StringFilter<"Project"> | string
     progress?: IntFilter<"Project"> | number
   }
@@ -16831,6 +18429,36 @@ export namespace Prisma {
     userId?: StringFilter<"Session"> | string
   }
 
+  export type AttachmentsUpsertWithWhereUniqueWithoutUserInput = {
+    where: AttachmentsWhereUniqueInput
+    update: XOR<AttachmentsUpdateWithoutUserInput, AttachmentsUncheckedUpdateWithoutUserInput>
+    create: XOR<AttachmentsCreateWithoutUserInput, AttachmentsUncheckedCreateWithoutUserInput>
+  }
+
+  export type AttachmentsUpdateWithWhereUniqueWithoutUserInput = {
+    where: AttachmentsWhereUniqueInput
+    data: XOR<AttachmentsUpdateWithoutUserInput, AttachmentsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AttachmentsUpdateManyWithWhereWithoutUserInput = {
+    where: AttachmentsScalarWhereInput
+    data: XOR<AttachmentsUpdateManyMutationInput, AttachmentsUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AttachmentsScalarWhereInput = {
+    AND?: AttachmentsScalarWhereInput | AttachmentsScalarWhereInput[]
+    OR?: AttachmentsScalarWhereInput[]
+    NOT?: AttachmentsScalarWhereInput | AttachmentsScalarWhereInput[]
+    id?: StringFilter<"Attachments"> | string
+    createdAt?: DateTimeFilter<"Attachments"> | Date | string
+    updatedAt?: DateTimeFilter<"Attachments"> | Date | string
+    url?: StringFilter<"Attachments"> | string
+    projectId?: StringFilter<"Attachments"> | string
+    userId?: StringFilter<"Attachments"> | string
+    fileName?: StringFilter<"Attachments"> | string
+    fileType?: StringFilter<"Attachments"> | string
+  }
+
   export type UserCreateWithoutSessionsInput = {
     id?: string
     email: string
@@ -16848,6 +18476,7 @@ export namespace Prisma {
     Notifications?: NotificationCreateNestedManyWithoutUserInput
     Activities?: ActivityCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -16867,6 +18496,7 @@ export namespace Prisma {
     Notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -16902,6 +18532,7 @@ export namespace Prisma {
     Notifications?: NotificationUpdateManyWithoutUserNestedInput
     Activities?: ActivityUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -16921,6 +18552,7 @@ export namespace Prisma {
     Notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -16940,6 +18572,7 @@ export namespace Prisma {
     Notifications?: NotificationCreateNestedManyWithoutUserInput
     Activities?: ActivityCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -16959,6 +18592,7 @@ export namespace Prisma {
     Notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -16994,6 +18628,7 @@ export namespace Prisma {
     Notifications?: NotificationUpdateManyWithoutUserNestedInput
     Activities?: ActivityUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -17013,6 +18648,7 @@ export namespace Prisma {
     Notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutProjectsInput = {
@@ -17032,6 +18668,7 @@ export namespace Prisma {
     Activities?: ActivityCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProjectsInput = {
@@ -17051,6 +18688,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProjectsInput = {
@@ -17140,6 +18778,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type AttachmentsCreateWithoutProjectInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    fileName: string
+    fileType: string
+    user: UserCreateNestedOneWithoutAttachmentsInput
+  }
+
+  export type AttachmentsUncheckedCreateWithoutProjectInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    userId: string
+    fileName: string
+    fileType: string
+  }
+
+  export type AttachmentsCreateOrConnectWithoutProjectInput = {
+    where: AttachmentsWhereUniqueInput
+    create: XOR<AttachmentsCreateWithoutProjectInput, AttachmentsUncheckedCreateWithoutProjectInput>
+  }
+
+  export type AttachmentsCreateManyProjectInputEnvelope = {
+    data: AttachmentsCreateManyProjectInput | AttachmentsCreateManyProjectInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutProjectsInput = {
     update: XOR<UserUpdateWithoutProjectsInput, UserUncheckedUpdateWithoutProjectsInput>
     create: XOR<UserCreateWithoutProjectsInput, UserUncheckedCreateWithoutProjectsInput>
@@ -17168,6 +18836,7 @@ export namespace Prisma {
     Activities?: ActivityUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -17187,6 +18856,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TaskUpsertWithWhereUniqueWithoutProjectInput = {
@@ -17221,6 +18891,22 @@ export namespace Prisma {
     data: XOR<ActivityUpdateManyMutationInput, ActivityUncheckedUpdateManyWithoutProjectInput>
   }
 
+  export type AttachmentsUpsertWithWhereUniqueWithoutProjectInput = {
+    where: AttachmentsWhereUniqueInput
+    update: XOR<AttachmentsUpdateWithoutProjectInput, AttachmentsUncheckedUpdateWithoutProjectInput>
+    create: XOR<AttachmentsCreateWithoutProjectInput, AttachmentsUncheckedCreateWithoutProjectInput>
+  }
+
+  export type AttachmentsUpdateWithWhereUniqueWithoutProjectInput = {
+    where: AttachmentsWhereUniqueInput
+    data: XOR<AttachmentsUpdateWithoutProjectInput, AttachmentsUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type AttachmentsUpdateManyWithWhereWithoutProjectInput = {
+    where: AttachmentsScalarWhereInput
+    data: XOR<AttachmentsUpdateManyMutationInput, AttachmentsUncheckedUpdateManyWithoutProjectInput>
+  }
+
   export type ProjectCreateWithoutTasksInput = {
     id?: string
     createdAt?: Date | string
@@ -17233,10 +18919,10 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     progress?: number
     owner: UserCreateNestedOneWithoutProjectsInput
     activities?: ActivityCreateNestedManyWithoutProjectInput
+    Attachments?: AttachmentsCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutTasksInput = {
@@ -17251,10 +18937,10 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
     progress?: number
     activities?: ActivityUncheckedCreateNestedManyWithoutProjectInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutTasksInput = {
@@ -17279,6 +18965,7 @@ export namespace Prisma {
     Activities?: ActivityCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignedTasksInput = {
@@ -17298,6 +18985,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignedTasksInput = {
@@ -17322,6 +19010,7 @@ export namespace Prisma {
     Activities?: ActivityCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedTasksInput = {
@@ -17341,6 +19030,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedTasksInput = {
@@ -17530,10 +19220,10 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     progress?: IntFieldUpdateOperationsInput | number
     owner?: UserUpdateOneRequiredWithoutProjectsNestedInput
     activities?: ActivityUpdateManyWithoutProjectNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutTasksInput = {
@@ -17548,10 +19238,10 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
     progress?: IntFieldUpdateOperationsInput | number
     activities?: ActivityUncheckedUpdateManyWithoutProjectNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type UserUpsertWithoutAssignedTasksInput = {
@@ -17582,6 +19272,7 @@ export namespace Prisma {
     Activities?: ActivityUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignedTasksInput = {
@@ -17601,6 +19292,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutCreatedTasksInput = {
@@ -17631,6 +19323,7 @@ export namespace Prisma {
     Activities?: ActivityUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedTasksInput = {
@@ -17650,6 +19343,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TaskUpsertWithoutSubTasksInput = {
@@ -17817,6 +19511,7 @@ export namespace Prisma {
     Activities?: ActivityCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommentsInput = {
@@ -17836,6 +19531,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommentsInput = {
@@ -17979,6 +19675,7 @@ export namespace Prisma {
     Activities?: ActivityUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -17998,6 +19695,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CommentUpsertWithoutRepliesInput = {
@@ -18064,6 +19762,7 @@ export namespace Prisma {
     Activities?: ActivityCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -18083,6 +19782,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -18118,6 +19818,7 @@ export namespace Prisma {
     Activities?: ActivityUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -18137,6 +19838,7 @@ export namespace Prisma {
     Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutActivitiesInput = {
@@ -18156,6 +19858,7 @@ export namespace Prisma {
     Notifications?: NotificationCreateNestedManyWithoutUserInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActivitiesInput = {
@@ -18175,6 +19878,7 @@ export namespace Prisma {
     Notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActivitiesInput = {
@@ -18194,10 +19898,10 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     progress?: number
     owner: UserCreateNestedOneWithoutProjectsInput
     tasks?: TaskCreateNestedManyWithoutProjectInput
+    Attachments?: AttachmentsCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutActivitiesInput = {
@@ -18212,10 +19916,10 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     ownerId: string
     progress?: number
     tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
+    Attachments?: AttachmentsUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutActivitiesInput = {
@@ -18298,6 +20002,7 @@ export namespace Prisma {
     Notifications?: NotificationUpdateManyWithoutUserNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivitiesInput = {
@@ -18317,6 +20022,7 @@ export namespace Prisma {
     Notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProjectUpsertWithoutActivitiesInput = {
@@ -18342,10 +20048,10 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     progress?: IntFieldUpdateOperationsInput | number
     owner?: UserUpdateOneRequiredWithoutProjectsNestedInput
     tasks?: TaskUpdateManyWithoutProjectNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutActivitiesInput = {
@@ -18360,10 +20066,10 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     ownerId?: StringFieldUpdateOperationsInput | string
     progress?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type TaskUpsertWithoutActivitiesInput = {
@@ -18419,6 +20125,190 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutTaskNestedInput
   }
 
+  export type ProjectCreateWithoutAttachmentsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    description: string
+    slug: string
+    isPublic?: boolean
+    status?: $Enums.ProjectStatus
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    dueDate: Date | string
+    progress?: number
+    owner: UserCreateNestedOneWithoutProjectsInput
+    tasks?: TaskCreateNestedManyWithoutProjectInput
+    activities?: ActivityCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutAttachmentsInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    name: string
+    description: string
+    slug: string
+    isPublic?: boolean
+    status?: $Enums.ProjectStatus
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    dueDate: Date | string
+    ownerId: string
+    progress?: number
+    tasks?: TaskUncheckedCreateNestedManyWithoutProjectInput
+    activities?: ActivityUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutAttachmentsInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutAttachmentsInput, ProjectUncheckedCreateWithoutAttachmentsInput>
+  }
+
+  export type UserCreateWithoutAttachmentsInput = {
+    id?: string
+    email: string
+    name: string
+    emailVerified: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    username: string
+    role?: $Enums.Role
+    projects?: ProjectCreateNestedManyWithoutOwnerInput
+    assignedTasks?: TaskCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskCreateNestedManyWithoutCreatorInput
+    Comments?: CommentCreateNestedManyWithoutUserInput
+    Notifications?: NotificationCreateNestedManyWithoutUserInput
+    Activities?: ActivityCreateNestedManyWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutAttachmentsInput = {
+    id?: string
+    email: string
+    name: string
+    emailVerified: boolean
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    username: string
+    role?: $Enums.Role
+    projects?: ProjectUncheckedCreateNestedManyWithoutOwnerInput
+    assignedTasks?: TaskUncheckedCreateNestedManyWithoutAssigneeInput
+    createdTasks?: TaskUncheckedCreateNestedManyWithoutCreatorInput
+    Comments?: CommentUncheckedCreateNestedManyWithoutUserInput
+    Notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    Activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutAttachmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutAttachmentsInput, UserUncheckedCreateWithoutAttachmentsInput>
+  }
+
+  export type ProjectUpsertWithoutAttachmentsInput = {
+    update: XOR<ProjectUpdateWithoutAttachmentsInput, ProjectUncheckedUpdateWithoutAttachmentsInput>
+    create: XOR<ProjectCreateWithoutAttachmentsInput, ProjectUncheckedCreateWithoutAttachmentsInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutAttachmentsInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutAttachmentsInput, ProjectUncheckedUpdateWithoutAttachmentsInput>
+  }
+
+  export type ProjectUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    progress?: IntFieldUpdateOperationsInput | number
+    owner?: UserUpdateOneRequiredWithoutProjectsNestedInput
+    tasks?: TaskUpdateManyWithoutProjectNestedInput
+    activities?: ActivityUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ownerId?: StringFieldUpdateOperationsInput | string
+    progress?: IntFieldUpdateOperationsInput | number
+    tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
+    activities?: ActivityUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type UserUpsertWithoutAttachmentsInput = {
+    update: XOR<UserUpdateWithoutAttachmentsInput, UserUncheckedUpdateWithoutAttachmentsInput>
+    create: XOR<UserCreateWithoutAttachmentsInput, UserUncheckedCreateWithoutAttachmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutAttachmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutAttachmentsInput, UserUncheckedUpdateWithoutAttachmentsInput>
+  }
+
+  export type UserUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    username?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    projects?: ProjectUpdateManyWithoutOwnerNestedInput
+    assignedTasks?: TaskUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUpdateManyWithoutCreatorNestedInput
+    Comments?: CommentUpdateManyWithoutUserNestedInput
+    Notifications?: NotificationUpdateManyWithoutUserNestedInput
+    Activities?: ActivityUpdateManyWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutAttachmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    emailVerified?: BoolFieldUpdateOperationsInput | boolean
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    username?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    projects?: ProjectUncheckedUpdateManyWithoutOwnerNestedInput
+    assignedTasks?: TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+    createdTasks?: TaskUncheckedUpdateManyWithoutCreatorNestedInput
+    Comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
+    Notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    Activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type ProjectCreateManyOwnerInput = {
     id?: string
     createdAt?: Date | string
@@ -18431,7 +20321,6 @@ export namespace Prisma {
     startDate?: Date | string | null
     endDate?: Date | string | null
     dueDate: Date | string
-    attachments?: ProjectCreateattachmentsInput | string[]
     progress?: number
   }
 
@@ -18524,6 +20413,16 @@ export namespace Prisma {
     userAgent?: string | null
   }
 
+  export type AttachmentsCreateManyUserInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    projectId: string
+    fileName: string
+    fileType: string
+  }
+
   export type ProjectUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18536,10 +20435,10 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     progress?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUpdateManyWithoutProjectNestedInput
     activities?: ActivityUpdateManyWithoutProjectNestedInput
+    Attachments?: AttachmentsUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutOwnerInput = {
@@ -18554,10 +20453,10 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     progress?: IntFieldUpdateOperationsInput | number
     tasks?: TaskUncheckedUpdateManyWithoutProjectNestedInput
     activities?: ActivityUncheckedUpdateManyWithoutProjectNestedInput
+    Attachments?: AttachmentsUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutOwnerInput = {
@@ -18572,7 +20471,6 @@ export namespace Prisma {
     startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    attachments?: ProjectUpdateattachmentsInput | string[]
     progress?: IntFieldUpdateOperationsInput | number
   }
 
@@ -18857,6 +20755,36 @@ export namespace Prisma {
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type AttachmentsUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    project?: ProjectUpdateOneRequiredWithoutAttachmentsNestedInput
+  }
+
+  export type AttachmentsUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AttachmentsUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+  }
+
   export type TaskCreateManyProjectInput = {
     id?: string
     createdAt?: Date | string
@@ -18883,6 +20811,16 @@ export namespace Prisma {
     taskId?: string | null
     content: string
     link: string
+  }
+
+  export type AttachmentsCreateManyProjectInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    url: string
+    userId: string
+    fileName: string
+    fileType: string
   }
 
   export type TaskUpdateWithoutProjectInput = {
@@ -18973,6 +20911,36 @@ export namespace Prisma {
     taskId?: NullableStringFieldUpdateOperationsInput | string | null
     content?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AttachmentsUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutAttachmentsNestedInput
+  }
+
+  export type AttachmentsUncheckedUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type AttachmentsUncheckedUpdateManyWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    url?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
   }
 
   export type TaskCreateManyParentTaskInput = {

@@ -46,17 +46,17 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.2 }}
             className={cn(
-                "p-4 rounded-lg border mb-2 transition-all duration-200 hover:shadow-sm",
+                "p-1 rounded-lg border mb-2 transition-all duration-200 hover:shadow-sm",
                 isRead
                     ? "bg-card hover:bg-muted/50"
                     : "bg-primary/5 hover:bg-primary/10 border-primary/20"
             )}
         >
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-2">
                 {/* Main notification content as a link */}
                 <Link
                     href={notification.link || "/dashboard/notifications"}
-                    className="flex items-start space-x-3 cursor-pointer"
+                    className="flex items-start space-x-2 cursor-pointer"
                 >
                     {/* Notification indicator/icon */}
                     <motion.div

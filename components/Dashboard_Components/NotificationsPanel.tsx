@@ -1,5 +1,4 @@
-import { format } from 'date-fns'
-import { BellRing, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react'
+import { BellRing, CheckCircle2, ArrowRight } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { GetUserNotifications } from '@/lib/actions/notifications/get-notifications';
@@ -63,7 +62,7 @@ const NotificationsPanel = async ({ userId }: NotificationsPanelProps) => {
 
     return (
         <Card className="transition-all hover:shadow-md animate-in fade-in-50 duration-300">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-lg font-semibold">Notifications  {unreadCount > 0 && (
                         <Badge>{unreadCount} unread</Badge>
@@ -74,7 +73,7 @@ const NotificationsPanel = async ({ userId }: NotificationsPanelProps) => {
                 <CardDescription>Your latest updates and alerts</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-2">
                     {notifications.slice(0, 3).map((notification) => (
                         <NotificationItem key={notification.id} notification={notification} />
                     ))}

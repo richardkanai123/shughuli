@@ -91,10 +91,10 @@ export async function POST(Request: NextRequest) {
 			name,
 			description,
 			ownerId,
-			endDate,
 			isPublic,
 			slug,
 			startDate,
+			dueDate,
 			status,
 		} = isValid.data;
 		const project = await prisma.project.create({
@@ -102,8 +102,8 @@ export async function POST(Request: NextRequest) {
 				name,
 				slug,
 				description,
+				dueDate,
 				ownerId,
-				endDate,
 				isPublic,
 				startDate,
 				status,
