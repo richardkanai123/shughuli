@@ -52,7 +52,6 @@ export const GetUserProjects = async (userId: string): Promise<{
                 startDate: true,
                 endDate: true,
                 ownerId: true,
-                attachments: true,
                 // Avoid fetching owner and tasks unless needed
             },
         });
