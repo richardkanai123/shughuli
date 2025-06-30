@@ -18,6 +18,12 @@ export const ourFileRouter = {
       maxFileSize: "4MB",
           maxFileCount: 2,
     },
+
+    pdf: {
+      maxFileSize: "16MB",
+      maxFileCount: 2,
+    },
+
   })
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
@@ -36,9 +42,9 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
+      // console.log("Upload complete for userId:", metadata.userId);
 
-      console.log("file url", file.ufsUrl);
+      // console.log("file url", file.ufsUrl);
       const fileType = file.type
       return { uploadedBy: metadata.userId, fileUrl: file.ufsUrl, fileType: fileType, fileName: file.name };
     }),

@@ -14,6 +14,8 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import FetchErrorComponent from "@/components/Public_Components/FetchErrorComponent";
+import { getProjectAttachments } from "@/lib/actions/projects/project_attachment";
+import ProjectAttachments from "@/components/Dashboard_Components/project_components/project-parts/ProjectAttachments";
 
 const ProjectPage = async ({
     params,
@@ -21,14 +23,14 @@ const ProjectPage = async ({
     params: Promise<{ projectid: string }>;
 }) => {
     const { projectid } = await params;
-    const data = await getProjectDetails(projectid);
+    const { message, project, status } = await getProjectDetails(projectid);
 
-    if (data.status !== 200) {
-        return <FetchErrorComponent message={data.message} />;
+    if (status !== 200) {
+        return <FetchErrorComponent message={message} />;
     }
 
     // Error state: Project not found
-    if (!data.project) {
+    if (!project) {
         return (
             <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
                 <Card className="max-w-md w-full">
@@ -70,15 +72,17 @@ const ProjectPage = async ({
         );
     }
 
-    // Rest of component for successful data fetch
-    const { project } = data;
-
-    const tasks = GetProjectTasks(data.project.id);
+    const tasks = GetProjectTasks(project.id);
+    const attachments = getProjectAttachments(project.id);
 
     return (
         <div className="min-h-[calc(100vh-4rem)] max-h-fit">
             <div className="max-w-6xl mx-auto space-y-8">
                 <ProjectDetails project={project} />
+            </div>
+            {/* Attachments section */}
+            <div className="max-w-6xl mx-auto mt-8">
+                <ProjectAttachments attachments={attachments} projectid={projectid} />
             </div>
 
             {/* list of tasks related to this project */}

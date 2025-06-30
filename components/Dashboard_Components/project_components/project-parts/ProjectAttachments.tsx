@@ -9,7 +9,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { useMemo } from "react"
+import { use, useMemo } from "react"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -22,6 +22,9 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Card, CardFooter, CardHeader } from "@/components/ui/card"
+import { Attachments } from "@/lib/generated/prisma"
+import ErrorAlert from "@/components/Public_Components/ErrorAlert"
+import Uploader from "../../buttons/attatchment_uploader"
 
 // Utility function to determine file type and icon - moved outside component
 const getFileTypeInfo = (filename: string) => {
@@ -41,16 +44,44 @@ const getFileTypeInfo = (filename: string) => {
     };
 };
 
-interface ProjectAttachmentsProps {
-    attachments: string[]
-    projectId: string
-}
 
-const ProjectAttachments = ({ attachments, projectId }: ProjectAttachmentsProps) => {
+const ProjectAttachments = ({ attachments, projectid }: {
+    attachments: Promise<{
+        success: boolean;
+        message: string;
+        attachments?: null | Attachments[];
+    }>,
+    projectid: string
+}) => {
+
+
+    const attachmentsData = use(attachments);
+    const { success, message, attachments: attachmentList } = attachmentsData;
+
+    if (!success) {
+        return <ErrorAlert ErrorMessage={message} />;
+    }
+
+    if (!attachmentList || attachmentList.length === 0) {
+        return (
+            <div className="text-center py-6 text-muted-foreground border rounded-md">
+                <Paperclip className="h-6 w-6 mx-auto mb-2" />
+                <p className="text-sm">No attachments yet</p>
+                <p className="text-xs mt-1">Add files to this project for easy access</p>
+
+                <Uploader projectid={projectid} />
+            </div>
+        );
+    }
+
+
+    // If attachments are available, render the component
+
     return (
         <motion.div
-            className="space-y-3"
+            className="bg-card p-4 rounded-md shadow-sm mb-4"
             initial={{ opacity: 0 }}
+
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.6 }}
         >
@@ -61,66 +92,49 @@ const ProjectAttachments = ({ attachments, projectId }: ProjectAttachmentsProps)
                 </div>
 
                 {/* Add Attachment Button */}
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button variant="outline" size="sm" className="h-7 px-2">
-                            <PlusCircle className="h-3.5 w-3.5 mr-1" />
-                            <span className="text-xs">Add</span>
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Add Attachment</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Upload a file to attach to this project.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <div className="py-4">
-                            <div className="border border-dashed rounded-md p-8 text-center text-muted-foreground">
-                                <Paperclip className="h-6 w-6 mx-auto mb-2" />
-                                <p>Drag & drop files here or click to browse</p>
-                            </div>
-                        </div>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction>Upload</AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                <div className="my-4 mx-auto">
+                    <Uploader projectid={projectid} />
+                </div>
+
             </div>
 
             {/* Attachments List */}
-            {attachments && attachments.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                    {attachments.map((attachment, index) => (
-                        <AttachmentItem key={index} attachment={attachment} />
-                    ))}
-                </div>
-            ) : (
-                <div className="text-center py-6 text-muted-foreground border rounded-md">
-                    <Paperclip className="h-6 w-6 mx-auto mb-2" />
-                    <p className="text-sm">No attachments yet</p>
-                    <p className="text-xs mt-1">Add files to this project for easy access</p>
-                </div>
-            )}
-        </motion.div>
+            {
+                attachmentList && attachmentList.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        {attachmentList.map((attachment, id) => (
+                            <AttachmentItem key={id} attachment={attachment} />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-6 text-muted-foreground border rounded-md">
+                        <Paperclip className="h-6 w-6 mx-auto mb-2" />
+                        <p className="text-sm">No attachments yet</p>
+                        <p className="text-xs mt-1">Add files to this project for easy access</p>
+                    </div>
+                )
+            }
+        </motion.div >
     )
 }
 
 // Further component extraction for attachment items
-const AttachmentItem = ({ attachment }: { attachment: string }) => {
-    const fileInfo = useMemo(() => getFileTypeInfo(attachment || 'file'), [attachment]);
-    const isImage = fileInfo.type === 'Image';
-    const filename = useMemo(() => {
-        // Extract filename from path
-        return attachment.split('/').pop() || attachment;
-    }, [attachment]);
+const AttachmentItem = ({ attachment }: { attachment: Attachments }) => {
+    const { fileType, fileName, url } = attachment;
+
+    const isImage = useMemo(() => {
+        const imageTypes = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp'];
+        const extension = fileName.split('.').pop()?.toLowerCase() || '';
+        return imageTypes.includes(extension) || fileType.startsWith('image/');
+    }, [fileName]);
+
+    const fileInfo = useMemo(() => getFileTypeInfo(fileName), [fileName]);
 
     return (
         <Card className="relative overflow-hidden hover:shadow-lg transition-shadow">
             <CardHeader>
                 <a
-                    href={attachment || '#'}
+                    href={url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block border rounded-md overflow-hidden transition-colors hover:border-primary"
@@ -129,8 +143,8 @@ const AttachmentItem = ({ attachment }: { attachment: string }) => {
                         <div className="aspect-square w-full bg-muted flex items-center justify-center relative">
                             {/* Image thumbnail */}
                             <img
-                                src={attachment}
-                                alt={filename}
+                                src={url}
+                                alt={fileName}
                                 className="object-cover w-full h-full absolute inset-0"
                             />
                         </div>
@@ -141,7 +155,7 @@ const AttachmentItem = ({ attachment }: { attachment: string }) => {
                     )}
                     <div className="p-2">
                         <p className="text-xs font-medium truncate">
-                            {filename}
+                            {fileName}
                         </p>
                         <p className="text-xs text-muted-foreground">
                             {fileInfo.type}
@@ -149,31 +163,28 @@ const AttachmentItem = ({ attachment }: { attachment: string }) => {
                     </div>
                 </a>
             </CardHeader>
-            <CardFooter className="w-64 p-2">
-                <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium truncate">{filename}</span>
-                    <div className="flex gap-1">
-                        <Button variant="ghost" size="icon" className="h-6 w-6" asChild>
-                            <a href={attachment} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="h-3.5 w-3.5" />
-                            </a>
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-6 w-6" asChild>
-                            <a href={attachment} download>
-                                <Download className="h-3.5 w-3.5" />
-                            </a>
-                        </Button>
-                    </div>
+            <CardFooter className="flex items-center justify-between p-2">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <span>{fileType}</span>
+                    <span className="text-xs">|</span>
                 </div>
-                {isImage && (
-                    <div className="rounded-md overflow-hidden">
-                        <img
-                            src={attachment}
-                            alt={filename}
-                            className="w-full h-auto"
-                        />
-                    </div>
-                )}
+                <div className="flex items-center gap-2">
+                    <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                    >
+                        <ExternalLink className="h-4 w-4" />
+                    </a>
+                    <a
+                        href={url}
+                        download={fileName}
+                        className="text-primary hover:underline"
+                    >
+                        <Download className="h-4 w-4" />
+                    </a>
+                </div>
             </CardFooter>
         </Card>
     );

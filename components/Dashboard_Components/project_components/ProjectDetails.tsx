@@ -12,7 +12,6 @@ import ProjectHeader from "./project-parts/ProjectHeader";
 import ProjectDescription from "./project-parts/ProjectDescription";
 import ProjectProgress from "./project-parts/ProjectProgress";
 import ProjectDates from "./project-parts/ProjectDates";
-import ProjectAttachments from "./project-parts/ProjectAttachments";
 import Uploader from "../buttons/attatchment_uploader";
 
 const ProjectDetails = ({ project }: { project: Project }) => {
@@ -100,35 +99,6 @@ const ProjectDetails = ({ project }: { project: Project }) => {
                                 />
                             </div>
                         </motion.div>
-
-                        {/* Attachments Section - Only show if attachments exist
-                        {project. && project.attachments.length > 0 ? (
-                            <>
-                                <Separator className="my-6" />
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 0.4, duration: 0.3 }}>
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <Paperclip className="h-4 w-4 text-primary" />
-                                        <h3 className="text-sm font-medium">Attachments</h3>
-                                        <Badge
-                                            variant="outline"
-                                            className="text-xs">
-                                            {project.attachments.length}
-                                        </Badge>
-                                    </div>
-                                    <ProjectAttachments
-                                        attachments={project.attachments || []}
-                                        projectId={project.id}
-                                    />
-                                </motion.div>
-                            </>
-                        ) : (
-                            
-                        )} */}
-
-                        <Uploader projectid={project.id} />
                     </div>
                 </CardContent>
             </Card>

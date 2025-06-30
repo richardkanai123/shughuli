@@ -13,25 +13,18 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import DeleteProjectbtn from "../../buttons/DeleteProjectbtn";
 import CompleteProjectBtn from "../../buttons/CompleteProjectBtn";
 
 const ProjectHeader = ({ project }: { project: Project }) => {
     const { name, slug, status, id } = project;
-
-    const session = useSession();
-    const user = session.data?.userId;
-    const isOwner = user === project.ownerId;
-
     return (
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4"
-        >
+            className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
             {/* Project Info */}
             <div className="space-y-3 flex-1">
                 <div className="flex items-center gap-3">
@@ -58,9 +51,8 @@ const ProjectHeader = ({ project }: { project: Project }) => {
                         className={cn(
                             "text-xs font-medium px-2.5 py-1",
                             getStatusColor(status)
-                        )}
-                    >
-                        {status.replace('_', ' ')}
+                        )}>
+                        {status.replace("_", " ")}
                     </Badge>
                 </div>
             </div>
@@ -69,34 +61,30 @@ const ProjectHeader = ({ project }: { project: Project }) => {
             <div className="flex items-center gap-2 flex-wrap lg:flex-nowrap">
                 <TooltipProvider delayDuration={300}>
                     {/* Complete Project Button */}
-                    {status !== "COMPLETED" && isOwner && (
-                        <CompleteProjectBtn projectId={id} />
-                    )}
+                    {status !== "COMPLETED" && <CompleteProjectBtn projectId={id} />}
 
                     {/* Edit Project Button */}
-                    {isOwner && (
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="h-9"
-                                    asChild
-                                >
-                                    <Link href={`/dashboard/projects/${project.slug}/edit`}>
-                                        <Edit2 className="h-4 w-4 mr-2" />
-                                        Edit
-                                    </Link>
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent side="bottom">
-                                <p>Edit project details</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    )}
+
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-9"
+                                asChild>
+                                <Link href={`/dashboard/projects/${project.slug}/edit`}>
+                                    <Edit2 className="h-4 w-4 mr-2" />
+                                    Edit
+                                </Link>
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                            <p>Edit project details</p>
+                        </TooltipContent>
+                    </Tooltip>
 
                     {/* Delete Project Button */}
-                    {isOwner && <DeleteProjectbtn projectid={project.id} />}
+                    <DeleteProjectbtn projectid={project.id} />
                 </TooltipProvider>
             </div>
         </motion.div>

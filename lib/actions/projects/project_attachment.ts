@@ -1,6 +1,7 @@
 "use server";
 import prisma from "@/lib/prisma";
 import { Authenticate } from "../AuthProtection";
+import { Attachments } from "@/lib/generated/prisma";
 
 interface FileAttachment {
 	url: string;
@@ -18,7 +19,7 @@ export async function addProjectAttachment(
 		if (!session) {
 			return { success: false, message: "Unauthorized" };
 		}
-		const userId = session?.id;
+		const userId = session?.userId;
 		// Validate the input
 		if (files.length === 0) {
 			return {
@@ -93,7 +94,11 @@ export async function addProjectAttachment(
 	}
 }
 
-export const getProjectAttachments = async (projectid: string) => {
+export const getProjectAttachments = async (projectid: string): Promise<{
+	success: boolean;
+	message: string;
+	attachments?: null | Attachments[];
+}> => {
 	try {
 		// Authenticate the user
 		const session = await Authenticate();
@@ -124,8 +129,9 @@ export const getProjectAttachments = async (projectid: string) => {
 		}
 
 		const isOwner = project.ownerId === userId;
+		const isPublic = project.isPublic;
 
-		if (!isOwner) {
+		if (!isOwner && !isPublic) {
 			return {
 				success: false,
 				message:
