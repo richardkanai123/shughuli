@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
@@ -52,6 +51,7 @@ const Uploader = ({ projectid }: { projectid: string }) => {
                                 fileUrl: string;
                                 fileName: string;
                                 fileType: string;
+                                key: string;
 
                             }>[];
                             // loop through the files and log their details
@@ -60,6 +60,7 @@ const Uploader = ({ projectid }: { projectid: string }) => {
                                     url: file.ufsUrl,
                                     fileName: file.name,
                                     fileType: file.type,
+                                    key: file.key,
                                 };
                             });
 
@@ -81,7 +82,7 @@ const Uploader = ({ projectid }: { projectid: string }) => {
                     />
 
                     <p className="text-sm text-muted-foreground text-center">
-                        {uploading ? "Uploading..." : uploadmsg ? uploadmsg : "No files uploaded."}
+                        {uploading ? "Uploading..." : uploadmsg}
                     </p>
                     <div className="text-xs text-muted-foreground mt-2">
                         <p>Supported formats: JPG, PNG, PDF</p>
@@ -90,7 +91,7 @@ const Uploader = ({ projectid }: { projectid: string }) => {
                     </div>
                 </div>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel disabled={uploading}>Close</AlertDialogCancel>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

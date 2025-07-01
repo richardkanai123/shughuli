@@ -81,8 +81,10 @@ const ProjectPage = async ({
                 <ProjectDetails project={project} />
             </div>
             {/* Attachments section */}
-            <div className="max-w-6xl mx-auto mt-8">
-                <ProjectAttachments attachments={attachments} projectid={projectid} />
+            <div className="max-w-6xl mx-auto mt-8 mb-4">
+                <Suspense fallback={<div className="text-center">Loading attachments...</div>}>
+                    <ProjectAttachments attachments={attachments} projectid={project.id} />
+                </Suspense>
             </div>
 
             {/* list of tasks related to this project */}

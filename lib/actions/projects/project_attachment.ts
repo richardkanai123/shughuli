@@ -7,6 +7,7 @@ interface FileAttachment {
 	url: string;
 	fileName: string;
 	fileType: string;
+	key: string; 
 }
 
 export async function addProjectAttachment(
@@ -74,6 +75,7 @@ export async function addProjectAttachment(
 					url: file.url,
 					fileName: file.fileName,
 					fileType: file.fileType,
+					key: file.key, // Assuming 'key' is a unique identifier for the file
 				})),
 			],
 			skipDuplicates: true, // Skip duplicates if any
@@ -94,7 +96,9 @@ export async function addProjectAttachment(
 	}
 }
 
-export const getProjectAttachments = async (projectid: string): Promise<{
+export const getProjectAttachments = async (
+	projectid: string
+): Promise<{
 	success: boolean;
 	message: string;
 	attachments?: null | Attachments[];
@@ -102,10 +106,15 @@ export const getProjectAttachments = async (projectid: string): Promise<{
 	try {
 		// Authenticate the user
 		const session = await Authenticate();
-		if (!session) {
-			return { success: false, message: "Unauthorized" };
+
+		const uploader = session.userId;
+		
+
+		if (!uploader) {
+			return { success: false, message: "You are not authorized to access this project." };
 		}
-		const userId = session?.id;
+
+
 
 		// Validate the input
 		if (!projectid || typeof projectid !== "string") {
@@ -128,18 +137,6 @@ export const getProjectAttachments = async (projectid: string): Promise<{
 			};
 		}
 
-		const isOwner = project.ownerId === userId;
-		const isPublic = project.isPublic;
-
-		if (!isOwner && !isPublic) {
-			return {
-				success: false,
-				message:
-					"You do not have permission to view attachments for this project.",
-			};
-		}
-
-		// Retrieve attachments from the database
 		const attachments = await prisma.attachments.findMany({
 			where: { projectId: projectid },
 		});
@@ -159,3 +156,4 @@ export const getProjectAttachments = async (projectid: string): Promise<{
 		};
 	}
 };
+

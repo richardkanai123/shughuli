@@ -68,7 +68,7 @@ export const CompleteTask = async (
 		const projectId = targetTask.projectId;
 		const taskTitle = targetTask.title;
 
-		// Use a transaction for atomicity
+		// Use a minimal transaction for critical operations only
 		const result = await prisma.$transaction(async (tx) => {
 			// Update the task status to completed
 			const updatedTask = await tx.task.update({
@@ -81,27 +81,30 @@ export const CompleteTask = async (
 				},
 			});
 
-			// Recalculate the average progress of all tasks in the project
-			const aggregateResult = await tx.task.aggregate({
+			// Get project progress data in a single optimized query
+			const projectStats = await tx.task.aggregate({
 				where: {
 					projectId: projectId,
 				},
 				_avg: {
 					progress: true,
 				},
-				_count: true,
-			});
-
-			const newProjectProgress = Math.round(aggregateResult._avg.progress || 0);
-			const totalTasks = aggregateResult._count;
-
-			// Count completed tasks
-			const completedTasksCount = await tx.task.count({
-				where: {
-					projectId: projectId,
-					status: "DONE",
+				_count: {
+					_all: true,
+					
 				},
 			});
+
+			const newProjectProgress = Math.round(projectStats._avg.progress || 0);
+			const totalTasks = projectStats._count._all;
+			const completedTasksCount = projectStats._count._all
+				? await tx.task.count({
+					where: {
+						projectId: projectId,
+						status: "DONE",
+					},
+				})
+				: 0;
 
 			// Update project progress
 			const updatedProject = await tx.project.update({
@@ -112,123 +115,127 @@ export const CompleteTask = async (
 				},
 			});
 
-			// Create a link to the task for activity and notification
-			const taskLink = `/dashboard/tasks/${taskId}`;
-			const projectLink = `/dashboard/projects/${projectId}`;
-
-			// Create activity message with more context
-			const activityMessage = `Task "${taskTitle}" marked as complete.`;
-
-			// Create a new activity log for the task completion
-			const activity = await createActivity(
-				"TASK_UPDATED", // More specific activity type
-				taskLink,
-				activityMessage,
-				taskId,
-				''
-			);
-
-			// Create project activity showing progress
-			const projectActivityMessage = `Project progress updated to ${newProjectProgress}% (${completedTasksCount}/${totalTasks} tasks complete)`;
-			const projectActivity = await createActivity(
-				"PROJECT_UPDATED",
-				projectLink,
-				projectActivityMessage,
-				targetTask.id,
-				projectId
-			);
-
-			// Create notification for the user who completed the task
-			const completerNotification = await createNotification(
-				"TASK_COMPLETED",
-				activityMessage,
-				userId,
-				taskLink
-			);
-
-			// Create notification for project owner (if different from completer)
-			let ownerNotification = { success: true };
-			if (projectOwnerId && projectOwnerId !== userId) {
-				ownerNotification = await createNotification(
-					"TASK_COMPLETED",
-					`Task "${taskTitle}" in project "${updatedProject.name}" was completed by ${
-						isAssignee ? "assignee" : "creator"
-					}.`,
-					projectOwnerId,
-					taskLink
-				);
-			}
-
-			// Create notification for task creator (if different from completer and owner)
-			let creatorNotification = { success: true };
-			if (
-				targetTask.creatorId &&
-				!isCreator &&
-				targetTask.creatorId !== projectOwnerId
-			) {
-				creatorNotification = await createNotification(
-					"TASK_COMPLETED",
-					`Task "${taskTitle}" that you created was marked as complete.`,
-					targetTask.creatorId,
-					taskLink
-				);
-			}
-
 			return {
 				updatedTask,
 				updatedProject,
-				activity,
-				projectActivity,
-				completerNotification,
-				ownerNotification,
-				creatorNotification,
 				newProjectProgress,
 				completedTasksCount,
 				totalTasks,
 			};
+		}, {
+			timeout: 10000, // 10 second timeout
 		});
 
-		// Check for activity/notification creation failures
-		const activityFailures = [];
-		if (!result.activity.success) {
-			activityFailures.push("task activity");
-			console.warn("Failed to create task completion activity");
-		}
+		// Move all activity and notification creation outside transaction
+		const taskLink = `/dashboard/tasks/${taskId}`;
+		const projectLink = `/dashboard/projects/${projectId}`;
+		const activityMessage = `Task "${taskTitle}" marked as complete.`;
 
-		if (!result.projectActivity.success) {
-			activityFailures.push("project activity");
-			console.warn("Failed to create project update activity");
-		}
+		// Create activities and notifications asynchronously (non-blocking)
+		const [
+			activity,
+			projectActivity,
+			completerNotification,
+			ownerNotification,
+			creatorNotification
+		] = await Promise.allSettled([
+			createActivity(
+				"TASK_UPDATED",
+				taskLink,
+				activityMessage,
+				taskId,
+				''
+			),
+			createActivity(
+				"PROJECT_UPDATED",
+				projectLink,
+				`Project progress updated to ${result.newProjectProgress}% (${result.completedTasksCount}/${result.totalTasks} tasks complete)`,
+				targetTask.id,
+				projectId
+			),
+			createNotification(
+				"TASK_COMPLETED",
+				activityMessage,
+				userId,
+				taskLink
+			),
+			// Owner notification (if different from completer)
+			projectOwnerId && projectOwnerId !== userId 
+				? createNotification(
+					"TASK_COMPLETED",
+					`Task "${taskTitle}" in project "${result.updatedProject.name}" was completed by ${
+						isAssignee ? "assignee" : "creator"
+					}.`,
+					projectOwnerId,
+					taskLink
+				)
+				: Promise.resolve({ success: true }),
+			// Creator notification (if different from completer and owner)
+			targetTask.creatorId && !isCreator && targetTask.creatorId !== projectOwnerId
+				? createNotification(
+					"TASK_COMPLETED",
+					`Task "${taskTitle}" that you created was marked as complete.`,
+					targetTask.creatorId,
+					taskLink
+				)
+				: Promise.resolve({ success: true })
+		]);
 
-		if (!result.completerNotification.success) {
-			activityFailures.push("completer notification");
-			console.warn("Failed to create notification for task completer");
-		}
-
-		if (!result.ownerNotification.success) {
-			activityFailures.push("owner notification");
-			console.warn("Failed to create notification for project owner");
-		}
-
-		if (!result.creatorNotification.success) {
-			activityFailures.push("creator notification");
-			console.warn("Failed to create notification for task creator");
-		}
-
-		// Enhanced success message with project progress
-		const baseMessage = "Task completed successfully";
-		const progressInfo = `Project progress is now ${result.newProjectProgress}% (${result.completedTasksCount}/${result.totalTasks} tasks complete)`;
-
-		let message = `${baseMessage}. ${progressInfo}`;
-
-		if (activityFailures.length > 0) {
-			message += `. Note: Failed to create ${activityFailures.join(", ")}.`;
-		}
-
-		return {
-			success: true,
-			message: message,
+		// Convert Promise.allSettled results back to expected format
+		const activityResults = {
+			activity: activity.status === 'fulfilled' ? activity.value : { success: false },
+			projectActivity: projectActivity.status === 'fulfilled' ? projectActivity.value : { success: false },
+			completerNotification: completerNotification.status === 'fulfilled' ? completerNotification.value : { success: false },
+			ownerNotification: ownerNotification.status === 'fulfilled' ? ownerNotification.value : { success: false },
+			creatorNotification: creatorNotification.status === 'fulfilled' ? creatorNotification.value : { success: false },
 		};
+
+		// Merge transaction result with activity results
+		const finalResult = {
+			...result,
+			...activityResults,
+		};
+
+
+		if (!finalResult.updatedTask || !finalResult.updatedProject) {
+			return {
+				success: false,
+				message: "Failed to update task or project",
+			};
+		}
+		// Collect any activity failures
+		const activityFailures = [];
+		if (!finalResult.activity.success) {
+			activityFailures.push("task activity");
+		}
+		if (!finalResult.projectActivity.success) {
+			activityFailures.push("project activity");
+		}
+		if (!finalResult.completerNotification.success) {
+			activityFailures.push("completer notification");
+		}
+		if (!finalResult.ownerNotification.success) {
+			activityFailures.push("owner notification");
+		}
+		if (!finalResult.creatorNotification.success) {
+			activityFailures.push("creator notification");
+		}
+		// If there are no activity failures, we can return a success message
+		if (activityFailures.length === 0) {
+			return {
+				success: true,
+				message: "Task completed successfully.",
+			};
+		
+		} else {
+			return {
+				success: true,
+				message: `Task completed, but some activities failed: ${activityFailures.join(", ")}`,
+			};
+		}
+
+
+		
 	} catch (error) {
 		console.error("Error completing task:", error);
 		return {

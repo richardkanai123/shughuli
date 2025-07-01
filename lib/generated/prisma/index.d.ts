@@ -431,8 +431,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.10.1
-   * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
+   * Prisma Client JS version: 6.11.0
+   * Query Engine version: 9c30299f5a0ea26a96790e13f796dc6094db3173
    */
   export type PrismaVersion = {
     client: string
@@ -12677,6 +12677,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     url: string | null
+    key: string | null
     projectId: string | null
     userId: string | null
     fileName: string | null
@@ -12688,6 +12689,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     url: string | null
+    key: string | null
     projectId: string | null
     userId: string | null
     fileName: string | null
@@ -12699,6 +12701,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     url: number
+    key: number
     projectId: number
     userId: number
     fileName: number
@@ -12712,6 +12715,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     url?: true
+    key?: true
     projectId?: true
     userId?: true
     fileName?: true
@@ -12723,6 +12727,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     url?: true
+    key?: true
     projectId?: true
     userId?: true
     fileName?: true
@@ -12734,6 +12739,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     url?: true
+    key?: true
     projectId?: true
     userId?: true
     fileName?: true
@@ -12818,6 +12824,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     url: string
+    key: string
     projectId: string
     userId: string
     fileName: string
@@ -12846,6 +12853,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     url?: boolean
+    key?: boolean
     projectId?: boolean
     userId?: boolean
     fileName?: boolean
@@ -12859,6 +12867,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     url?: boolean
+    key?: boolean
     projectId?: boolean
     userId?: boolean
     fileName?: boolean
@@ -12872,6 +12881,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     url?: boolean
+    key?: boolean
     projectId?: boolean
     userId?: boolean
     fileName?: boolean
@@ -12885,13 +12895,14 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     url?: boolean
+    key?: boolean
     projectId?: boolean
     userId?: boolean
     fileName?: boolean
     fileType?: boolean
   }
 
-  export type AttachmentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "url" | "projectId" | "userId" | "fileName" | "fileType", ExtArgs["result"]["attachments"]>
+  export type AttachmentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "url" | "key" | "projectId" | "userId" | "fileName" | "fileType", ExtArgs["result"]["attachments"]>
   export type AttachmentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -12916,6 +12927,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       url: string
+      key: string
       projectId: string
       userId: string
       fileName: string
@@ -13349,6 +13361,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Attachments", 'DateTime'>
     readonly updatedAt: FieldRef<"Attachments", 'DateTime'>
     readonly url: FieldRef<"Attachments", 'String'>
+    readonly key: FieldRef<"Attachments", 'String'>
     readonly projectId: FieldRef<"Attachments", 'String'>
     readonly userId: FieldRef<"Attachments", 'String'>
     readonly fileName: FieldRef<"Attachments", 'String'>
@@ -13927,6 +13940,7 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     url: 'url',
+    key: 'key',
     projectId: 'projectId',
     userId: 'userId',
     fileName: 'fileName',
@@ -14881,6 +14895,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Attachments"> | Date | string
     updatedAt?: DateTimeFilter<"Attachments"> | Date | string
     url?: StringFilter<"Attachments"> | string
+    key?: StringFilter<"Attachments"> | string
     projectId?: StringFilter<"Attachments"> | string
     userId?: StringFilter<"Attachments"> | string
     fileName?: StringFilter<"Attachments"> | string
@@ -14894,6 +14909,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     url?: SortOrder
+    key?: SortOrder
     projectId?: SortOrder
     userId?: SortOrder
     fileName?: SortOrder
@@ -14910,6 +14926,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Attachments"> | Date | string
     updatedAt?: DateTimeFilter<"Attachments"> | Date | string
     url?: StringFilter<"Attachments"> | string
+    key?: StringFilter<"Attachments"> | string
     projectId?: StringFilter<"Attachments"> | string
     userId?: StringFilter<"Attachments"> | string
     fileName?: StringFilter<"Attachments"> | string
@@ -14923,6 +14940,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     url?: SortOrder
+    key?: SortOrder
     projectId?: SortOrder
     userId?: SortOrder
     fileName?: SortOrder
@@ -14940,6 +14958,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Attachments"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Attachments"> | Date | string
     url?: StringWithAggregatesFilter<"Attachments"> | string
+    key?: StringWithAggregatesFilter<"Attachments"> | string
     projectId?: StringWithAggregatesFilter<"Attachments"> | string
     userId?: StringWithAggregatesFilter<"Attachments"> | string
     fileName?: StringWithAggregatesFilter<"Attachments"> | string
@@ -15799,6 +15818,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     fileName: string
     fileType: string
     project: ProjectCreateNestedOneWithoutAttachmentsInput
@@ -15810,6 +15830,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     projectId: string
     userId: string
     fileName: string
@@ -15821,6 +15842,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
     project?: ProjectUpdateOneRequiredWithoutAttachmentsNestedInput
@@ -15832,6 +15854,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
@@ -15843,6 +15866,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     projectId: string
     userId: string
     fileName: string
@@ -15854,6 +15878,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
   }
@@ -15863,6 +15888,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
@@ -16599,6 +16625,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     url?: SortOrder
+    key?: SortOrder
     projectId?: SortOrder
     userId?: SortOrder
     fileName?: SortOrder
@@ -16610,6 +16637,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     url?: SortOrder
+    key?: SortOrder
     projectId?: SortOrder
     userId?: SortOrder
     fileName?: SortOrder
@@ -16621,6 +16649,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     url?: SortOrder
+    key?: SortOrder
     projectId?: SortOrder
     userId?: SortOrder
     fileName?: SortOrder
@@ -18162,6 +18191,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     fileName: string
     fileType: string
     project: ProjectCreateNestedOneWithoutAttachmentsInput
@@ -18172,6 +18202,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     projectId: string
     fileName: string
     fileType: string
@@ -18453,6 +18484,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Attachments"> | Date | string
     updatedAt?: DateTimeFilter<"Attachments"> | Date | string
     url?: StringFilter<"Attachments"> | string
+    key?: StringFilter<"Attachments"> | string
     projectId?: StringFilter<"Attachments"> | string
     userId?: StringFilter<"Attachments"> | string
     fileName?: StringFilter<"Attachments"> | string
@@ -18783,6 +18815,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     fileName: string
     fileType: string
     user: UserCreateNestedOneWithoutAttachmentsInput
@@ -18793,6 +18826,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     userId: string
     fileName: string
     fileType: string
@@ -20418,6 +20452,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     projectId: string
     fileName: string
     fileType: string
@@ -20760,6 +20795,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
     project?: ProjectUpdateOneRequiredWithoutAttachmentsNestedInput
@@ -20770,6 +20806,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
@@ -20780,6 +20817,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
@@ -20818,6 +20856,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     url: string
+    key: string
     userId: string
     fileName: string
     fileType: string
@@ -20918,6 +20957,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutAttachmentsNestedInput
@@ -20928,6 +20968,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string
@@ -20938,6 +20979,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     url?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     fileName?: StringFieldUpdateOperationsInput | string
     fileType?: StringFieldUpdateOperationsInput | string

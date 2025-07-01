@@ -10,9 +10,10 @@ import DeleteNotificationBtn from "./buttons/DeleteNotifcationBtn";
 
 interface NotificationItemProps {
     notification: Notification;
+    version: 'Full' | 'Compact';
 }
 
-const NotificationItem = ({ notification }: NotificationItemProps) => {
+const NotificationItem = ({ notification, version }: NotificationItemProps) => {
     const isRead = notification.isRead;
 
     // Get notification icon based on content
@@ -82,11 +83,14 @@ const NotificationItem = ({ notification }: NotificationItemProps) => {
                                 {notification.title}
                             </h4>
 
+
                         </div>
 
-                        <p className="text-sm text-muted-foreground my-1">
-                            {notification.message}
-                        </p>
+                        {
+                            version === 'Full' && (
+                                <p className="text-sm text-muted-foreground">{notification.message}</p>
+                            )
+                        }
                     </div>
                 </Link>
 

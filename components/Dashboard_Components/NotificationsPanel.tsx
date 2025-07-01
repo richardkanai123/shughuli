@@ -75,7 +75,7 @@ const NotificationsPanel = async ({ userId }: NotificationsPanelProps) => {
             <CardContent>
                 <div className="space-y-2">
                     {notifications.slice(0, 3).map((notification) => (
-                        <NotificationItem key={notification.id} notification={notification} />
+                        <NotificationItem version='Compact' key={notification.id} notification={notification} />
                     ))}
                 </div>
             </CardContent>

@@ -37,6 +37,7 @@ const NotificationsList = ({ notifications, filter = 'all' }: { notifications: N
             <div className="space-y-3">
                 {filteredNotifications.map(notification => (
                     <NotificationItem
+                        version='Full'
                         key={notification.id}
                         notification={notification}
                     />

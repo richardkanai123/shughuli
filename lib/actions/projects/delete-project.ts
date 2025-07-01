@@ -2,7 +2,7 @@
 import prisma from "@/lib/prisma";
 import { createActivity } from "../activity/create-activity";
 import { Authenticate } from "../AuthProtection";
-
+import { UTApi } from "uploadthing/server";
 export const DeleteProject = async (id: string) => {
 	try {
 		if (!id) {
@@ -24,6 +24,11 @@ export const DeleteProject = async (id: string) => {
 				name: true,
 				ownerId: true,
 				slug: true,
+				Attachments: {
+					select: {
+						key: true,
+					}
+				}
 			},
 		});
 
@@ -34,6 +39,9 @@ export const DeleteProject = async (id: string) => {
 				message: "Project not found",
 			};
 		}
+
+		const projectAttachments = targetProject.Attachments;
+
 
 
 		if (targetProject.ownerId !== session.userId) {
@@ -49,6 +57,15 @@ export const DeleteProject = async (id: string) => {
 				id: id,
 			},
 		});
+
+		if (projectAttachments.length > 0) {
+			const uploadThing = new UTApi();
+			// Delete attachments using UploadThing API
+			const deletePromises = projectAttachments.map(async (attachment) => {
+				await uploadThing.deleteFiles(attachment.key);
+			});
+			await Promise.all(deletePromises);
+		}
 
 		// Create a new activity
 		const link = `/dashboard/projects`;
