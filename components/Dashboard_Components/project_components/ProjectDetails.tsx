@@ -12,7 +12,6 @@ import ProjectHeader from "./project-parts/ProjectHeader";
 import ProjectDescription from "./project-parts/ProjectDescription";
 import ProjectProgress from "./project-parts/ProjectProgress";
 import ProjectDates from "./project-parts/ProjectDates";
-import Uploader from "../buttons/attatchment_uploader";
 
 const ProjectDetails = ({ project }: { project: Project }) => {
     // Animation states
