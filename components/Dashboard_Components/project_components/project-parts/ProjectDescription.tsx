@@ -1,6 +1,4 @@
 'use client'
-import { FileText } from "lucide-react"
-
 const ProjectDescription = ({ description }: { description?: string | null }) => {
     return (
         <div className="space-y-2">

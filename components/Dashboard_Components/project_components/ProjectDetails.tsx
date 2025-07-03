@@ -93,8 +93,8 @@ const ProjectDetails = ({ project }: { project: Project }) => {
                                     startDate={project.startDate}
                                     endDate={project.endDate}
                                     projectId={project.id}
-                                    ownerId={project.ownerId}
                                     dueDate={project.dueDate}
+                                    status={project.status}
                                 />
                             </div>
                         </motion.div>
