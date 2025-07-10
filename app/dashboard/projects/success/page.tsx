@@ -64,9 +64,10 @@ const CreateProjectSuccess = () => {
                                 className="w-full group"
                                 asChild
                             >
-                                <Link href="/dashboard">
+                                <Link href="/dashboard/projects/create-new">
                                     <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                                    Back to Dashboard
+
+                                    Add Another Project
                                 </Link>
                             </Button>
                         </motion.div>

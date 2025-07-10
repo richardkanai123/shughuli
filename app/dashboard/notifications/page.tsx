@@ -16,6 +16,8 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import NotificationsList from '@/components/Dashboard_Components/notifications/NotificationList';
 import NotificationsLoading from '@/components/Skeletons/NotificationSkeleton';
+import ReadAllNotificationsBtn from '@/components/Dashboard_Components/buttons/ReadAllNotificationsBtn';
+import DeleteAllNotificationsBtn from '@/components/Dashboard_Components/buttons/DeleteAllNotificationsBtn';
 
 
 
@@ -47,14 +49,8 @@ const NotificationsPage = async () => {
                 <div className="flex items-center gap-2">
                     {hasNotifications && (
                         <>
-                            <Button variant="outline" size="sm" className="gap-1">
-                                <CheckCheck className="h-4 w-4" />
-                                <span className="hidden sm:inline">Mark all as read</span>
-                            </Button>
-                            <Button variant="outline" size="sm" className="gap-1">
-                                <Trash2 className="h-4 w-4" />
-                                <span className="hidden sm:inline">Clear all</span>
-                            </Button>
+                            <ReadAllNotificationsBtn />
+                            <DeleteAllNotificationsBtn />
                         </>
                     )}
                 </div>
