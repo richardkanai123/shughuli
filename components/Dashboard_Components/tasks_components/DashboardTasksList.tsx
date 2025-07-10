@@ -148,7 +148,7 @@ const TaskRow = memo(({ task, projectId }: { task: Task; projectId: string }) =>
                     <div className="font-medium text-sm line-clamp-1">{task.title}</div>
                     {task.description && (
                         <div className="text-xs text-muted-foreground line-clamp-1">
-                            {task.description}
+                            {task.description.slice(0, 20)}...
                         </div>
                     )}
                 </div>
